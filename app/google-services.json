@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "780932072290",
+    "project_id": "finger-spinner-e3bbf",
+    "storage_bucket": "finger-spinner-e3bbf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:780932072290:android:6d412487c6c9120423e23b",
+        "android_client_info": {
+          "package_name": "co.piontech.pionbase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSFIClCOFlF7HwzXh7nRfYQavFrOhER7g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
