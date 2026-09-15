@@ -30,4 +30,16 @@
     <string name="please_select_language">Please select language</string>
     <string name="do_you_want_to_exit">Do you want to exit?</string>
     <string name="exit">Exit</string>
+    <string name="hd_wallpaper" translatable="false">HD Wallpaper</string>
+    <string name="home_tab" translatable="false">HOME</string>
+    <string name="categories_tab" translatable="false">CATEGORIES</string>
+    <string name="featured" translatable="false">Featured</string>
+    <string name="top_wallpaper" translatable="false">Top Wallpaper</string>
+    <string name="see_more" translatable="false">See More</string>
+    <string name="update_profile" translatable="false">Update Profile</string>
+    <string name="dark_theme" translatable="false">Dark Theme</string>
+    <string name="auto_change_wallpaper" translatable="false">Auto Change Wallpaper</string>
+    <string name="enable_notifications" translatable="false">Enable Notifications</string>
+    <string name="rate_this_app" translatable="false">Rate this App</string>
+    <string name="share_with_friend" translatable="false">Share with friend</string>
 </resources>
