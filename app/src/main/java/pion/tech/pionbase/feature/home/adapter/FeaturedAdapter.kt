@@ -2,11 +2,11 @@ package pion.tech.pionbase.feature.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
 import pion.tech.pionbase.base.BaseListAdapter
 import pion.tech.pionbase.base.createDiffCallback
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
 import pion.tech.pionbase.databinding.ItemFeaturedBinding
+import pion.tech.pionbase.util.loadImage
 
 class FeaturedAdapter :
     BaseListAdapter<WallpaperUIModel, ItemFeaturedBinding>(
@@ -31,7 +31,7 @@ class FeaturedAdapter :
     ) {
         binding.apply {
             tvFeaturedTitle.text = item.title
-            Glide.with(ivFeatured).load(item.imageUrl).into(ivFeatured)
+            ivFeatured.loadImage(item.imageUrl)
         }
     }
 }

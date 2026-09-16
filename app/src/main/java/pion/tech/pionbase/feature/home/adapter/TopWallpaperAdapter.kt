@@ -2,11 +2,11 @@ package pion.tech.pionbase.feature.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
 import pion.tech.pionbase.base.BaseListAdapter
 import pion.tech.pionbase.base.createDiffCallback
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
 import pion.tech.pionbase.databinding.ItemWallpaperBinding
+import pion.tech.pionbase.util.loadImage
 
 class TopWallpaperAdapter :
     BaseListAdapter<WallpaperUIModel, ItemWallpaperBinding>(
@@ -30,7 +30,7 @@ class TopWallpaperAdapter :
         position: Int,
     ) {
         binding.apply {
-            Glide.with(ivWallpaper).load(item.imageUrl).into(ivWallpaper)
+            ivWallpaper.loadImage(item.imageUrl)
         }
     }
 }

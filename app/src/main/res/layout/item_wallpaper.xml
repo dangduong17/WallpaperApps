@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp"
-    app:cardCornerRadius="12dp"
+    android:layout_margin="@dimen/_4dp"
+    app:cardCornerRadius="@dimen/_12dp"
     app:cardElevation="0dp"
     app:strokeWidth="0dp">
 
     <ImageView
         android:id="@+id/ivWallpaper"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="@dimen/_200dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_launcher_background" />
 </com.google.android.material.card.MaterialCardView>
