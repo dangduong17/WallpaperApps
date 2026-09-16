@@ -29,6 +29,9 @@
         <action
             android:id="@+id/action_homeFragment_to_settingFragment"
             app:destination="@id/settingFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_wallpaperDetailFragment"
+            app:destination="@id/wallpaperDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/languageFragment"
@@ -79,5 +82,14 @@
             app:destination="@id/onboardFragment"
             app:popUpTo="@id/changeLanguageFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/wallpaperDetailFragment"
+        android:name="pion.tech.pionbase.feature.wallpaperDetail.WallpaperDetailFragment"
+        android:label="WallpaperDetailFragment"
+        tools:layout="@layout/fragment_wallpaper_detail">
+        <argument
+            android:name="wallpaper"
+            app:argType="pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel" />
     </fragment>
 </navigation>

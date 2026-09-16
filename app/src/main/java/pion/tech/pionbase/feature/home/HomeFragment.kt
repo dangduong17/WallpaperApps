@@ -5,6 +5,7 @@ import android.view.View
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import pion.tech.pionbase.base.BaseFragment
+import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
 import pion.tech.pionbase.databinding.FragmentHomeBinding
 import pion.tech.pionbase.feature.home.adapter.CategoryAdapter
 import pion.tech.pionbase.feature.home.adapter.FeaturedAdapter
@@ -16,7 +17,7 @@ class HomeFragment :
     BaseFragment<FragmentHomeBinding, HomeViewModel>(
         FragmentHomeBinding::inflate,
         HomeViewModel::class,
-    ) {
+    ), FeaturedAdapter.Listener, TopWallpaperAdapter.Listener {
     
     val featuredAdapter = FeaturedAdapter()
     val topWallpaperAdapter = TopWallpaperAdapter()
@@ -64,5 +65,10 @@ class HomeFragment :
                     }
                 )
             }
+    }
+
+    override fun onClickWallpaper(item: WallpaperUIModel) {
+        val action = HomeFragmentDirections.actionHomeFragmentToWallpaperDetailFragment(item)
+        navigator.navigateTo(action)
     }
 }

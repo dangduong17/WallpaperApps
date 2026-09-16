@@ -11,6 +11,9 @@ private const val TAB_CATEGORIES = 1
 
 fun HomeFragment.initView() {
     binding.apply {
+        featuredAdapter.setListener(this@initView)
+        topWallpaperAdapter.setListener(this@initView)
+        
         rvFeatured.adapter = featuredAdapter
         rvTopWallpaper.adapter = topWallpaperAdapter
         rvCategories.adapter = categoryAdapter
