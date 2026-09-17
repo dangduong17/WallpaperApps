@@ -2,6 +2,8 @@ package pion.tech.pionbase.feature.home
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import pion.tech.pionbase.base.BaseFragment
@@ -11,6 +13,7 @@ import pion.tech.pionbase.feature.home.adapter.CategoryAdapter
 import pion.tech.pionbase.feature.home.adapter.FeaturedAdapter
 import pion.tech.pionbase.feature.home.adapter.TopWallpaperAdapter
 import pion.tech.pionbase.util.collectFlowOnView
+import pion.tech.pionbase.util.displayToast
 import pion.tech.pionbase.util.handleUiState
 
 class HomeFragment :
@@ -22,6 +25,17 @@ class HomeFragment :
     val featuredAdapter = FeaturedAdapter()
     val topWallpaperAdapter = TopWallpaperAdapter()
     val categoryAdapter = CategoryAdapter()
+
+    val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) {
+            displayToast("Selected photo: $uri")
+            // In a real app, you might want to open this URI in the detail screen
+            // For now, we'll navigate to detail with a dummy model or handle it specifically
+            val customWallpaper = WallpaperUIModel("Custom", uri.toString())
+            val action = HomeFragmentDirections.actionHomeFragmentToWallpaperDetailFragment(customWallpaper)
+            navigator.navigateTo(action)
+        }
+    }
 
     override fun init(view: View, savedInstanceState: Bundle?) {
         initView()

@@ -242,12 +242,14 @@ fun Context.openBrowser(url: String) {
 
 fun ImageView.loadImage(
     source: Any?,
-    placeholder: Int,
+    placeholder: Int = android.R.drawable.ic_menu_gallery,
+    error: Int = android.R.drawable.ic_menu_report_image
 ) {
     Glide
         .with(this)
         .load(source)
         .placeholder(placeholder)
+        .error(error)
         .into(this)
 }
 
@@ -255,6 +257,8 @@ fun ImageView.loadImage(source: Any?) {
     Glide
         .with(this)
         .load(source)
+        .placeholder(android.R.drawable.ic_menu_gallery)
+        .error(android.R.drawable.ic_menu_report_image)
         .into(this)
 }
 

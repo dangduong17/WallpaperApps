@@ -9,4 +9,6 @@ interface WallpaperRepository {
     fun getFeaturedWallpapers(): Flow<Result<List<WallpaperDtoModel>>>
     fun getTopWallpapers(): Flow<Result<List<WallpaperDtoModel>>>
     fun getCategories(): Flow<Result<List<CategoryDtoModel>>>
+    fun getFavoriteWallpapers(): Flow<Result<List<WallpaperDtoModel>>>
+    suspend fun toggleFavorite(imageUrl: String): Result<Unit>
 }

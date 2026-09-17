@@ -1,6 +1,8 @@
 package pion.tech.pionbase.feature.home
 
 import android.view.View
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.tabs.TabLayout
 import pion.tech.pionbase.R
 import pion.tech.pionbase.feature.home.dialog.ExitAppDialog
@@ -35,6 +37,9 @@ fun HomeFragment.initView() {
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
+        
+        // Default selection to Home
+        tabLayout.getTabAt(TAB_HOME)?.select()
     }
 }
 
@@ -50,15 +55,24 @@ fun HomeFragment.backEvent() {
 }
 
 fun HomeFragment.settingEvent() {
-    binding.ivProfile.setPreventDoubleClickScaleView {
+    // Set listeners on the containers (FrameLayouts) for a larger touch target
+    binding.btnProfile.setPreventDoubleClickScaleView {
         navigator.navigateTo(R.id.action_homeFragment_to_settingFragment)
+    }
+
+    binding.btnFavorite.setPreventDoubleClickScaleView {
+        navigator.navigateTo(R.id.action_homeFragment_to_favoriteFragment)
+    }
+    
+    binding.btnHome.setPreventDoubleClickScaleView {
+        binding.tabLayout.getTabAt(TAB_HOME)?.select()
+    }
+
+    binding.btnPickPhoto.setPreventDoubleClickScaleView {
+        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 }
 
 fun HomeFragment.showDemoDialogEvent() {
-    // binding.btnShowDialog.setPreventDoubleClick {
-    //    val dialog = DemoDialog.newInstance("Demo Dialog")
-    //    dialog.setListener(this)
-    //    safeShowDialog(dialog)
-    // }
+    // Implementation for demo dialog if needed
 }

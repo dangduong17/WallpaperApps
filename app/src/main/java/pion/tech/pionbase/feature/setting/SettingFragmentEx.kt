@@ -1,8 +1,8 @@
 package pion.tech.pionbase.feature.setting
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import androidx.core.net.toUri
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import pion.tech.pionbase.R
 import pion.tech.pionbase.util.setPreventDoubleClickScaleView
 
@@ -68,4 +68,10 @@ fun SettingFragment.resetGDPR() {
     // if (BuildConfig.DEBUG) {
     //    binding.btnResetGdpr.isVisible = true
     // }
+}
+
+fun SettingFragment.photoPickerEvent() {
+    binding.btnPickPhoto.setPreventDoubleClickScaleView {
+        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
 }

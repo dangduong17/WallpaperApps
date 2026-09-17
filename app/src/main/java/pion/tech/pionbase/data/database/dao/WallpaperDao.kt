@@ -20,4 +20,7 @@ interface WallpaperDao {
 
     @Update
     suspend fun updateWallpaper(wallpaper: WallpaperEntity)
+
+    @Query("SELECT * FROM wallpapers WHERE imageUrl = :url LIMIT 1")
+    suspend fun getWallpaperByUrl(url: String): WallpaperEntity?
 }

@@ -5,7 +5,9 @@ import androidx.room.RoomDatabase
 import org.koin.dsl.module
 import pion.tech.pionbase.BuildConfig
 import pion.tech.pionbase.data.database.AppDatabase
+import pion.tech.pionbase.data.database.dao.CategoryDao
 import pion.tech.pionbase.data.database.dao.DummyDAO
+import pion.tech.pionbase.data.database.dao.WallpaperDao
 
 val databaseModule =
     module {
@@ -19,12 +21,9 @@ val databaseModule =
                     ).enableMultiInstanceInvalidation()
                     .setJournalMode(RoomDatabase.JournalMode.WRITE_AHEAD_LOGGING)
 
-            // Allow destructive migration only in DEBUG builds for development
-            // In production, add proper migrations using .addMigrations()
             if (BuildConfig.DEBUG) {
                 builder.fallbackToDestructiveMigration()
             } else {
-                // In production, fallback only on downgrade (safer than always destructive)
                 builder.fallbackToDestructiveMigrationOnDowngrade()
             }
 
@@ -32,4 +31,6 @@ val databaseModule =
         }
 
         single<DummyDAO> { get<AppDatabase>().dummyDAO() }
+        single<WallpaperDao> { get<AppDatabase>().wallpaperDao() }
+        single<CategoryDao> { get<AppDatabase>().categoryDao() }
     }

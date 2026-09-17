@@ -32,6 +32,9 @@
         <action
             android:id="@+id/action_homeFragment_to_wallpaperDetailFragment"
             app:destination="@id/wallpaperDetailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_favoriteFragment"
+            app:destination="@id/favoriteFragment" />
     </fragment>
     <fragment
         android:id="@+id/languageFragment"
@@ -91,5 +94,15 @@
         <argument
             android:name="wallpaper"
             app:argType="pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="pion.tech.pionbase.feature.favorite.FavoriteFragment"
+        android:label="FavoriteFragment"
+        tools:layout="@layout/fragment_favorite">
+        <action
+            android:id="@+id/action_favoriteFragment_to_wallpaperDetailFragment"
+            app:destination="@id/wallpaperDetailFragment" />
     </fragment>
 </navigation>

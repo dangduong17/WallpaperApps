@@ -40,12 +40,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_24dp"
-            android:src="@android:drawable/btn_star_big_off"
-            app:backgroundTint="#E91E63"
+            android:src="@drawable/ic_heart"
+            app:backgroundTint="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
+            app:tint="@color/black" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSetWallpaper"
