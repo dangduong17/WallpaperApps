@@ -2,6 +2,7 @@ package pion.tech.pionbase.feature.wallpaperDetail
 
 import android.os.Bundle
 import android.view.View
+import android.view.animation.Animation
 import androidx.navigation.fragment.navArgs
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -16,6 +17,7 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
     WallpaperDetailViewModel::class
 ) {
     private val args: WallpaperDetailFragmentArgs by navArgs()
+    var favoriteAnim: Animation? = null
 
     override fun init(view: View, savedInstanceState: Bundle?) {
         viewModel.setWallpaper(args.wallpaper)
@@ -51,5 +53,10 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
                     binding.fabFavorite.setColorFilter(android.graphics.Color.BLACK)
                 }
             }
+    }
+
+    override fun onDestroyView() {
+        releaseAnimation()
+        super.onDestroyView()
     }
 }

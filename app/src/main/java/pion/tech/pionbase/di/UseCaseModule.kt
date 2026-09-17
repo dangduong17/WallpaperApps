@@ -9,6 +9,7 @@ import pion.tech.pionbase.domain.usecase.wallpaper.GetFavoriteWallpapersUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.GetFeaturedWallpapersUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.GetTopWallpapersUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.GetWallpapersByCategoryUseCase
+import pion.tech.pionbase.domain.usecase.wallpaper.IsFavoriteWallpaperUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.SearchWallpapersUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.ToggleFavoriteUseCase
 
@@ -23,6 +24,7 @@ val wallpaperUseCaseModule = module {
     factoryOf(::GetFavoriteWallpapersUseCase)
     factoryOf(::ToggleFavoriteUseCase)
     factoryOf(::GetWallpapersByCategoryUseCase)
+    factoryOf(::IsFavoriteWallpaperUseCase)
     factoryOf(::SearchWallpapersUseCase)
 }
 

@@ -16,8 +16,11 @@ fun WallpaperDetailFragment.settingEvent() {
     }
 
     binding.fabFavorite.setPreventDoubleClickScaleView {
-        // Clear and distinct pop animation
-        val anim = ScaleAnimation(
+        // Clear previous animation if any
+        binding.fabFavorite.clearAnimation()
+        
+        // Create and store animation
+        favoriteAnim = ScaleAnimation(
             1.0f, 1.5f, 1.0f, 1.5f,
             Animation.RELATIVE_TO_SELF, 0.5f,
             Animation.RELATIVE_TO_SELF, 0.5f
@@ -25,12 +28,19 @@ fun WallpaperDetailFragment.settingEvent() {
             duration = 400
             interpolator = OvershootInterpolator()
         }
-        binding.fabFavorite.startAnimation(anim)
         
+        binding.fabFavorite.startAnimation(favoriteAnim)
         viewModel.toggleFavorite()
     }
 
     binding.btnSetWallpaper.setPreventDoubleClickScaleView {
         displayToast("Setting wallpaper...")
     }
+}
+
+fun WallpaperDetailFragment.releaseAnimation() {
+    binding.fabFavorite.clearAnimation()
+    favoriteAnim?.setAnimationListener(null)
+    favoriteAnim?.cancel()
+    favoriteAnim = null
 }

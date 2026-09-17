@@ -29,4 +29,7 @@ interface WallpaperDao {
 
     @Query("SELECT * FROM wallpapers WHERE imageUrl = :url LIMIT 1")
     suspend fun getWallpaperByUrl(url: String): WallpaperEntity?
+
+    @Query("SELECT isFavorite FROM wallpapers WHERE imageUrl = :url LIMIT 1")
+    fun isFavorite(url: String): Flow<Boolean>
 }

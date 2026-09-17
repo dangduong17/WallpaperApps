@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#12121D">
+    android:background="@color/main_background">
 
     <!-- Header Section -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,6 +19,7 @@
             android:layout_width="@dimen/_40dp"
             android:layout_height="@dimen/_40dp"
             android:layout_marginStart="@dimen/_16dp"
+            android:contentDescription="@string/back"
             android:padding="@dimen/_8dp"
             android:src="@drawable/ic_back"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -61,8 +62,8 @@
         android:id="@+id/tvEmpty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No wallpapers found"
-        android:textColor="#80FFFFFF"
+        android:text="@string/no_wallpapers_found"
+        android:textColor="@color/text_secondary"
         android:textSize="@dimen/_16sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -2,9 +2,10 @@ package pion.tech.pionbase.data.repository.wallpaper
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import pion.tech.pionbase.data.database.dao.CategoryDao
 import pion.tech.pionbase.data.database.dao.WallpaperDao
@@ -20,50 +21,53 @@ class WallpaperRepositoryImpl(
     private val categoryDao: CategoryDao
 ) : BaseRepository(), WallpaperRepository {
 
-    override fun getFeaturedWallpapers(): Flow<Result<List<WallpaperDtoModel>>> = flow {
-        val dbWallpapers = wallpaperDao.getFeaturedWallpapers().first()
-        if (dbWallpapers.isEmpty()) {
-            val remoteFeatured = dataSource.getFeaturedWallpapers()
-            wallpaperDao.insertWallpapers(remoteFeatured.map { 
-                WallpaperEntity(title = it.title, imageUrl = it.imageUrl, categoryName = it.categoryName, isFeatured = true) 
-            })
+    override fun getFeaturedWallpapers(): Flow<Result<List<WallpaperDtoModel>>> =
+        wallpaperDao.getFeaturedWallpapers().flatMapLatest { entities ->
+            if (entities.isEmpty()) {
+                flow<Result<List<WallpaperDtoModel>>> {
+                    val remote = dataSource.getFeaturedWallpapers()
+                    if (remote.isNotEmpty()) {
+                        wallpaperDao.insertWallpapers(remote.map { it.toEntity(isFeatured = true) })
+                    } else {
+                        emit(Result.Success(emptyList()))
+                    }
+                }.catch { emit(Result.Error(it)) }
+            } else {
+                flowOf(Result.Success(entities.map { it.toDto() }))
+            }
         }
-        emit(Unit)
-    }.flatMapLatest {
-        wallpaperDao.getFeaturedWallpapers().map { entities -> 
-            Result.Success(entities.map { it.toDto() }) 
-        }
-    }
 
-    override fun getTopWallpapers(): Flow<Result<List<WallpaperDtoModel>>> = flow {
-        val dbWallpapers = wallpaperDao.getAllWallpapers().first()
-        if (dbWallpapers.isEmpty()) {
-            val remoteTop = dataSource.getTopWallpapers()
-            wallpaperDao.insertWallpapers(remoteTop.map { 
-                WallpaperEntity(title = it.title, imageUrl = it.imageUrl, categoryName = it.categoryName, isFeatured = false) 
-            })
+    override fun getTopWallpapers(): Flow<Result<List<WallpaperDtoModel>>> =
+        wallpaperDao.getAllWallpapers().flatMapLatest { entities ->
+            if (entities.isEmpty()) {
+                flow<Result<List<WallpaperDtoModel>>> {
+                    val remote = dataSource.getTopWallpapers()
+                    if (remote.isNotEmpty()) {
+                        wallpaperDao.insertWallpapers(remote.map { it.toEntity(isFeatured = false) })
+                    } else {
+                        emit(Result.Success(emptyList()))
+                    }
+                }.catch { emit(Result.Error(it)) }
+            } else {
+                flowOf(Result.Success(entities.map { it.toDto() }))
+            }
         }
-        emit(Unit)
-    }.flatMapLatest {
-        wallpaperDao.getAllWallpapers().map { entities -> 
-            Result.Success(entities.map { it.toDto() }) 
-        }
-    }
 
-    override fun getCategories(): Flow<Result<List<CategoryDtoModel>>> = flow {
-        val dbCategories = categoryDao.getAllCategories().first()
-        if (dbCategories.isEmpty()) {
-            val remoteCategories = dataSource.getCategories()
-            categoryDao.insertCategories(remoteCategories.map { 
-                CategoryEntity(title = it.title, imageUrl = it.imageUrl) 
-            })
+    override fun getCategories(): Flow<Result<List<CategoryDtoModel>>> =
+        categoryDao.getAllCategories().flatMapLatest { entities ->
+            if (entities.isEmpty()) {
+                flow<Result<List<CategoryDtoModel>>> {
+                    val remote = dataSource.getCategories()
+                    if (remote.isNotEmpty()) {
+                        categoryDao.insertCategories(remote.map { it.toEntity() })
+                    } else {
+                        emit(Result.Success(emptyList()))
+                    }
+                }.catch { emit(Result.Error(it)) }
+            } else {
+                flowOf(Result.Success(entities.map { it.toDto() }))
+            }
         }
-        emit(Unit)
-    }.flatMapLatest {
-        categoryDao.getAllCategories().map { entities -> 
-            Result.Success(entities.map { it.toDto() }) 
-        }
-    }
 
     override fun getFavoriteWallpapers(): Flow<Result<List<WallpaperDtoModel>>> {
         return wallpaperDao.getFavoriteWallpapers().map { entities ->
@@ -75,6 +79,10 @@ class WallpaperRepositoryImpl(
         return wallpaperDao.getWallpapersByCategory(categoryName).map { entities ->
             Result.Success(entities.map { it.toDto() })
         }
+    }
+
+    override fun isFavorite(url: String): Flow<Result<Boolean>> {
+        return wallpaperDao.isFavorite(url).map { Result.Success(it) }
     }
 
     override fun searchWallpapers(query: String): Flow<Result<List<WallpaperDtoModel>>> {
