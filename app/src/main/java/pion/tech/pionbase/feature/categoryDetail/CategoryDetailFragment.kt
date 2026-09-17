@@ -18,7 +18,7 @@ class CategoryDetailFragment :
         CategoryDetailViewModel::class
     ), TopWallpaperAdapter.Listener {
 
-    private val args: CategoryDetailFragmentArgs by navArgs()
+    internal val args: CategoryDetailFragmentArgs by navArgs()
     val adapter = TopWallpaperAdapter()
 
     override fun init(view: View, savedInstanceState: Bundle?) {

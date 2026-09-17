@@ -24,6 +24,9 @@ interface WallpaperDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWallpapers(wallpapers: List<WallpaperEntity>)
 
+    @Query("SELECT * FROM wallpapers")
+    suspend fun getAllWallpapersList(): List<WallpaperEntity>
+
     @Update
     suspend fun updateWallpaper(wallpaper: WallpaperEntity)
 

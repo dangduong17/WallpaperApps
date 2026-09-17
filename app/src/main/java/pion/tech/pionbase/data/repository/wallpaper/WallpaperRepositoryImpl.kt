@@ -27,7 +27,12 @@ class WallpaperRepositoryImpl(
                 flow<Result<List<WallpaperDtoModel>>> {
                     val remote = dataSource.getFeaturedWallpapers()
                     if (remote.isNotEmpty()) {
-                        wallpaperDao.insertWallpapers(remote.map { it.toEntity(isFeatured = true) })
+                        val localWallpapers = wallpaperDao.getAllWallpapersList().associateBy { it.imageUrl }
+                        val merged = remote.map { dto ->
+                            val local = localWallpapers[dto.imageUrl]
+                            dto.toEntity(isFeatured = true).copy(isFavorite = local?.isFavorite ?: false)
+                        }
+                        wallpaperDao.insertWallpapers(merged)
                     } else {
                         emit(Result.Success(emptyList()))
                     }
@@ -43,7 +48,12 @@ class WallpaperRepositoryImpl(
                 flow<Result<List<WallpaperDtoModel>>> {
                     val remote = dataSource.getTopWallpapers()
                     if (remote.isNotEmpty()) {
-                        wallpaperDao.insertWallpapers(remote.map { it.toEntity(isFeatured = false) })
+                        val localWallpapers = wallpaperDao.getAllWallpapersList().associateBy { it.imageUrl }
+                        val merged = remote.map { dto ->
+                            val local = localWallpapers[dto.imageUrl]
+                            dto.toEntity(isFeatured = false).copy(isFavorite = local?.isFavorite ?: false)
+                        }
+                        wallpaperDao.insertWallpapers(merged)
                     } else {
                         emit(Result.Success(emptyList()))
                     }
