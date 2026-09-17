@@ -3,6 +3,7 @@ package pion.tech.pionbase.base.navigator
 import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.navigation.NavDirections
 
 interface Navigator {
     fun getCurrentDestinationId(): Int
@@ -23,6 +24,8 @@ interface Navigator {
         bundle: Bundle? = null,
         clearBackStack: Boolean = false,
     )
+
+    fun navigateTo(directions: NavDirections)
 
     /**
      * Navigate back to previous screen

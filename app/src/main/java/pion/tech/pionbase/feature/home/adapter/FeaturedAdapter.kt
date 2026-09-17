@@ -2,11 +2,12 @@ package pion.tech.pionbase.feature.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
 import pion.tech.pionbase.base.BaseListAdapter
 import pion.tech.pionbase.base.createDiffCallback
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
 import pion.tech.pionbase.databinding.ItemFeaturedBinding
+import pion.tech.pionbase.util.loadImage
+import pion.tech.pionbase.util.setPreventDoubleClick
 
 class FeaturedAdapter :
     BaseListAdapter<WallpaperUIModel, ItemFeaturedBinding>(
@@ -15,6 +16,15 @@ class FeaturedAdapter :
             areContentsTheSame = { oldItem, newItem -> oldItem == newItem },
         ),
     ) {
+    interface Listener {
+        fun onClickWallpaper(item: WallpaperUIModel)
+    }
+
+    private var listener: Listener? = null
+
+    fun setListener(listener: Listener) {
+        this.listener = listener
+    }
 
     override fun inflateBinding(
         inflater: LayoutInflater,
@@ -31,7 +41,10 @@ class FeaturedAdapter :
     ) {
         binding.apply {
             tvFeaturedTitle.text = item.title
-            Glide.with(ivFeatured).load(item.imageUrl).into(ivFeatured)
+            ivFeatured.loadImage(item.imageUrl)
+            root.setPreventDoubleClick {
+                listener?.onClickWallpaper(item)
+            }
         }
     }
 }

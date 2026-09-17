@@ -1,10 +1,11 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("kotlin-android")
     alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.gms.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
+    alias(libs.plugins.androidx.navigation.safeargs.kotlin)
     id("kotlin-parcelize")
-    id("kotlin-android")
 }
 
 android {
