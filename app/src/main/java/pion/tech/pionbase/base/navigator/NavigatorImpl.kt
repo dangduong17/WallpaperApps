@@ -6,6 +6,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.navigation.NavDirections
 import androidx.navigation.NavOptions
 
 class NavigatorImpl(
@@ -84,6 +85,10 @@ class NavigatorImpl(
                 null
             }
         safeAction { navController.navigate(actionId, bundle, navOptions) }
+    }
+
+    override fun navigateTo(directions: NavDirections) {
+        safeAction { navController.navigate(directions) }
     }
 
     override fun navigateUp() {

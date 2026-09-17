@@ -140,7 +140,7 @@
                     android:textSize="@dimen/_18sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/rvFeatured" />
+                    app:layout_constraintTop_toTopOf="@id/rvFeatured" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSeeMore"

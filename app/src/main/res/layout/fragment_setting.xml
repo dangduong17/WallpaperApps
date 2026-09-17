@@ -130,7 +130,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="@dimen/_16dp"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/ivLanguageArrow"
@@ -183,7 +183,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="@dimen/_16dp"
                     android:text="@string/dark_theme"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_16sp"
@@ -224,7 +224,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="@dimen/_16dp"
                     android:text="@string/auto_change_wallpaper"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_16sp"
@@ -265,7 +265,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="@dimen/_16dp"
                     android:text="@string/enable_notifications"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_16sp"
@@ -307,7 +307,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="@dimen/_16dp"
                     android:text="@string/rate_this_app"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_16sp"
@@ -338,7 +338,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="@dimen/_16dp"
                     android:text="@string/share_with_friend"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_16sp"

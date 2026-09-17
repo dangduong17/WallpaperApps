@@ -7,6 +7,7 @@ import pion.tech.pionbase.base.createDiffCallback
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
 import pion.tech.pionbase.databinding.ItemFeaturedBinding
 import pion.tech.pionbase.util.loadImage
+import pion.tech.pionbase.util.setPreventDoubleClick
 
 class FeaturedAdapter :
     BaseListAdapter<WallpaperUIModel, ItemFeaturedBinding>(
@@ -15,6 +16,15 @@ class FeaturedAdapter :
             areContentsTheSame = { oldItem, newItem -> oldItem == newItem },
         ),
     ) {
+    interface Listener {
+        fun onClickWallpaper(item: WallpaperUIModel)
+    }
+
+    private var listener: Listener? = null
+
+    fun setListener(listener: Listener) {
+        this.listener = listener
+    }
 
     override fun inflateBinding(
         inflater: LayoutInflater,
@@ -32,6 +42,9 @@ class FeaturedAdapter :
         binding.apply {
             tvFeaturedTitle.text = item.title
             ivFeatured.loadImage(item.imageUrl)
+            root.setPreventDoubleClick {
+                listener?.onClickWallpaper(item)
+            }
         }
     }
 }
