@@ -77,6 +77,14 @@ class HomeFragment :
                     }
                 )
             }
+
+        // Observe selected tab
+        viewModel.uiState
+            .map { it.selectedTab }
+            .distinctUntilChanged()
+            .collectFlowOnView(viewLifecycleOwner) { selectedTab ->
+                binding.tabLayout.getTabAt(selectedTab)?.select()
+            }
     }
 
     override fun onClickWallpaper(item: WallpaperUIModel) {

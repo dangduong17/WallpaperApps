@@ -23,14 +23,17 @@ fun HomeFragment.initView() {
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                when (tab?.position) {
-                    TAB_HOME -> {
-                        layoutHome.visibility = View.VISIBLE
-                        rvCategories.visibility = View.GONE
-                    }
-                    TAB_CATEGORIES -> {
-                        layoutHome.visibility = View.GONE
-                        rvCategories.visibility = View.VISIBLE
+                tab?.position?.let { position ->
+                    viewModel.setSelectedTab(position)
+                    when (position) {
+                        TAB_HOME -> {
+                            layoutHome.visibility = View.VISIBLE
+                            rvCategories.visibility = View.GONE
+                        }
+                        TAB_CATEGORIES -> {
+                            layoutHome.visibility = View.GONE
+                            rvCategories.visibility = View.VISIBLE
+                        }
                     }
                 }
             }
@@ -38,9 +41,6 @@ fun HomeFragment.initView() {
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
-        
-        // Default selection to Home
-        tabLayout.getTabAt(TAB_HOME)?.select()
     }
 }
 

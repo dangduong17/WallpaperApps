@@ -89,11 +89,16 @@ class HomeViewModel(
         setState { copy(filters = newFilters) }
         getTopWallpapers(filter.name)
     }
+
+    fun setSelectedTab(index: Int) {
+        setState { copy(selectedTab = index) }
+    }
 }
 
 data class HomeUiState(
     val featuredUiState: UiState<List<WallpaperUIModel>> = UiState.None,
     val topWallpaperUiState: UiState<List<WallpaperUIModel>> = UiState.None,
     val categoriesUiState: UiState<List<CategoryUIModel>> = UiState.None,
-    val filters: List<FilterUIModel> = emptyList()
+    val filters: List<FilterUIModel> = emptyList(),
+    val selectedTab: Int = TAB_HOME
 )
