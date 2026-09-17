@@ -14,6 +14,7 @@ class DataStoreRepositoryImpl(
 ) : BaseRepository(), DataStoreRepository {
     private val isPremiumKey = booleanPreferencesKey("isPremiumKey")
     private val tokenKey = stringPreferencesKey("tokenKey")
+    private val isFirstLaunchKey = booleanPreferencesKey("isFirstLaunchKey")
 
     override fun getIsPremium(): Flow<Result<Boolean>> =
         dataStore.data.executeDataWithFlowCall { prefs ->
@@ -36,6 +37,18 @@ class DataStoreRepositoryImpl(
         executeDataCall {
             dataStore.edit {
                 it[tokenKey] = token
+            }
+        }
+
+    override fun getIsFirstLaunch(): Flow<Result<Boolean>> =
+        dataStore.data.executeDataWithFlowCall { prefs ->
+            prefs[isFirstLaunchKey] ?: true
+        }
+
+    override fun setIsFirstLaunch(isFirstLaunch: Boolean): Flow<Result<Unit>> =
+        executeDataCall {
+            dataStore.edit {
+                it[isFirstLaunchKey] = isFirstLaunch
             }
         }
 }

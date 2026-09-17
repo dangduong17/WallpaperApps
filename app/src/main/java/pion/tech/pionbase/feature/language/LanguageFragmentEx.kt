@@ -29,6 +29,7 @@ fun LanguageFragment.applyEvent() {
 
 fun LanguageFragment.handleApplyEvent() {
     applySelectedLanguage()
+    viewModel.setFirstLaunchFalse()
     navigateToNextScreen()
 }
 
@@ -41,11 +42,7 @@ fun LanguageFragment.navigateToNextScreen() {
     if (isCameFromSetting()) {
         navigator.navigateTo(R.id.action_languageFragment_to_splashFragment)
     } else {
-        if (AppRemoteConfig.maxTimeShowChangeLanguageScreen > 0L) {
-            navigator.navigateTo(R.id.action_languageFragment_to_changeLanguageFragment)
-        } else {
-            navigator.navigateTo(R.id.action_languageFragment_to_onboardFragment)
-        }
+        navigator.navigateTo(R.id.action_languageFragment_to_changeLanguageFragment)
     }
 }
 

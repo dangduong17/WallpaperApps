@@ -26,11 +26,14 @@ fun SplashFragment.initView() {
 
     progressAnimator =
         ValueAnimator.ofInt(0, 100).apply {
-            duration = 15000L
+            duration = 3000L // Rút ngắn thời gian xuống 3 giây
 
             addUpdateListener { animation ->
                 runCatching {
                     binding.progressBar.progress = animation.animatedValue as Int
+                    if (animation.animatedValue as Int == 100) {
+                        showAds()
+                    }
                 }
             }
             start()
@@ -38,18 +41,11 @@ fun SplashFragment.initView() {
 }
 
 fun SplashFragment.goToNextScreen() {
-    //TODO : check logic AdsConstant.isPremium
-//    val destination =
-//        if (AdsConstant.isPremium || isCameFromLanguage()) {
-//            R.id.action_splashFragment_to_homeFragment
-//        } else {
-//            R.id.action_splashFragment_to_languageFragment
-//        }
     val destination =
-        if (isCameFromLanguage()) {
-            R.id.action_splashFragment_to_homeFragment
-        } else {
+        if (viewModel.uiState.value.isFirstLaunch && !isCameFromLanguage()) {
             R.id.action_splashFragment_to_languageFragment
+        } else {
+            R.id.action_splashFragment_to_homeFragment
         }
     navigator.navigateTo(destination)
 }

@@ -7,6 +7,7 @@ import pion.tech.pionbase.base.createDiffCallback
 import pion.tech.pionbase.data.model.wallpaper.CategoryUIModel
 import pion.tech.pionbase.databinding.ItemCategoryBinding
 import pion.tech.pionbase.util.loadImage
+import pion.tech.pionbase.util.setPreventDoubleClick
 
 class CategoryAdapter :
     BaseListAdapter<CategoryUIModel, ItemCategoryBinding>(
@@ -15,6 +16,15 @@ class CategoryAdapter :
             areContentsTheSame = { oldItem, newItem -> oldItem == newItem },
         ),
     ) {
+    interface Listener {
+        fun onClickCategory(item: CategoryUIModel)
+    }
+
+    private var listener: Listener? = null
+
+    fun setListener(listener: Listener) {
+        this.listener = listener
+    }
 
     override fun inflateBinding(
         inflater: LayoutInflater,
@@ -32,6 +42,9 @@ class CategoryAdapter :
         binding.apply {
             tvCategoryTitle.text = item.title
             ivCategory.loadImage(item.imageUrl)
+            root.setPreventDoubleClick {
+                listener?.onClickCategory(item)
+            }
         }
     }
 }

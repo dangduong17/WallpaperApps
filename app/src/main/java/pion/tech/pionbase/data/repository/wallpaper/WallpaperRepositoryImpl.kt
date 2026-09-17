@@ -71,6 +71,18 @@ class WallpaperRepositoryImpl(
         }
     }
 
+    override fun getWallpapersByCategory(categoryName: String): Flow<Result<List<WallpaperDtoModel>>> {
+        return wallpaperDao.getWallpapersByCategory(categoryName).map { entities ->
+            Result.Success(entities.map { it.toDto() })
+        }
+    }
+
+    override fun searchWallpapers(query: String): Flow<Result<List<WallpaperDtoModel>>> {
+        return wallpaperDao.searchWallpapers(query).map { entities ->
+            Result.Success(entities.map { it.toDto() })
+        }
+    }
+
     override suspend fun toggleFavorite(imageUrl: String): Result<Unit> {
         return try {
             val wallpaper = wallpaperDao.getWallpaperByUrl(imageUrl)

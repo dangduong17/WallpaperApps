@@ -11,6 +11,8 @@ import pion.tech.pionbase.feature.setting.SettingViewModel
 import pion.tech.pionbase.feature.splash.SplashViewModel
 import pion.tech.pionbase.feature.wallpaperDetail.WallpaperDetailViewModel
 import pion.tech.pionbase.feature.favorite.FavoriteViewModel
+import pion.tech.pionbase.feature.search.SearchViewModel
+import pion.tech.pionbase.feature.categoryDetail.CategoryDetailViewModel
 
 val viewModelModule =
     module {
@@ -23,4 +25,6 @@ val viewModelModule =
         viewModelOf(::OnboardViewModel)
         viewModelOf(::WallpaperDetailViewModel)
         viewModelOf(::FavoriteViewModel)
+        viewModelOf(::SearchViewModel)
+        viewModelOf(::CategoryDetailViewModel)
     }

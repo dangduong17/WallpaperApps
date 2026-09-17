@@ -8,13 +8,14 @@ import pion.tech.pionbase.R
 import pion.tech.pionbase.feature.home.dialog.ExitAppDialog
 import pion.tech.pionbase.util.setPreventDoubleClickScaleView
 
-private const val TAB_HOME = 0
-private const val TAB_CATEGORIES = 1
+internal const val TAB_HOME = 0
+internal const val TAB_CATEGORIES = 1
 
 fun HomeFragment.initView() {
     binding.apply {
         featuredAdapter.setListener(this@initView)
         topWallpaperAdapter.setListener(this@initView)
+        categoryAdapter.setListener(this@initView)
         
         rvFeatured.adapter = featuredAdapter
         rvTopWallpaper.adapter = topWallpaperAdapter
@@ -62,6 +63,10 @@ fun HomeFragment.settingEvent() {
 
     binding.btnFavorite.setPreventDoubleClickScaleView {
         navigator.navigateTo(R.id.action_homeFragment_to_favoriteFragment)
+    }
+
+    binding.btnSearch.setPreventDoubleClickScaleView {
+        navigator.navigateTo(R.id.action_homeFragment_to_searchFragment)
     }
     
     binding.btnHome.setPreventDoubleClickScaleView {

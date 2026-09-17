@@ -21,7 +21,7 @@ class SplashFragment :
     }
 
     override fun subscribeObserver(view: View) {
-        showAds()
+        // Chờ animation kết thúc sẽ tự gọi showAds() và goToNextScreen()
     }
 
     override fun onDestroyView() {

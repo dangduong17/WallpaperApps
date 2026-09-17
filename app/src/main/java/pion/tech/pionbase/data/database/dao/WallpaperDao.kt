@@ -15,6 +15,12 @@ interface WallpaperDao {
     @Query("SELECT * FROM wallpapers WHERE isFavorite = 1")
     fun getFavoriteWallpapers(): Flow<List<WallpaperEntity>>
 
+    @Query("SELECT * FROM wallpapers WHERE categoryName = :categoryName")
+    fun getWallpapersByCategory(categoryName: String): Flow<List<WallpaperEntity>>
+
+    @Query("SELECT * FROM wallpapers WHERE title LIKE '%' || :query || '%'")
+    fun searchWallpapers(query: String): Flow<List<WallpaperEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWallpapers(wallpapers: List<WallpaperEntity>)
 

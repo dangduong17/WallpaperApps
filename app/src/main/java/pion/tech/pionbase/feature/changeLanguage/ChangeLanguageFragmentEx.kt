@@ -123,7 +123,7 @@ private suspend fun ChangeLanguageFragment.loadAdSuspend(
     }
 
 fun ChangeLanguageFragment.goToNextScreen() {
-    navigator.navigateTo(R.id.action_changeLanguageFragment_to_onboardFragment)
+    navigator.navigateTo(R.id.action_changeLanguageFragment_to_homeFragment)
 }
 
 fun ChangeLanguageFragment.releaseAnimation() {
