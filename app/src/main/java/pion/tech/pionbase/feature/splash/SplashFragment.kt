@@ -3,6 +3,8 @@ package pion.tech.pionbase.feature.splash
 import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.View
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import pion.tech.pionbase.app.MainActivity
 import pion.tech.pionbase.base.BaseFragment
 import pion.tech.pionbase.databinding.FragmentSplashBinding
@@ -21,7 +23,15 @@ class SplashFragment :
     }
 
     override fun subscribeObserver(view: View) {
-        // Chờ animation kết thúc sẽ tự gọi showAds() và goToNextScreen()
+        // Observe first launch state to navigate if animation finished but data was slow
+        viewModel.uiState
+            .map { it.isFirstLaunch }
+            .distinctUntilChanged()
+            .collectFlowOnView(viewLifecycleOwner) { isFirstLaunch ->
+                if (isFirstLaunch != null && binding.progressBar.progress == 100) {
+                    goToNextScreen()
+                }
+            }
     }
 
     override fun onDestroyView() {

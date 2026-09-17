@@ -23,5 +23,5 @@ class SplashViewModel(
 }
 
 data class SplashUiState(
-    val isFirstLaunch: Boolean = true
+    val isFirstLaunch: Boolean? = null
 )

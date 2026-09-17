@@ -41,8 +41,10 @@ fun SplashFragment.initView() {
 }
 
 fun SplashFragment.goToNextScreen() {
+    val isFirstLaunch = viewModel.uiState.value.isFirstLaunch ?: return
+    
     val destination =
-        if (viewModel.uiState.value.isFirstLaunch && !isCameFromLanguage()) {
+        if (isFirstLaunch && !isCameFromLanguage()) {
             R.id.action_splashFragment_to_languageFragment
         } else {
             R.id.action_splashFragment_to_homeFragment
