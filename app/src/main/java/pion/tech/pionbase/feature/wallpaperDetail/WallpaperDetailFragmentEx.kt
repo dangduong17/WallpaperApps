@@ -3,6 +3,8 @@ package pion.tech.pionbase.feature.wallpaperDetail
 import android.view.animation.Animation
 import android.view.animation.OvershootInterpolator
 import android.view.animation.ScaleAnimation
+import pion.tech.pionbase.base.launchIO
+import pion.tech.pionbase.base.launchMain
 import pion.tech.pionbase.util.displayToast
 import pion.tech.pionbase.util.setPreventDoubleClickScaleView
 
@@ -34,7 +36,40 @@ fun WallpaperDetailFragment.settingEvent() {
     }
 
     binding.btnSetWallpaper.setPreventDoubleClickScaleView {
-        displayToast("Setting wallpaper...")
+        val wallpaperUrl = viewModel.uiState.value.wallpaper?.imageUrl ?: return@setPreventDoubleClickScaleView
+        
+        showHideLoading(true)
+        
+        launchIO {
+            val file = try {
+                val connection = java.net.URL(wallpaperUrl).openConnection() as java.net.HttpURLConnection
+                connection.connect()
+                val inputStream = connection.inputStream
+                val targetFile = java.io.File(requireContext().cacheDir, "current_wallpaper.mp4")
+                val outputStream = java.io.FileOutputStream(targetFile)
+                inputStream.copyTo(outputStream)
+                targetFile
+            } catch (e: Exception) {
+                null
+            }
+            
+            launchMain {
+                showHideLoading(false)
+                if (file != null && file.exists()) {
+                    val sharedPref = requireContext().getSharedPreferences("wallpaper_prefs", android.content.Context.MODE_PRIVATE)
+                    sharedPref.edit().putString("wallpaper_path", file.absolutePath).apply()
+                    
+                    val intent = android.content.Intent(android.app.WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER)
+                    intent.putExtra(
+                        android.app.WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
+                        android.content.ComponentName(requireContext(), pion.tech.pionbase.service.VideoWallpaperService::class.java)
+                    )
+                    startActivity(intent)
+                } else {
+                    displayToast("Không thể tải hình nền")
+                }
+            }
+        }
     }
     
     binding.fabDownload.setPreventDoubleClickScaleView {
