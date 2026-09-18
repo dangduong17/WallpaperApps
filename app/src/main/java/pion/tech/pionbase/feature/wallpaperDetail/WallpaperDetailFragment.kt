@@ -1,6 +1,9 @@
 package pion.tech.pionbase.feature.wallpaperDetail
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import android.view.View
 import android.view.animation.Animation
 import androidx.navigation.fragment.navArgs
@@ -10,7 +13,9 @@ import pion.tech.pionbase.R
 import pion.tech.pionbase.base.BaseFragment
 import pion.tech.pionbase.databinding.FragmentWallpaperDetailBinding
 import pion.tech.pionbase.util.collectFlowOnView
+import pion.tech.pionbase.util.displayToast
 import pion.tech.pionbase.util.loadImage
+import pion.tech.pionbase.util.setPreventDoubleClickScaleView
 
 class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, WallpaperDetailViewModel>(
     FragmentWallpaperDetailBinding::inflate,
@@ -19,10 +24,30 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
     private val args: WallpaperDetailFragmentArgs by navArgs()
     var favoriteAnim: Animation? = null
 
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        timber.log.Timber.d("PermissionCheck Result: $isGranted")
+        if (isGranted) {
+            viewModel.downloadWallpaper()
+        } else {
+            displayToast("Cần cấp quyền để lưu ảnh")
+        }
+    }
+
     override fun init(view: View, savedInstanceState: Bundle?) {
         viewModel.setWallpaper(args.wallpaper)
         initView()
         settingEvent()
+    }
+
+    fun checkPermissionAndDownload() {
+        timber.log.Timber.d("Check Permission Started")
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        } else {
+            viewModel.downloadWallpaper()
+        }
     }
 
     override fun subscribeObserver(view: View) {
@@ -51,6 +76,19 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
                     binding.fabFavorite.clearColorFilter()
                 } else {
                     binding.fabFavorite.setColorFilter(android.graphics.Color.BLACK)
+                }
+            }
+
+        viewModel.uiState
+            .map { it.isLoading }
+            .distinctUntilChanged()
+            .collectFlowOnView(viewLifecycleOwner) { isLoading ->
+                if (isLoading) {
+                    binding.fabDownload.setImageResource(android.R.drawable.stat_notify_sync)
+                    binding.fabDownload.isEnabled = false
+                } else {
+                    binding.fabDownload.setImageResource(android.R.drawable.stat_sys_download)
+                    binding.fabDownload.isEnabled = true
                 }
             }
     }

@@ -1,24 +1,37 @@
 package pion.tech.pionbase.data.repository.wallpaper
 
+import android.content.ContentValues
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.provider.MediaStore
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import pion.tech.pionbase.data.database.dao.CategoryDao
 import pion.tech.pionbase.data.database.dao.WallpaperDao
 import pion.tech.pionbase.data.model.wallpaper.*
 import pion.tech.pionbase.data.remote.wallpaper.WallpaperDataSource
 import pion.tech.pionbase.data.repository.BaseRepository
 import pion.tech.pionbase.util.Result
+import java.io.OutputStream
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class WallpaperRepositoryImpl(
     private val dataSource: WallpaperDataSource,
     private val wallpaperDao: WallpaperDao,
-    private val categoryDao: CategoryDao
+    private val categoryDao: CategoryDao,
+    private val okHttpClient: OkHttpClient,
+    private val context: android.content.Context
 ) : BaseRepository(), WallpaperRepository {
 
     override fun getFeaturedWallpapers(): Flow<Result<List<WallpaperDtoModel>>> =
@@ -114,4 +127,35 @@ class WallpaperRepositoryImpl(
             Result.Error(e)
         }
     }
+
+    override suspend fun downloadWallpaper(url: String): Flow<Result<Uri>> = flow {
+        val request = Request.Builder().url(url).build()
+        val response = okHttpClient.newCall(request).execute()
+        if (!response.isSuccessful) throw Exception("Failed to download")
+        
+        val bitmap = response.body?.byteStream()?.use { BitmapFactory.decodeStream(it) } 
+            ?: throw Exception("Failed to decode image")
+
+        val filename = "PionBase_${System.currentTimeMillis()}.jpg"
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, filename)
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/PionBase")
+            }
+        }
+
+        val uri = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+            ?: throw Exception("Failed to create media store entry")
+
+        context.contentResolver.openOutputStream(uri)?.use { outputStream ->
+            bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 100, outputStream)
+        } ?: throw Exception("Failed to open output stream")
+
+        val result: Result<Uri> = Result.Success(uri)
+        emit(result)
+    }.catch { 
+        timber.log.Timber.e(it, "Download error")
+        emit(Result.Error(it)) 
+    }.flowOn(Dispatchers.IO)
 }

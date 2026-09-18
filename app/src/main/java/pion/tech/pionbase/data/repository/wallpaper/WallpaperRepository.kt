@@ -14,4 +14,5 @@ interface WallpaperRepository {
     fun isFavorite(url: String): Flow<Result<Boolean>>
     fun searchWallpapers(query: String): Flow<Result<List<WallpaperDtoModel>>>
     suspend fun toggleFavorite(imageUrl: String): Result<Unit>
+    suspend fun downloadWallpaper(url: String): Flow<Result<android.net.Uri>>
 }

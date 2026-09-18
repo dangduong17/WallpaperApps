@@ -36,6 +36,10 @@ fun WallpaperDetailFragment.settingEvent() {
     binding.btnSetWallpaper.setPreventDoubleClickScaleView {
         displayToast("Setting wallpaper...")
     }
+    
+    binding.fabDownload.setPreventDoubleClickScaleView {
+        checkPermissionAndDownload()
+    }
 }
 
 fun WallpaperDetailFragment.releaseAnimation() {
