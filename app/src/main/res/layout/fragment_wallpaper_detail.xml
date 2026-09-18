@@ -35,31 +35,44 @@
         android:layout_marginBottom="@dimen/_32dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabFavorite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/_24dp"
-            android:src="@android:drawable/btn_star_big_off"
-            app:backgroundTint="#E91E63"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSetWallpaper"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_24dp"
+            android:layout_marginStart="@dimen/_24dp"
+            android:layout_marginEnd="@dimen/_16dp"
             android:text="Set as Wallpaper"
             android:textAllCaps="false"
             android:textColor="@color/white"
             app:cornerRadius="@dimen/_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/fabFavorite"
+            app:layout_constraintEnd_toStartOf="@id/fabDownload"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabDownload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_16dp"
+            android:src="@android:drawable/stat_sys_download"
+            app:backgroundTint="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/fabFavorite"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/black" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabFavorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_24dp"
+            android:src="@drawable/ic_heart"
+            app:backgroundTint="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/black" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

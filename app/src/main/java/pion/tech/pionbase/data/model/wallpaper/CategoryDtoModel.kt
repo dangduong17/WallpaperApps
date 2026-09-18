@@ -9,3 +9,8 @@ fun CategoryDtoModel.toPresentation() = CategoryUIModel(
     title = this.title,
     imageUrl = this.imageUrl
 )
+
+fun CategoryDtoModel.toEntity() = CategoryEntity(
+    title = this.title,
+    imageUrl = this.imageUrl
+)

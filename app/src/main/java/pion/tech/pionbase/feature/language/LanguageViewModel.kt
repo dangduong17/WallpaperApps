@@ -4,11 +4,13 @@ import pion.tech.pionbase.base.BaseViewModel
 import pion.tech.pionbase.data.model.language.LanguageUIModel
 import pion.tech.pionbase.data.model.language.toPresentation
 import pion.tech.pionbase.domain.usecase.language.GetLanguagesUseCase
+import pion.tech.pionbase.data.repository.dataStore.DataStoreRepository
 import pion.tech.pionbase.util.UiState
 import pion.tech.pionbase.util.handleApiCall
 
 class LanguageViewModel(
     private val getLanguagesUseCase: GetLanguagesUseCase,
+    private val dataStoreRepository: DataStoreRepository,
 ) : BaseViewModel<LanguageUiState, Nothing>(LanguageUiState()) {
 
     init {
@@ -21,9 +23,11 @@ class LanguageViewModel(
             apiCall = { getLanguagesUseCase() },
             onSuccess = { dtoList ->
                 val languages = dtoList.map { it.toPresentation() }
+                val defaultLanguage = languages.find { it.localeCode == "en" }
                 setState {
                     copy(
-                        languagesUiState = UiState.Success(languages)
+                        languagesUiState = UiState.Success(languages),
+                        selectedLanguage = defaultLanguage ?: languages.firstOrNull()
                     )
                 }
             },
@@ -43,6 +47,10 @@ class LanguageViewModel(
                 selectedLanguage = item,
             )
         }
+    }
+
+    fun setFirstLaunchFalse() {
+        handleApiCall(apiCall = { dataStoreRepository.setIsFirstLaunch(false) })
     }
 
     fun getSelectedLanguage(): LanguageUIModel? = uiState.value.selectedLanguage

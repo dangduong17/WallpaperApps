@@ -58,34 +58,9 @@
         android:layout_marginHorizontal="@dimen/_12dp"
         android:layout_marginTop="@dimen/_12dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/layoutAds"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:spanCount="3"
         tools:listitem="@layout/item_language" />
 
-    <FrameLayout
-        android:id="@+id/layoutAds"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="#C7C7C7"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="360:70"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <FrameLayout
-            android:id="@+id/adViewGroup"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/loading_ads"
-                android:textColor="@color/black" />
-
-        </FrameLayout>
-    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

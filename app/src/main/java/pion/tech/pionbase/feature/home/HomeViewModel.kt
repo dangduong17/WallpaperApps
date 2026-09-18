@@ -7,13 +7,16 @@ import pion.tech.pionbase.data.model.wallpaper.toPresentation
 import pion.tech.pionbase.domain.usecase.wallpaper.GetCategoriesUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.GetFeaturedWallpapersUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.GetTopWallpapersUseCase
+import pion.tech.pionbase.domain.usecase.wallpaper.GetWallpapersByCategoryUseCase
+import pion.tech.pionbase.feature.home.adapter.FilterUIModel
 import pion.tech.pionbase.util.UiState
 import pion.tech.pionbase.util.handleApiCall
 
 class HomeViewModel(
     private val getFeaturedWallpapersUseCase: GetFeaturedWallpapersUseCase,
     private val getTopWallpapersUseCase: GetTopWallpapersUseCase,
-    private val getCategoriesUseCase: GetCategoriesUseCase
+    private val getCategoriesUseCase: GetCategoriesUseCase,
+    private val getWallpapersByCategoryUseCase: GetWallpapersByCategoryUseCase
 ) : BaseViewModel<HomeUiState, Nothing>(HomeUiState()) {
 
     init {
@@ -35,9 +38,17 @@ class HomeViewModel(
         )
     }
 
-    private fun getTopWallpapers() {
+    fun getTopWallpapers(categoryName: String? = null) {
+        val selectedCategory = categoryName ?: uiState.value.filters.find { it.isSelected }?.name
+        
         handleApiCall(
-            apiCall = { getTopWallpapersUseCase() },
+            apiCall = { 
+                if (selectedCategory == null || selectedCategory == "All") {
+                    getTopWallpapersUseCase()
+                } else {
+                    getWallpapersByCategoryUseCase(selectedCategory)
+                }
+            },
             onSuccess = { dtoList ->
                 val topWallpapers = dtoList.map { it.toPresentation() }
                 setState { copy(topWallpaperUiState = UiState.Success(topWallpapers)) }
@@ -53,12 +64,34 @@ class HomeViewModel(
             apiCall = { getCategoriesUseCase() },
             onSuccess = { dtoList ->
                 val categories = dtoList.map { it.toPresentation() }
-                setState { copy(categoriesUiState = UiState.Success(categories)) }
+                
+                // Also create filters for Home tab
+                val filters = mutableListOf(FilterUIModel("All", true))
+                filters.addAll(categories.map { FilterUIModel(it.title, false) })
+                
+                setState { 
+                    copy(
+                        categoriesUiState = UiState.Success(categories),
+                        filters = filters
+                    ) 
+                }
             },
             onError = { throwable ->
                 setState { copy(categoriesUiState = UiState.Error(throwable)) }
             },
         )
+    }
+
+    fun selectFilter(filter: FilterUIModel) {
+        val newFilters = uiState.value.filters.map {
+            it.copy(isSelected = it.name == filter.name)
+        }
+        setState { copy(filters = newFilters) }
+        getTopWallpapers(filter.name)
+    }
+
+    fun setSelectedTab(index: Int) {
+        setState { copy(selectedTab = index) }
     }
 }
 
@@ -66,4 +99,6 @@ data class HomeUiState(
     val featuredUiState: UiState<List<WallpaperUIModel>> = UiState.None,
     val topWallpaperUiState: UiState<List<WallpaperUIModel>> = UiState.None,
     val categoriesUiState: UiState<List<CategoryUIModel>> = UiState.None,
+    val filters: List<FilterUIModel> = emptyList(),
+    val selectedTab: Int = TAB_HOME
 )

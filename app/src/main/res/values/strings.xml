@@ -42,4 +42,6 @@
     <string name="enable_notifications">Enable Notifications</string>
     <string name="rate_this_app">Rate this App</string>
     <string name="share_with_friend">Share with friend</string>
+    <string name="no_wallpapers_found">No wallpapers found</string>
+    <string name="back">Back</string>
 </resources>

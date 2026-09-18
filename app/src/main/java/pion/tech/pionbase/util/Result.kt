@@ -1,13 +1,8 @@
 package pion.tech.pionbase.util
 
-sealed class Result<T> {
-    data class Success<T>(
-        val data: T,
-    ) : Result<T>()
-
-    data class Error<T>(
-        val error: Throwable,
-    ) : Result<T>()
+sealed class Result<out T> {
+    data class Success<out T>(val data: T) : Result<T>()
+    data class Error<out T>(val error: Throwable) : Result<T>()
 }
 
 inline fun <T> Result<T>.onSuccess(block: (T) -> Unit): Result<T> = if (this is Result.Success) also { block(data) } else this

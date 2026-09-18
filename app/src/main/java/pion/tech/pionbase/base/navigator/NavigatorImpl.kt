@@ -2,10 +2,7 @@ package pion.tech.pionbase.base.navigator
 
 import android.os.Bundle
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.NavDirections
 import androidx.navigation.NavOptions
 
@@ -14,20 +11,19 @@ class NavigatorImpl(
     private val lifecycle: Lifecycle,
     private val currentDestinationId: Int,
 ) : Navigator {
-    private var navObserver: LifecycleEventObserver? = null
 
-    private fun isAtCurrentDestination(): Boolean = navController.currentDestination?.id == currentDestinationId
+    private var navObserver: androidx.lifecycle.LifecycleEventObserver? = null
 
     private fun safeAction(action: () -> Unit) {
         if (!isAtCurrentDestination()) return
         runCatching {
             navObserver =
-                object : LifecycleEventObserver {
+                object : androidx.lifecycle.LifecycleEventObserver {
                     override fun onStateChanged(
-                        source: LifecycleOwner,
-                        event: Lifecycle.Event,
+                        source: androidx.lifecycle.LifecycleOwner,
+                        event: androidx.lifecycle.Lifecycle.Event,
                     ) {
-                        if (event == Lifecycle.Event.ON_RESUME) {
+                        if (event == androidx.lifecycle.Lifecycle.Event.ON_RESUME) {
                             lifecycle.removeObserver(this)
                             runCatching {
                                 if (navController.currentDestination?.id == currentDestinationId) {
@@ -44,12 +40,12 @@ class NavigatorImpl(
                     NavController.OnDestinationChangedListener {
                     override fun onDestinationChanged(
                         controller: NavController,
-                        destination: NavDestination,
+                        destination: androidx.navigation.NavDestination,
                         arguments: Bundle?,
                     ) {
                         if (destination.id != currentDestinationId) {
                             navController.removeOnDestinationChangedListener(this)
-                            lifecycle.removeObserver(navObserver as LifecycleEventObserver)
+                            lifecycle.removeObserver(navObserver!!)
                         }
                     }
                 },
@@ -59,6 +55,10 @@ class NavigatorImpl(
                 action()
             }
         }
+    }
+
+    private fun isAtCurrentDestination(): Boolean {
+        return navController.currentDestination?.id == currentDestinationId
     }
 
     override fun getCurrentDestinationId(): Int = navController.currentDestination?.id ?: 0
@@ -92,7 +92,12 @@ class NavigatorImpl(
     }
 
     override fun navigateUp() {
-        safeAction { navController.navigateUp() }
+        // For navigateUp, we use the navController directly but still check lifecycle
+        if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+            runCatching {
+                navController.navigateUp()
+            }
+        }
     }
 
     override fun addOnDestinationChangedListener(listener: NavController.OnDestinationChangedListener) {
@@ -109,6 +114,10 @@ class NavigatorImpl(
         destinationId: Int,
         inclusive: Boolean,
     ) {
-        safeAction { navController.popBackStack(destinationId, inclusive) }
+        if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+            runCatching {
+                navController.popBackStack(destinationId, inclusive)
+            }
+        }
     }
 }

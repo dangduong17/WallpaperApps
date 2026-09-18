@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardFilter"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    app:cardCornerRadius="@dimen/_16dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="#33FFFFFF">
+
+    <TextView
+        android:id="@+id/tvFilterName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/_16dp"
+        android:paddingVertical="@dimen/_6dp"
+        android:text="Nature"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12sp" />
+
+</com.google.android.material.card.MaterialCardView>

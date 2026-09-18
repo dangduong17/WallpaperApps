@@ -242,19 +242,29 @@ fun Context.openBrowser(url: String) {
 
 fun ImageView.loadImage(
     source: Any?,
-    placeholder: Int,
+    placeholder: Int = android.R.drawable.ic_menu_gallery,
+    error: Int = android.R.drawable.ic_menu_report_image
 ) {
+    if (this.context is android.app.Activity && ((this.context as android.app.Activity).isFinishing || (this.context as android.app.Activity).isDestroyed)) {
+        return
+    }
     Glide
         .with(this)
         .load(source)
         .placeholder(placeholder)
+        .error(error)
         .into(this)
 }
 
 fun ImageView.loadImage(source: Any?) {
+    if (this.context is android.app.Activity && ((this.context as android.app.Activity).isFinishing || (this.context as android.app.Activity).isDestroyed)) {
+        return
+    }
     Glide
         .with(this)
         .load(source)
+        .placeholder(android.R.drawable.ic_menu_gallery)
+        .error(android.R.drawable.ic_menu_report_image)
         .into(this)
 }
 
@@ -264,6 +274,9 @@ fun ImageView.loadWithCallback(
     onSuccess: (() -> Unit)? = null,
     onError: (() -> Unit)? = null,
 ) {
+    if (this.context is android.app.Activity && ((this.context as android.app.Activity).isFinishing || (this.context as android.app.Activity).isDestroyed)) {
+        return
+    }
     onStart?.invoke()
 
     Glide
@@ -278,6 +291,9 @@ fun ImageView.loadWithCallback(
                     dataSource: DataSource,
                     isFirstResource: Boolean,
                 ): Boolean {
+                    if (this@loadWithCallback.context is android.app.Activity && ((this@loadWithCallback.context as android.app.Activity).isFinishing || (this@loadWithCallback.context as android.app.Activity).isDestroyed)) {
+                        return false
+                    }
                     onSuccess?.invoke()
                     return false
                 }
@@ -288,6 +304,9 @@ fun ImageView.loadWithCallback(
                     target: Target<Drawable>,
                     isFirstResource: Boolean,
                 ): Boolean {
+                    if (this@loadWithCallback.context is android.app.Activity && ((this@loadWithCallback.context as android.app.Activity).isFinishing || (this@loadWithCallback.context as android.app.Activity).isDestroyed)) {
+                        return false
+                    }
                     onError?.invoke()
                     return false
                 }

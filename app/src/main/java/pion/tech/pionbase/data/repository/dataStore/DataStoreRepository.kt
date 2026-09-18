@@ -11,4 +11,8 @@ interface DataStoreRepository {
     fun getToken(): Flow<Result<String?>>
 
     fun setToken(token: String): Flow<Result<Unit>>
+
+    fun getIsFirstLaunch(): Flow<Result<Boolean>>
+
+    fun setIsFirstLaunch(isFirstLaunch: Boolean): Flow<Result<Unit>>
 }
