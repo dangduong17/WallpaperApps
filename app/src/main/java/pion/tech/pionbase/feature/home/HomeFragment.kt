@@ -40,15 +40,6 @@ class HomeFragment :
         initView()
         settingEvent()
         onBackEvent()
-
-        viewLifecycleOwner.lifecycle.addObserver(object : androidx.lifecycle.DefaultLifecycleObserver {
-            override fun onResume(owner: androidx.lifecycle.LifecycleOwner) {
-                super.onResume(owner)
-                featuredAdapter.setListener(this@HomeFragment)
-                topWallpaperAdapter.setListener(this@HomeFragment)
-                categoryAdapter.setListener(this@HomeFragment)
-            }
-        })
     }
 
     override fun subscribeObserver(view: View) {
