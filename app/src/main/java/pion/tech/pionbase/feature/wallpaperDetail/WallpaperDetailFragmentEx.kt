@@ -36,27 +36,47 @@ fun WallpaperDetailFragment.settingEvent() {
     }
 
     binding.btnSetWallpaper.setPreventDoubleClickScaleView {
-        val bitmap = (binding.ivFullWallpaper.drawable as? android.graphics.drawable.BitmapDrawable)?.bitmap
-        if (bitmap != null) {
-            showHideLoading(true)
-            launchIO {
-                try {
-                    val wallpaperManager = android.app.WallpaperManager.getInstance(requireContext())
-                    wallpaperManager.setBitmap(bitmap)
-                    launchMain {
-                        showHideLoading(false)
-                        displayToast("Đã đặt hình nền thành công!")
-                    }
-                } catch (e: Exception) {
-                    launchMain {
-                        showHideLoading(false)
-                        displayToast("Không thể đặt hình nền: ${e.message}")
+        val options = arrayOf("Màn hình chính", "Màn hình khóa", "Cả hai")
+        android.app.AlertDialog.Builder(requireContext())
+            .setTitle("Đặt làm hình nền")
+            .setItems(options) { _, which ->
+                val flag = when(which) {
+                    0 -> android.app.WallpaperManager.FLAG_SYSTEM
+                    1 -> android.app.WallpaperManager.FLAG_LOCK
+                    else -> android.app.WallpaperManager.FLAG_SYSTEM or android.app.WallpaperManager.FLAG_LOCK
+                }
+
+                wallpaperUri?.let { uri ->
+                    viewModel.applyWallpaper(uri, flag)
+                } ?: run {
+                    val bitmap = (binding.ivFullWallpaper.drawable as? android.graphics.drawable.BitmapDrawable)?.bitmap
+                    if (bitmap != null) {
+                        showHideLoading(true)
+                        launchIO {
+                            try {
+                                val wallpaperManager = android.app.WallpaperManager.getInstance(requireContext())
+                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                                    wallpaperManager.setBitmap(bitmap, null, true, flag)
+                                } else {
+                                    wallpaperManager.setBitmap(bitmap)
+                                }
+                                launchMain {
+                                    showHideLoading(false)
+                                    displayToast("Đã đặt hình nền thành công!")
+                                }
+                            } catch (e: Exception) {
+                                launchMain {
+                                    showHideLoading(false)
+                                    displayToast("Không thể đặt hình nền: ${e.message}")
+                                }
+                            }
+                        }
+                    } else {
+                        displayToast("Đang tải ảnh, vui lòng đợi...")
                     }
                 }
             }
-        } else {
-            displayToast("Đang tải ảnh, vui lòng đợi...")
-        }
+            .show()
     }
     
     binding.fabDownload.setPreventDoubleClickScaleView {

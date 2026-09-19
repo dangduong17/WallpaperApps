@@ -3,6 +3,7 @@ package pion.tech.pionbase.feature.wallpaperDetail
 import pion.tech.pionbase.base.BaseViewModel
 import pion.tech.pionbase.base.launchMain
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
+import pion.tech.pionbase.domain.usecase.home.SetWallpaperUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.DownloadWallpaperUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.IsFavoriteWallpaperUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.ToggleFavoriteUseCase
@@ -11,7 +12,8 @@ import pion.tech.pionbase.util.handleApiCall
 class WallpaperDetailViewModel(
     private val toggleFavoriteUseCase: ToggleFavoriteUseCase,
     private val isFavoriteWallpaperUseCase: IsFavoriteWallpaperUseCase,
-    private val downloadWallpaperUseCase: DownloadWallpaperUseCase
+    private val downloadWallpaperUseCase: DownloadWallpaperUseCase,
+    private val setWallpaperUseCase: SetWallpaperUseCase
 ) : BaseViewModel<WallpaperDetailUiState, Nothing>(WallpaperDetailUiState()) {
     
     fun downloadWallpaper() {
@@ -31,6 +33,19 @@ class WallpaperDetailViewModel(
     fun setWallpaper(item: WallpaperUIModel) {
         setState { copy(wallpaper = item) }
         checkFavoriteStatus(item.imageUrl)
+    }
+
+    fun applyWallpaper(uri: android.net.Uri, which: Int) {
+        setState { copy(isSettingWallpaper = true) }
+        handleApiCall(
+            apiCall = { setWallpaperUseCase(uri, which) },
+            onSuccess = { 
+                setState { copy(isSettingWallpaper = false) }
+            },
+            onError = { 
+                setState { copy(isSettingWallpaper = false) }
+            }
+        )
     }
 
     private fun checkFavoriteStatus(url: String) {
@@ -56,5 +71,6 @@ class WallpaperDetailViewModel(
 data class WallpaperDetailUiState(
     val wallpaper: WallpaperUIModel? = null,
     val isFavorite: Boolean = false,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val isSettingWallpaper: Boolean = false
 )
