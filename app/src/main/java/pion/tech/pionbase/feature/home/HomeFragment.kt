@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import pion.tech.pionbase.R
@@ -39,6 +40,15 @@ class HomeFragment :
         initView()
         settingEvent()
         onBackEvent()
+
+        viewLifecycleOwner.lifecycle.addObserver(object : androidx.lifecycle.DefaultLifecycleObserver {
+            override fun onResume(owner: androidx.lifecycle.LifecycleOwner) {
+                super.onResume(owner)
+                featuredAdapter.setListener(this@HomeFragment)
+                topWallpaperAdapter.setListener(this@HomeFragment)
+                categoryAdapter.setListener(this@HomeFragment)
+            }
+        })
     }
 
     override fun subscribeObserver(view: View) {
@@ -88,12 +98,14 @@ class HomeFragment :
     }
 
     override fun onClickWallpaper(item: WallpaperUIModel) {
+        timber.log.Timber.d("HomeFragment: onClickWallpaper called for: ${item.imageUrl}")
         val action = HomeFragmentDirections.actionHomeFragmentToWallpaperDetailFragment(item)
-        navigator.navigateTo(action)
+        findNavController().navigate(action)
     }
 
     override fun onClickCategory(item: CategoryUIModel) {
+        timber.log.Timber.d("HomeFragment: onClickCategory called for: ${item.title}")
         val action = HomeFragmentDirections.actionHomeFragmentToCategoryDetailFragment(item.title)
-        navigator.navigateTo(action)
+        findNavController().navigate(action)
     }
 }
