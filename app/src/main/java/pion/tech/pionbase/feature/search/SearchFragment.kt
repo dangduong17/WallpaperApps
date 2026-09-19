@@ -10,6 +10,7 @@ import pion.tech.pionbase.base.BaseFragment
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
 import pion.tech.pionbase.databinding.FragmentSearchBinding
 import pion.tech.pionbase.feature.home.adapter.TopWallpaperAdapter
+import pion.tech.pionbase.feature.search.adapter.SuggestionAdapter
 import pion.tech.pionbase.util.collectFlowOnView
 import pion.tech.pionbase.util.handleUiState
 
@@ -20,6 +21,7 @@ class SearchFragment :
     ), TopWallpaperAdapter.Listener {
 
     val adapter = TopWallpaperAdapter()
+    val suggestionAdapter = SuggestionAdapter()
 
     override fun init(view: View, savedInstanceState: Bundle?) {
         initView()
@@ -27,6 +29,15 @@ class SearchFragment :
     }
 
     override fun subscribeObserver(view: View) {
+        viewModel.uiState
+            .map { it.suggestions }
+            .distinctUntilChanged()
+            .collectFlowOnView(viewLifecycleOwner) { suggestions ->
+                timber.log.Timber.d("SearchFragment: Received suggestions size: ${suggestions.size}")
+                binding.rvSuggestions.isVisible = suggestions.isNotEmpty()
+                suggestionAdapter.submitList(suggestions)
+            }
+
         viewModel.uiState
             .map { it.searchResultUiState }
             .distinctUntilChanged()

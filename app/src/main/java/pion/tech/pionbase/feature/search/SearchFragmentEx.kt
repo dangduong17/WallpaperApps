@@ -8,6 +8,15 @@ fun SearchFragment.initView() {
     adapter.setListener(this)
     binding.rvSearchResult.adapter = adapter
     
+    suggestionAdapter.setListener(object : pion.tech.pionbase.feature.search.adapter.SuggestionAdapter.Listener {
+        override fun onClickSuggestion(suggestion: String) {
+            binding.edtSearch.setText(suggestion)
+            viewModel.searchNow(suggestion)
+            binding.rvSuggestions.visibility = android.view.View.GONE
+        }
+    })
+    binding.rvSuggestions.adapter = suggestionAdapter
+    
     binding.edtSearch.addTextChangedListener { text ->
         viewModel.onQueryChanged(text?.toString() ?: "")
     }

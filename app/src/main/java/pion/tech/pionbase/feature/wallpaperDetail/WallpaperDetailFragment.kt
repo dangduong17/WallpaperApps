@@ -22,6 +22,12 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
     WallpaperDetailViewModel::class
 ) {
     private val args: WallpaperDetailFragmentArgs by navArgs()
+    
+    // Xử lý URI nếu là ảnh từ picker (truyền qua args dưới dạng String)
+    val wallpaperUri: android.net.Uri? by lazy {
+        args.wallpaper.imageUrl.takeIf { it.startsWith("content://") }?.let { android.net.Uri.parse(it) }
+    }
+    
     var favoriteAnim: Animation? = null
 
     private val requestPermissionLauncher = registerForActivityResult(
@@ -36,6 +42,9 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
     }
 
     override fun init(view: View, savedInstanceState: Bundle?) {
+        // Luôn ưu tiên hiển thị title từ args.wallpaper
+        binding.tvImageName.text = args.wallpaper.title
+        
         viewModel.setWallpaper(args.wallpaper)
         initView()
         settingEvent()
@@ -56,8 +65,21 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
             .distinctUntilChanged()
             .collectFlowOnView(viewLifecycleOwner) { wallpaper ->
                 wallpaper?.let {
-                    binding.ivFullWallpaper.loadImage(it.imageUrl)
+                    // Nếu là ảnh từ Picker, dùng setImageURI
+                    if (wallpaperUri != null) {
+                        binding.ivFullWallpaper.setImageURI(wallpaperUri)
+                    } else {
+                        binding.ivFullWallpaper.loadImage(it.imageUrl)
+                    }
                 }
+            }
+
+        // Thêm observer cho trạng thái loading
+        viewModel.uiState
+            .map { it.isSettingWallpaper }
+            .distinctUntilChanged()
+            .collectFlowOnView(viewLifecycleOwner) { isSetting ->
+                showHideLoading(isSetting)
             }
 
         viewModel.uiState
@@ -80,16 +102,10 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
             }
 
         viewModel.uiState
-            .map { it.isLoading }
+            .map { it.isSettingWallpaper }
             .distinctUntilChanged()
-            .collectFlowOnView(viewLifecycleOwner) { isLoading ->
-                if (isLoading) {
-                    binding.fabDownload.setImageResource(android.R.drawable.stat_notify_sync)
-                    binding.fabDownload.isEnabled = false
-                } else {
-                    binding.fabDownload.setImageResource(android.R.drawable.stat_sys_download)
-                    binding.fabDownload.isEnabled = true
-                }
+            .collectFlowOnView(viewLifecycleOwner) { isSetting ->
+                showHideLoading(isSetting)
             }
     }
 

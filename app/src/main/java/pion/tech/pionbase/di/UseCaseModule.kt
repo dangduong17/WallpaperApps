@@ -3,6 +3,7 @@ package pion.tech.pionbase.di
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 import pion.tech.pionbase.domain.usecase.home.GetInstalledAppsUseCase
+import pion.tech.pionbase.domain.usecase.home.SetWallpaperUseCase
 import pion.tech.pionbase.domain.usecase.language.GetLanguagesUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.DownloadWallpaperUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.GetCategoriesUseCase
@@ -16,6 +17,7 @@ import pion.tech.pionbase.domain.usecase.wallpaper.ToggleFavoriteUseCase
 
 val homeUseCaseModule = module {
     factoryOf(::GetInstalledAppsUseCase)
+    factoryOf(::SetWallpaperUseCase)
 }
 
 val wallpaperUseCaseModule = module {
