@@ -3,9 +3,9 @@ package pion.tech.pionbase.feature.wallpaperDetail
 import android.view.animation.Animation
 import android.view.animation.OvershootInterpolator
 import android.view.animation.ScaleAnimation
+import com.google.android.material.snackbar.Snackbar
 import pion.tech.pionbase.base.launchIO
 import pion.tech.pionbase.base.launchMain
-import pion.tech.pionbase.util.displayToast
 import pion.tech.pionbase.util.setPreventDoubleClickScaleView
 
 fun WallpaperDetailFragment.initView() {
@@ -62,17 +62,17 @@ fun WallpaperDetailFragment.settingEvent() {
                                 }
                                 launchMain {
                                     showHideLoading(false)
-                                    displayToast("Đã đặt hình nền thành công!")
+                                    Snackbar.make(binding.root, "Đã đặt hình nền thành công!", Snackbar.LENGTH_SHORT).show()
                                 }
                             } catch (e: Exception) {
                                 launchMain {
                                     showHideLoading(false)
-                                    displayToast("Không thể đặt hình nền: ${e.message}")
+                                    Snackbar.make(binding.root, "Không thể đặt hình nền: ${e.message}", Snackbar.LENGTH_LONG).show()
                                 }
                             }
                         }
                     } else {
-                        displayToast("Đang tải ảnh, vui lòng đợi...")
+                        Snackbar.make(binding.root, "Đang tải ảnh, vui lòng đợi...", Snackbar.LENGTH_SHORT).show()
                     }
                 }
             }

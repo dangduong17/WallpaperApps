@@ -39,6 +39,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Hiện Snackbar nếu có thông báo thành công từ EditWallpaperActivity
+        checkSuccessMessage(intent)
+        
         enableEdgeToEdge()
         supportFragmentManager.registerFragmentLifecycleCallbacks(
             FragmentLifecycleCallbacksImpl(),
@@ -52,6 +56,24 @@ class MainActivity : AppCompatActivity() {
         }
         setupNavigationLogging()
         subscribeObserver()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        checkSuccessMessage(intent)
+    }
+
+    private fun checkSuccessMessage(intent: Intent?) {
+        if (intent?.getBooleanExtra("show_success_msg", false) == true) {
+            window.decorView.post {
+                com.google.android.material.snackbar.Snackbar.make(
+                    findViewById(android.R.id.content),
+                    "Đã thiết lập hình nền thành công!",
+                    com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     private fun subscribeObserver() {

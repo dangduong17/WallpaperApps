@@ -157,4 +157,7 @@ dependencies {
 
     // Roundable layout
     implementation(libs.roundablelayout)
+
+    // uCrop
+    implementation("com.github.yalantis:ucrop:2.2.9")
 }

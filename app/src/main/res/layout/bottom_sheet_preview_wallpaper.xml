@@ -19,7 +19,7 @@
         android:id="@+id/imgPreview"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:scaleType="centerCrop"
+        android:scaleType="fitCenter"
         android:contentDescription="@string/app_name" />
 
     <Button
@@ -27,6 +27,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Set as Wallpaper" />
+        android:text="@string/customize_wallpaper" />
 
 </LinearLayout>

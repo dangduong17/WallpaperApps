@@ -22,16 +22,24 @@ class WallpaperDetailViewModel(
         handleApiCall(
             apiCall = { downloadWallpaperUseCase(currentWallpaper.imageUrl) },
             onSuccess = {
-                setState { copy(isLoading = false) }
+                launchMain {
+                    kotlinx.coroutines.delay(400)
+                    setState { copy(isLoading = false) }
+                }
             },
             onError = {
-                setState { copy(isLoading = false) }
+                launchMain {
+                    kotlinx.coroutines.delay(400)
+                    setState { copy(isLoading = false) }
+                }
             }
         )
     }
     // ...
     fun setWallpaper(item: WallpaperUIModel) {
-        setState { copy(wallpaper = item) }
+        val isGif = item.imageUrl.lowercase().contains(".gif")
+        timber.log.Timber.d("DEBUG: URL=${item.imageUrl}, isGif=$isGif")
+        setState { copy(wallpaper = item, isGif = isGif) }
         checkFavoriteStatus(item.imageUrl)
     }
 
@@ -40,10 +48,16 @@ class WallpaperDetailViewModel(
         handleApiCall(
             apiCall = { setWallpaperUseCase(uri, which) },
             onSuccess = { 
-                setState { copy(isSettingWallpaper = false) }
+                launchMain {
+                    kotlinx.coroutines.delay(400)
+                    setState { copy(isSettingWallpaper = false) }
+                }
             },
             onError = { 
-                setState { copy(isSettingWallpaper = false) }
+                launchMain {
+                    kotlinx.coroutines.delay(400)
+                    setState { copy(isSettingWallpaper = false) }
+                }
             }
         )
     }
@@ -72,5 +86,6 @@ data class WallpaperDetailUiState(
     val wallpaper: WallpaperUIModel? = null,
     val isFavorite: Boolean = false,
     val isLoading: Boolean = false,
-    val isSettingWallpaper: Boolean = false
+    val isSettingWallpaper: Boolean = false,
+    val isGif: Boolean = false
 )

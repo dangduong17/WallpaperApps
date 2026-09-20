@@ -31,23 +31,64 @@ class HomeFragment :
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             val dialog = WallpaperPreviewBottomSheet(uri) { selectedUri ->
-                showWallpaperOptionsDialog(selectedUri)
+                val intent = android.content.Intent(requireContext(), EditWallpaperActivity::class.java)
+                intent.putExtra("uri", selectedUri)
+                startActivity(intent)
             }
             dialog.show(childFragmentManager, "WallpaperPreview")
         }
     }
 
     private fun showWallpaperOptionsDialog(uri: android.net.Uri) {
-        val options = arrayOf("Màn hình chính", "Màn hình khóa", "Cả hai")
+        val options = arrayOf("Màn hình chính", "Màn hình khóa", "Cả hai", "Hình nền động (Live Wallpaper)")
         android.app.AlertDialog.Builder(requireContext())
             .setTitle("Đặt làm hình nền")
             .setItems(options) { _, which ->
-                val flag = when (which) {
-                    0 -> android.app.WallpaperManager.FLAG_SYSTEM
-                    1 -> android.app.WallpaperManager.FLAG_LOCK
-                    else -> android.app.WallpaperManager.FLAG_SYSTEM or android.app.WallpaperManager.FLAG_LOCK
+                if (which == 3) {
+                    try {
+                        val outputFile = java.io.File(requireContext().filesDir, "active_gif.gif")
+                        
+                        // Mở stream và copy
+                        requireContext().contentResolver.openInputStream(uri)?.use { input ->
+                            outputFile.outputStream().use { output ->
+                                input.copyTo(output)
+                                output.flush() // Ép buộc ghi dữ liệu xuống ổ cứng
+                            }
+                        }
+                        
+                        // Kiểm tra file đã tồn tại và có dung lượng > 0
+                        if (outputFile.exists() && outputFile.length() > 0) {
+                            outputFile.setReadable(true, false)
+                            
+                            requireContext().getSharedPreferences("wallpaper_prefs", android.content.Context.MODE_PRIVATE)
+                                .edit().putString("selected_gif_path", outputFile.absolutePath).apply()
+                            
+                            val intent = android.content.Intent(android.app.WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER)
+                            intent.putExtra(
+                                android.app.WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
+                                android.content.ComponentName(requireContext(), pion.tech.pionbase.service.LiveWallpaperService::class.java)
+                            )
+                            intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                            try {
+                                startActivity(intent)
+                            } catch (_: android.content.ActivityNotFoundException) {
+                                displayToast("Thiết bị của bạn không hỗ trợ cài đặt hình nền động.")
+                            }
+                        } else {
+                            displayToast("Lỗi: Không thể chuẩn bị file ảnh (file rỗng).")
+                        }
+                    } catch (e: Exception) {
+                        timber.log.Timber.e(e, "Lỗi copy file")
+                        displayToast("Lỗi: ${e.message}")
+                    }
+                } else {
+                    val flag = when (which) {
+                        0 -> android.app.WallpaperManager.FLAG_SYSTEM
+                        1 -> android.app.WallpaperManager.FLAG_LOCK
+                        else -> android.app.WallpaperManager.FLAG_SYSTEM or android.app.WallpaperManager.FLAG_LOCK
+                    }
+                    viewModel.setWallpaper(uri, flag)
                 }
-                viewModel.setWallpaper(uri, flag)
             }
             .show()
     }

@@ -61,25 +61,34 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
 
     override fun subscribeObserver(view: View) {
         viewModel.uiState
-            .map { it.wallpaper }
+            .map { it.wallpaper to it.isGif }
             .distinctUntilChanged()
-            .collectFlowOnView(viewLifecycleOwner) { wallpaper ->
+            .collectFlowOnView(viewLifecycleOwner) { (wallpaper, isGif) ->
                 wallpaper?.let {
-                    // Nếu là ảnh từ Picker, dùng setImageURI
-                    if (wallpaperUri != null) {
-                        binding.ivFullWallpaper.setImageURI(wallpaperUri)
+                    timber.log.Timber.d("DEBUG: URL=${it.imageUrl}, isGif=$isGif")
+                    if (isGif) {
+                        com.bumptech.glide.Glide.with(requireContext())
+                            .asGif()
+                            .load(it.imageUrl)
+                            .diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy.RESOURCE)
+                            .into(binding.ivFullWallpaper)
                     } else {
-                        binding.ivFullWallpaper.loadImage(it.imageUrl)
+                        // Nếu là ảnh từ Picker, dùng setImageURI
+                        if (wallpaperUri != null) {
+                            binding.ivFullWallpaper.setImageURI(wallpaperUri)
+                        } else {
+                            binding.ivFullWallpaper.loadImage(it.imageUrl)
+                        }
                     }
                 }
             }
 
         // Thêm observer cho trạng thái loading
         viewModel.uiState
-            .map { it.isSettingWallpaper }
+            .map { it.isLoading || it.isSettingWallpaper }
             .distinctUntilChanged()
-            .collectFlowOnView(viewLifecycleOwner) { isSetting ->
-                showHideLoading(isSetting)
+            .collectFlowOnView(viewLifecycleOwner) { isLoading ->
+                showHideLoading(isLoading)
             }
 
         viewModel.uiState
@@ -99,13 +108,6 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
                 } else {
                     binding.fabFavorite.setColorFilter(android.graphics.Color.BLACK)
                 }
-            }
-
-        viewModel.uiState
-            .map { it.isSettingWallpaper }
-            .distinctUntilChanged()
-            .collectFlowOnView(viewLifecycleOwner) { isSetting ->
-                showHideLoading(isSetting)
             }
     }
 

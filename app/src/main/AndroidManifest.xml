@@ -32,6 +32,15 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".feature.home.EditWallpaperActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:theme="@style/MyUCropTheme" />
+
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
             android:enabled="false"
@@ -42,15 +51,15 @@
         </service>
 
         <service
-            android:name=".service.VideoWallpaperService"
+            android:name=".service.LiveWallpaperService"
             android:permission="android.permission.BIND_WALLPAPER"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService" />
             </intent-filter>
             <meta-data
-                android:name="android.service.wallpaper.wallpaper"
-                android:resource="@xml/wallpaper" />
+                android:name="android.service.wallpaper"
+                android:resource="@xml/wallpaper_service_config" />
         </service>
 
         <meta-data
