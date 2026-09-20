@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_24dp"
             android:layout_marginEnd="@dimen/_16dp"
-            android:text="Set as Wallpaper"
+            android:text="@string/set_as_wallpaper"
             android:textAllCaps="false"
             android:textColor="@color/white"
             app:cornerRadius="@dimen/_24dp"

@@ -18,7 +18,7 @@
             android:layout_width="@dimen/_28dp"
             android:layout_height="@dimen/_28dp"
             android:layout_marginStart="@dimen/_16dp"
-            android:src="@android:drawable/ic_menu_sort_by_size"
+            android:src="@drawable/ic_gear"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -145,9 +145,10 @@
                         android:textSize="@dimen/_16sp" />
 
                     <TextView
+                        android:id="@+id/tvLanguageName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="English"
+                        android:text="@string/english"
                         android:textColor="#80FFFFFF"
                         android:textSize="@dimen/_12sp" />
                 </LinearLayout>
@@ -370,7 +371,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_16dp"
-                    android:text="Select Custom Wallpaper"
+                    android:text="@string/select_custom_wallpaper"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_16sp"
                     app:layout_constraintBottom_toBottomOf="parent"

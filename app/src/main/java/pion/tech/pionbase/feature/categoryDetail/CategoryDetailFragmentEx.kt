@@ -6,7 +6,9 @@ fun CategoryDetailFragment.initView() {
     binding.tvTitle.text = args.categoryName
     
     adapter.setListener(this)
-    binding.rvWallpapers.adapter = adapter
+    if (binding.rvWallpapers.adapter == null) {
+        binding.rvWallpapers.adapter = adapter
+    }
 }
 
 fun CategoryDetailFragment.settingEvent() {

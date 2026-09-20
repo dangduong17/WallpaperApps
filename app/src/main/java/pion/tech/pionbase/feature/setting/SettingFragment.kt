@@ -6,6 +6,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import pion.tech.pionbase.base.BaseFragment
 import pion.tech.pionbase.databinding.FragmentSettingBinding
+import pion.tech.pionbase.util.collectFlowOnView
 import pion.tech.pionbase.util.displayToast
 
 class SettingFragment :
@@ -35,5 +36,17 @@ class SettingFragment :
     }
 
     override fun subscribeObserver(view: View) {
+        // Cập nhật tên ngôn ngữ dựa trên lựa chọn hiện tại
+        dataStoreRepository.getLanguage().collectFlowOnView(viewLifecycleOwner) { result ->
+            if (result is pion.tech.pionbase.util.Result.Success) {
+                val localeCode = result.data
+                // Map localeCode to display name. Simple approach:
+                val languageName = when(localeCode) {
+                    "vi" -> "Tiếng Việt"
+                    else -> "English"
+                }
+                binding.tvLanguageName.text = languageName
+            }
+        }
     }
 }

@@ -1,29 +1,38 @@
 <resources>
-    <string name="admob_application_id" translatable="false">ca-app-pub-2222869408518511~9607465111</string>
-    <string name="please_wait" translatable="false">Please wait!</string>
     <string name="app_name" translatable="false">Pion base</string>
-    <string name="loading">加载中</string>
-    <string name="home">家</string>
+    <string name="hd_wallpaper" translatable="false">HD Wallpaper</string>
+    <string name="featured">精选</string>
+    <string name="top_wallpaper">热门壁纸</string>
+    <string name="see_more">查看更多</string>
+    <string name="home_tab">首页</string>
+    <string name="categories_tab">分类</string>
+    <string name="setting">设置</string>
+    <string name="update_profile">更新个人资料</string>
     <string name="language">语言</string>
-    <string name="loading_ads">加载广告</string>
-    <string name="something_error">错误</string>
-    <string name="swipe_to_continue">滑动继续</string>
-    <string name="loading_data">加载数据</string>
-    <string name="setting">环境</string>
-    <string name="general_setting">一般设置</string>
-    <string name="information_about">有关的信息</string>
-    <string name="developer">开发人员</string>
-    <string name="privacy_policy">隐私政策</string>
-    <string name="gdpr">GDPR</string>
-    <string name="store_name">商店名称：</string>
-    <string name="website">网站：</string>
-    <string name="why_do_you_see_ads">你为什么看到广告？</string>
-    <string name="des_advertisement_1">对于生产和开发，我们需要资金，其中之一来自广告收入</string>
-    <string name="des_advertisment_2">1。要删除广告，您可以通过购买高级版本或广告模型版本来支持我们。</string>
-    <string name="des_advertisement_3">2。通过电子邮件与我们联系，以考虑参加试点计划，您可以从中使用较少的广告版本，但可能不会对性能进行优化。</string>
-    <string name="what_ads_type_do_we_use">我们使用什么广告类型？</string>
-    <string name="des_advertisement_4">我们与许多广告网络合作伙伴相关联，最大的是Google广告，用于主要广告格式</string>
-    <string name="des_5">- 屏幕之间散布的全屏广告</string>
-    <string name="des_6">- 横幅，本机广告被定制为AD的组成部分（通常带有黄色标签）</string>
-    <string name="des_7">我们一直在努力平衡用户体验和广告</string>
+    <string name="dark_theme">深色主题</string>
+    <string name="auto_change_wallpaper">自动更换壁纸</string>
+    <string name="enable_notifications">启用通知</string>
+    <string name="rate_this_app">评价此应用</string>
+    <string name="share_with_friend">分享给朋友</string>
+    <string name="select_custom_wallpaper">选择自定义壁纸</string>
+    <string name="please_select_language">请选择语言</string>
+    <string name="close">关闭</string>
+    <string name="cancel">取消</string>
+    <string name="this_is_demo">这是一个演示对话框</string>
+    <string name="pion_tech">Pion Tech</string>
+    <string name="website_url" translatable="false">https://piontech.co</string>
+    <string name="facebook">Facebook:</string>
+    <string name="telegram">Telegram:</string>
+    <string name="piontechglobal" translatable="false">@piontechglobal</string>
+    <string name="my_favorites">我的收藏</string>
+    <string name="no_favorites_yet">暂无收藏</string>
+    <string name="ok">确定</string>
+    <string name="next">下一步</string>
+    <string name="no_results_found">未找到结果</string>
+    <string name="set_as_wallpaper">设为壁纸</string>
+    <string name="animals">动物</string>
+    <string name="arts">艺术</string>
+    <string name="nature">自然</string>
+    <string name="layout_ads">布局广告</string>
+    <string name="english">英语</string>
 </resources>

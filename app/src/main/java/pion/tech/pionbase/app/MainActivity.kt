@@ -15,6 +15,8 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import pion.tech.pionbase.data.repository.dataStore.DataStoreRepository
+import pion.tech.pionbase.feature.language.LanguageManager
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import org.koin.android.ext.android.inject
@@ -32,6 +34,7 @@ import kotlin.getValue
 class MainActivity : AppCompatActivity() {
     private val commonViewModel: CommonViewModel by viewModel()
     val logger: FirebaseAnalyticsLogger by inject()
+    private val dataStoreRepository: DataStoreRepository by inject()
 
     companion object {
         private const val RESTART_DELAY_MS = 500L
@@ -42,6 +45,8 @@ class MainActivity : AppCompatActivity() {
         
         // Hiện Snackbar nếu có thông báo thành công từ EditWallpaperActivity
         checkSuccessMessage(intent)
+        
+        LanguageManager.init(this, dataStoreRepository)
         
         enableEdgeToEdge()
         supportFragmentManager.registerFragmentLifecycleCallbacks(

@@ -23,13 +23,28 @@ class LanguageViewModel(
             apiCall = { getLanguagesUseCase() },
             onSuccess = { dtoList ->
                 val languages = dtoList.map { it.toPresentation() }
-                val defaultLanguage = languages.find { it.localeCode == "en" }
-                setState {
-                    copy(
-                        languagesUiState = UiState.Success(languages),
-                        selectedLanguage = defaultLanguage ?: languages.firstOrNull()
-                    )
-                }
+                // Load saved language or default to "en"
+                handleApiCall(
+                    apiCall = { dataStoreRepository.getLanguage() },
+                    onSuccess = { savedLocale ->
+                        val selectedLanguage = languages.find { it.localeCode == savedLocale } ?: languages.find { it.localeCode == "en" }
+                        setState {
+                            copy(
+                                languagesUiState = UiState.Success(languages),
+                                selectedLanguage = selectedLanguage ?: languages.firstOrNull()
+                            )
+                        }
+                    },
+                    onError = {
+                        val defaultLanguage = languages.find { it.localeCode == "en" }
+                        setState {
+                            copy(
+                                languagesUiState = UiState.Success(languages),
+                                selectedLanguage = defaultLanguage ?: languages.firstOrNull()
+                            )
+                        }
+                    }
+                )
             },
             onError = { throwable ->
                 setState {
@@ -49,6 +64,11 @@ class LanguageViewModel(
         }
     }
 
+    fun applySelectedLanguage() {
+        val selected = uiState.value.selectedLanguage ?: return
+        handleApiCall(apiCall = { dataStoreRepository.setLanguage(selected.localeCode) })
+    }
+
     fun setFirstLaunchFalse() {
         handleApiCall(apiCall = { dataStoreRepository.setIsFirstLaunch(false) })
     }
@@ -62,17 +82,11 @@ data class LanguageUiState(
 )
 
 fun LanguageUiState.getSelectedLanguageListUiState(): UiState<List<LanguageUIModel>> {
-    // 1. Dùng biến trung gian để smart cast và tránh gọi getter nhiều lần
     return when (val state = languagesUiState) {
         is UiState.Success -> {
-            // 2. Đưa phép tính không đổi ra ngoài vòng lặp
             val targetLocaleCode = selectedLanguage?.localeCode
-
             UiState.Success(state.data.map { item ->
-                // 3. Gán trực tiếp kết quả biểu thức logic
                 val shouldBeSelected = (item.localeCode == targetLocaleCode)
-
-                // 4. Chỉ copy (tạo object mới) khi trạng thái thực sự thay đổi
                 if (item.isSelected == shouldBeSelected) {
                     item
                 } else {
@@ -80,7 +94,6 @@ fun LanguageUiState.getSelectedLanguageListUiState(): UiState<List<LanguageUIMod
                 }
             })
         }
-
         else -> state
     }
 }

@@ -21,9 +21,16 @@ class CategoryDetailFragment :
     internal val args: CategoryDetailFragmentArgs by navArgs()
     val adapter = TopWallpaperAdapter()
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        adapter.setListener(this)
+    }
+
     override fun init(view: View, savedInstanceState: Bundle?) {
+        timber.log.Timber.d("CategoryDetailFragment: init called")
         initView()
         settingEvent()
+        adapter.setListener(this) // Đảm bảo listener luôn được set
         viewModel.getWallpapersByCategory(args.categoryName)
     }
 

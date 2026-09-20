@@ -4,7 +4,9 @@ import pion.tech.pionbase.util.setPreventDoubleClickScaleView
 
 fun FavoriteFragment.initView() {
     adapter.setListener(this)
-    binding.rvFavorites.adapter = adapter
+    if (binding.rvFavorites.adapter == null) {
+        binding.rvFavorites.adapter = adapter
+    }
 }
 
 fun FavoriteFragment.settingEvent() {

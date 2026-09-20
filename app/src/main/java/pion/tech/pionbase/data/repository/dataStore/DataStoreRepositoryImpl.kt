@@ -15,6 +15,7 @@ class DataStoreRepositoryImpl(
     private val isPremiumKey = booleanPreferencesKey("isPremiumKey")
     private val tokenKey = stringPreferencesKey("tokenKey")
     private val isFirstLaunchKey = booleanPreferencesKey("isFirstLaunchKey")
+    private val languageKey = stringPreferencesKey("languageKey")
 
     override fun getIsPremium(): Flow<Result<Boolean>> =
         dataStore.data.executeDataWithFlowCall { prefs ->
@@ -49,6 +50,18 @@ class DataStoreRepositoryImpl(
         executeDataCall {
             dataStore.edit {
                 it[isFirstLaunchKey] = isFirstLaunch
+            }
+        }
+
+    override fun getLanguage(): Flow<Result<String>> =
+        dataStore.data.executeDataWithFlowCall { prefs ->
+            prefs[languageKey] ?: "en"
+        }
+
+    override fun setLanguage(localeCode: String): Flow<Result<Unit>> =
+        executeDataCall {
+            dataStore.edit {
+                it[languageKey] = localeCode
             }
         }
 }

@@ -14,7 +14,7 @@ class LanguageAdapter :
     BaseListAdapter<LanguageUIModel, ItemLanguageBinding>(
         createDiffCallback(
             areItemsTheSame = { oldItem, newItem -> oldItem.localeCode == newItem.localeCode },
-            areContentsTheSame = { oldItem, newItem -> oldItem == newItem },
+            areContentsTheSame = { oldItem, newItem -> oldItem.isSelected == newItem.isSelected },
         ),
     ) {
     interface Listener {

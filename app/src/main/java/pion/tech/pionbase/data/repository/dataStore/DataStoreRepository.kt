@@ -15,4 +15,8 @@ interface DataStoreRepository {
     fun getIsFirstLaunch(): Flow<Result<Boolean>>
 
     fun setIsFirstLaunch(isFirstLaunch: Boolean): Flow<Result<Unit>>
+
+    fun getLanguage(): Flow<Result<String>>
+
+    fun setLanguage(localeCode: String): Flow<Result<Unit>>
 }

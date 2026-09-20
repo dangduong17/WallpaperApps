@@ -28,6 +28,7 @@ fun LanguageFragment.applyEvent() {
 }
 
 fun LanguageFragment.handleApplyEvent() {
+    viewModel.applySelectedLanguage()
     applySelectedLanguage()
     viewModel.setFirstLaunchFalse()
     navigateToNextScreen()
