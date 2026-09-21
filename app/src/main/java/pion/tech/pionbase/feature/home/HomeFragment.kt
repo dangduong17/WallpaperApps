@@ -1,9 +1,15 @@
 package pion.tech.pionbase.feature.home
 
+import android.app.Activity
+import android.app.AlertDialog
+import android.app.WallpaperManager
+import android.content.ComponentName
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import com.yalantis.ucrop.UCrop
 import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -14,9 +20,11 @@ import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
 import pion.tech.pionbase.databinding.FragmentHomeBinding
 import pion.tech.pionbase.feature.home.adapter.*
 import pion.tech.pionbase.feature.home.bottomSheet.WallpaperPreviewBottomSheet
+import pion.tech.pionbase.service.LiveWallpaperService
 import pion.tech.pionbase.util.collectFlowOnView
 import pion.tech.pionbase.util.displayToast
 import pion.tech.pionbase.util.handleUiState
+import java.io.File
 
 class HomeFragment :
     BaseFragment<FragmentHomeBinding, HomeViewModel>(
@@ -28,14 +36,30 @@ class HomeFragment :
     val topWallpaperAdapter = TopWallpaperAdapter()
     val categoryAdapter = CategoryAdapter()
 
+    private val cropImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.let { data ->
+                val resultUri = UCrop.getOutput(data)
+                if (resultUri != null) {
+                    showWallpaperOptionsDialog(resultUri)
+                }
+            }
+        }
+    }
+
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        timber.log.Timber.d("HomeFragment: PickVisualMedia result: $uri")
         if (uri != null) {
             val dialog = WallpaperPreviewBottomSheet(uri) { selectedUri ->
-                val intent = android.content.Intent(requireContext(), EditWallpaperActivity::class.java)
-                intent.putExtra("uri", selectedUri)
-                startActivity(intent)
+                val destinationUri = Uri.fromFile(File(requireContext().cacheDir, "cropped_" + System.currentTimeMillis() + ".jpg"))
+                val intent = UCrop.of(selectedUri, destinationUri)
+                    .withAspectRatio(9f, 16f)
+                    .getIntent(requireContext())
+                cropImage.launch(intent)
             }
             dialog.show(childFragmentManager, "WallpaperPreview")
+        } else {
+            displayToast("Không thể chọn ảnh")
         }
     }
 

@@ -28,22 +28,9 @@ class WallpaperPreviewBottomSheet(
     override fun addEvent(savedInstanceState: Bundle?) {
         super.addEvent(savedInstanceState)
         binding.btnSetWallpaper.setPreventDoubleClickScaleView {
-            val destinationUri = Uri.fromFile(File(requireContext().cacheDir, "cropped_wallpaper_" + System.currentTimeMillis() + ".gif"))
-            UCrop.of(uri, destinationUri)
-                .withAspectRatio(9f, 16f)
-                .start(requireActivity(), this)
+            onConfirm(uri)
+            dismiss()
         }
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
-            val resultUri = data?.let { UCrop.getOutput(it) }
-            if (resultUri != null) {
-                onConfirm(resultUri)
-                dismiss()
-            }
-        }
-    }
 }
