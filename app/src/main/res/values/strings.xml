@@ -84,5 +84,8 @@
     <string name="wallpaper_set_success">Wallpaper set successfully!</string>
     <string name="please_enter_url">Please enter a URL</string>
     <string name="vietnamese">Tiếng Việt</string>
+    <string name="download_success_title">Notification</string>
+    <string name="download_success_message">Wallpaper saved successfully to Pictures/PionBase</string>
+    <string name="download_error_message">Error: %1$s</string>
     <string name="english_lang">English</string>
 </resources>

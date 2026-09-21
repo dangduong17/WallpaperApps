@@ -112,6 +112,22 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
                     binding.fabFavorite.setColorFilter(android.graphics.Color.BLACK)
                 }
             }
+
+        viewModel.uiEvent
+            .collectFlowOnView(viewLifecycleOwner) { event ->
+                when (event) {
+                    is WallpaperDetailEvent.DownloadSuccess -> {
+                        android.app.AlertDialog.Builder(requireContext())
+                            .setTitle(getString(R.string.download_success_title))
+                            .setMessage(getString(R.string.download_success_message))
+                            .setPositiveButton(getString(R.string.ok), null)
+                            .show()
+                    }
+                    is WallpaperDetailEvent.DownloadError -> {
+                        displayToast(getString(R.string.download_error_message, event.throwable.message))
+                    }
+                }
+            }
     }
 
     override fun onDestroyView() {

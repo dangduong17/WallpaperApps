@@ -14,23 +14,25 @@ class WallpaperDetailViewModel(
     private val isFavoriteWallpaperUseCase: IsFavoriteWallpaperUseCase,
     private val downloadWallpaperUseCase: DownloadWallpaperUseCase,
     private val setWallpaperUseCase: SetWallpaperUseCase
-) : BaseViewModel<WallpaperDetailUiState, Nothing>(WallpaperDetailUiState()) {
+) : BaseViewModel<WallpaperDetailUiState, WallpaperDetailEvent>(WallpaperDetailUiState()) {
     
     fun downloadWallpaper() {
         val currentWallpaper = uiState.value.wallpaper ?: return
         setState { copy(isLoading = true) }
         handleApiCall(
             apiCall = { downloadWallpaperUseCase(currentWallpaper.imageUrl) },
-            onSuccess = {
+            onSuccess = { uri ->
                 launchMain {
                     kotlinx.coroutines.delay(400)
                     setState { copy(isLoading = false) }
+                    setEvent(WallpaperDetailEvent.DownloadSuccess(uri))
                 }
             },
-            onError = {
+            onError = { throwable ->
                 launchMain {
                     kotlinx.coroutines.delay(400)
                     setState { copy(isLoading = false) }
+                    setEvent(WallpaperDetailEvent.DownloadError(throwable))
                 }
             }
         )
@@ -89,3 +91,9 @@ data class WallpaperDetailUiState(
     val isSettingWallpaper: Boolean = false,
     val isGif: Boolean = false
 )
+
+sealed class WallpaperDetailEvent {
+    data class DownloadSuccess(val uri: android.net.Uri) : WallpaperDetailEvent()
+    data class DownloadError(val throwable: Throwable) : WallpaperDetailEvent()
+}
+
