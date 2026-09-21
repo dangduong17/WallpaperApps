@@ -92,4 +92,6 @@
     <string name="enter_image_url" translatable="false">Enter Image URL</string>
     <string name="preview_image" translatable="false">Preview Image</string>
     <string name="title_interval_dialog">Chọn khoảng thời gian (phút)</string>
+    <string name="cannot_select_image">Cannot select image</string>
+    <string name="media_selected">Media selected</string>
 </resources>

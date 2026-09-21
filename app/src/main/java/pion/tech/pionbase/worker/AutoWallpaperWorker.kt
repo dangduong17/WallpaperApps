@@ -10,7 +10,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import pion.tech.pionbase.data.repository.wallpaper.WallpaperRepository
-import pion.tech.pionbase.util.Result
+import pion.tech.pionbase.util.Result as AppResult
+import timber.log.Timber
 import kotlin.random.Random
 
 class AutoWallpaperWorker(
@@ -27,9 +28,12 @@ class AutoWallpaperWorker(
     }
 
     override suspend fun doWork(): androidx.work.ListenableWorker.Result = withContext(Dispatchers.IO) {
+        Timber.d("AutoWallpaperWorker: doWork started")
         try {
             val favoriteResult = wallpaperRepository.getFavoriteWallpapers().first()
-            if (favoriteResult is pion.tech.pionbase.util.Result.Success) {
+            Timber.d("AutoWallpaperWorker: Favorite result: $favoriteResult")
+
+            if (favoriteResult is AppResult.Success) {
                 val wallpapers = favoriteResult.data
                 if (wallpapers.isNotEmpty()) {
                     val randomWallpaper = wallpapers[Random.nextInt(wallpapers.size)]
@@ -48,6 +52,7 @@ class AutoWallpaperWorker(
                 androidx.work.ListenableWorker.Result.retry()
             }
         } catch (e: Exception) {
+            Timber.e(e, "AutoWallpaperWorker: Error during work")
             androidx.work.ListenableWorker.Result.failure()
         }
     }
@@ -61,6 +66,7 @@ class AutoWallpaperWorker(
                     .submit()
                     .get()
             } catch (e: Exception) {
+                Timber.e(e, "AutoWallpaperWorker: Error downloading bitmap")
                 null
             }
         }

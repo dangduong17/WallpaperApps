@@ -56,21 +56,20 @@ fun SettingFragment.showIntervalDialog() {
         )
     }
     AlertDialog.Builder(requireContext())
-        .setTitle("Chọn khoảng thời gian (phút)")
+        .setTitle(getString(R.string.title_interval_dialog))
         .setView(picker)
-        .setPositiveButton("OK") { _, _ ->
+        .setPositiveButton(getString(R.string.ok)) { _, _ ->
             val interval = picker.value.toLong()
             viewModel.setAutoWallpaperEnabled(true)
             viewModel.setAutoWallpaperInterval(interval)
             scheduleAutoWallpaper(interval)
         }
-        .setNegativeButton("Cancel", null)
+        .setNegativeButton(getString(R.string.cancel), null)
         .show()
 }
 
 fun SettingFragment.scheduleAutoWallpaper(intervalMinutes: Long) {
     val workRequest = PeriodicWorkRequestBuilder<AutoWallpaperWorker>(intervalMinutes, TimeUnit.MINUTES)
-        .setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
         .build()
     WorkManager.getInstance(requireContext()).enqueueUniquePeriodicWork(
         AutoWallpaperWorker.WORK_NAME,

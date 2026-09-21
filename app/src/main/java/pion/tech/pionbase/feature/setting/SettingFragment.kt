@@ -20,7 +20,7 @@ class SettingFragment :
 
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
-            displayToast("Selected media: $uri")
+            displayToast(R.string.media_selected)
             // Here you can save this URI or navigate to detail to set as wallpaper
         }
     }

@@ -102,6 +102,9 @@ dependencies {
 
     // Koin
     implementation(libs.koin.android)
+    implementation("io.insert-koin:koin-androidx-workmanager:3.5.0")
+    implementation("io.insert-koin:koin-annotations:1.4.0")
+    ksp("io.insert-koin:koin-ksp-compiler:1.4.0")
 
     // Glide
     api(libs.glide)

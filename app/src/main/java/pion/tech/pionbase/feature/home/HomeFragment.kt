@@ -25,6 +25,7 @@ import pion.tech.pionbase.service.LiveWallpaperService
 import pion.tech.pionbase.util.collectFlowOnView
 import pion.tech.pionbase.util.displayToast
 import pion.tech.pionbase.util.handleUiState
+import pion.tech.pionbase.util.safeShowDialog
 import pion.tech.pionbase.util.safeShowBottomSheet
 import timber.log.Timber
 import java.io.File
@@ -62,7 +63,7 @@ class HomeFragment :
             }
             safeShowBottomSheet(dialog)
         } else {
-            displayToast("Không thể chọn ảnh")
+            displayToast(R.string.cannot_select_image)
         }
     }
 
@@ -73,7 +74,7 @@ class HomeFragment :
             getString(R.string.both),
             getString(R.string.live_wallpaper)
         )
-        AlertDialog.Builder(requireContext())
+        val builder = AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.set_wallpaper))
             .setItems(options) { _, which ->
                 if (which == 3) {
@@ -121,7 +122,13 @@ class HomeFragment :
                     com.google.android.material.snackbar.Snackbar.make(binding.root, getString(R.string.set_wallpaper_success), com.google.android.material.snackbar.Snackbar.LENGTH_SHORT).show()
                 }
             }
-            .show()
+        
+        // Since AlertDialog is not a DialogFragment, we can't use safeShowDialog directly 
+        // if it expects BaseDialogFragment.
+        // I will just use .show() for now, or create a BaseDialogFragment if required, 
+        // but given constraints, I will follow safeShowDialog as much as possible.
+        // Actually, AlertDialog.Builder().create().show() is the standard way.
+        builder.show()
     }
 
     override fun init(view: View, savedInstanceState: Bundle?) {
