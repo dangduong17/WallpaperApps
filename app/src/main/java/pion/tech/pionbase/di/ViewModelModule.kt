@@ -13,6 +13,7 @@ import pion.tech.pionbase.feature.wallpaperDetail.WallpaperDetailViewModel
 import pion.tech.pionbase.feature.favorite.FavoriteViewModel
 import pion.tech.pionbase.feature.search.SearchViewModel
 import pion.tech.pionbase.feature.categoryDetail.CategoryDetailViewModel
+import pion.tech.pionbase.feature.urlWallpaper.UrlWallpaperViewModel
 
 val viewModelModule =
     module {
@@ -27,4 +28,5 @@ val viewModelModule =
         viewModelOf(::FavoriteViewModel)
         viewModelOf(::SearchViewModel)
         viewModelOf(::CategoryDetailViewModel)
+        viewModelOf(::UrlWallpaperViewModel)
     }

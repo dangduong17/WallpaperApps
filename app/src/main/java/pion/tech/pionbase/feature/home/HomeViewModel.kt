@@ -4,6 +4,7 @@ import pion.tech.pionbase.base.BaseViewModel
 import pion.tech.pionbase.data.model.wallpaper.CategoryUIModel
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
 import pion.tech.pionbase.data.model.wallpaper.toPresentation
+import pion.tech.pionbase.domain.usecase.home.DownloadImageToBitmapUseCase
 import pion.tech.pionbase.domain.usecase.home.SetWallpaperUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.GetCategoriesUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.GetFeaturedWallpapersUseCase
@@ -18,7 +19,8 @@ class HomeViewModel(
     private val getTopWallpapersUseCase: GetTopWallpapersUseCase,
     private val getCategoriesUseCase: GetCategoriesUseCase,
     private val getWallpapersByCategoryUseCase: GetWallpapersByCategoryUseCase,
-    private val setWallpaperUseCase: SetWallpaperUseCase
+    private val setWallpaperUseCase: SetWallpaperUseCase,
+    private val downloadImageToBitmapUseCase: DownloadImageToBitmapUseCase
 ) : BaseViewModel<HomeUiState, Nothing>(HomeUiState()) {
 
     init {
@@ -106,6 +108,20 @@ class HomeViewModel(
             onError = { 
                 setState { copy(isSettingWallpaper = false) }
             }
+        )
+    }
+
+    fun setWallpaperFromUrl(url: String) {
+        handleApiCall(
+            apiCall = { downloadImageToBitmapUseCase(url) },
+            onSuccess = { bitmap ->
+                handleApiCall(
+                    apiCall = { setWallpaperUseCase(bitmap) },
+                    onSuccess = { /* Success */ },
+                    onError = { /* Error */ }
+                )
+            },
+            onError = { /* Error */ }
         )
     }
 }

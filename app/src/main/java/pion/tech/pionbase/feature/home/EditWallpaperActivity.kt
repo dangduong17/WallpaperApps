@@ -1,69 +1,65 @@
 package pion.tech.pionbase.feature.home
 
+import android.app.AlertDialog
+import android.content.ComponentName
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.yalantis.ucrop.UCrop
-import java.io.File
+import pion.tech.pionbase.R
+import pion.tech.pionbase.app.MainActivity
 import pion.tech.pionbase.service.LiveWallpaperService
+import pion.tech.pionbase.util.isGif
+import pion.tech.pionbase.util.parcelable
+import java.io.File
+import java.io.FileInputStream
 import android.app.WallpaperManager
-import android.content.ComponentName
+
+
 
 class EditWallpaperActivity : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        
-        val uri = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra("uri", Uri::class.java)
-        } else {
-            @Suppress("DEPRECATION")
-            intent.getParcelableExtra<Uri>("uri")
-        } ?: return finish()
-        
-        val mimeType = contentResolver.getType(uri)
-        val isGif = mimeType == "image/gif" || uri.toString().endsWith(".gif")
-        
-        if (isGif) {
-            applyWallpaper(uri)
-        } else {
-            val destinationUri = Uri.fromFile(File(cacheDir, "cropped_wallpaper_" + System.currentTimeMillis() + ".jpg"))
-            UCrop.of(uri, destinationUri)
-                .withAspectRatio(9f, 16f)
-                .start(this)
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
-            val resultUri = data?.let { UCrop.getOutput(it) }
+    private val cropLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val resultUri = result.data?.let { UCrop.getOutput(it) }
             if (resultUri != null) {
-                // COPY FILE THAY VÌ TRUYỀN URI:
-                // Việc này loại bỏ hoàn toàn việc phải cấp quyền cho URI file://
                 try {
                     val finalFile = File(filesDir, "active_final_wallpaper.jpg")
                     contentResolver.openInputStream(resultUri)?.use { input ->
                         finalFile.outputStream().use { output -> input.copyTo(output) }
                     }
-                    
-                    // Sau khi copy xong, gọi hàm apply với URI của file nội bộ này
                     applyWallpaper(Uri.fromFile(finalFile))
                 } catch (e: Exception) {
-                    android.widget.Toast.makeText(this, "Lỗi đọc file: ${e.message}", android.widget.Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, getString(R.string.error_reading_file, e.message), Toast.LENGTH_LONG).show()
                 }
             }
-        } else if (resultCode == UCrop.RESULT_ERROR) {
-            val cropError = UCrop.getError(data!!)
-            android.widget.Toast.makeText(this, "Lỗi Crop: ${cropError?.message}", android.widget.Toast.LENGTH_LONG).show()
+        } else if (result.resultCode == UCrop.RESULT_ERROR) {
+            val cropError = UCrop.getError(result.data!!)
+            Toast.makeText(this, getString(R.string.error_crop, cropError?.message), Toast.LENGTH_LONG).show()
             finish()
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        
+        val uri = intent.parcelable<Uri>("uri") ?: return finish()
+
+        val isCropped = intent.getBooleanExtra("is_cropped", false)
+        
+        if (uri.isGif(contentResolver) || isCropped) {
+            applyWallpaper(uri)
+        } else {
+            val destinationUri = Uri.fromFile(File(cacheDir, "cropped_wallpaper_" + System.currentTimeMillis() + ".jpg"))
+            cropLauncher.launch(UCrop.of(uri, destinationUri).withAspectRatio(9f, 16f).getIntent(this))
+        }
+    }
+
     private fun applyWallpaper(uri: Uri) {
-        val mimeType = contentResolver.getType(uri)
-        val isGif = mimeType == "image/gif" || uri.toString().endsWith(".gif")
+        val isGif = uri.isGif(contentResolver)
 
         if (isGif) {
             try {
@@ -84,34 +80,49 @@ class EditWallpaperActivity : AppCompatActivity() {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
                 
-                val mainIntent = Intent(this, pion.tech.pionbase.app.MainActivity::class.java)
+                val mainIntent = Intent(this, MainActivity::class.java)
                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 mainIntent.putExtra("show_success_msg", true)
                 startActivity(mainIntent)
                 finish()
             } catch (e: Exception) {
-                android.widget.Toast.makeText(this, "Lỗi không thể set GIF: ${e.message}", android.widget.Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.error_set_gif, e.message), Toast.LENGTH_LONG).show()
                 finish()
             }
         } else {
-            // LUỒNG ẢNH TĨNH: Copy nguyên vẹn, không nén để giữ chất lượng
-            try {
-                val finalFile = File(filesDir, "active_static_wallpaper.jpg")
-                contentResolver.openInputStream(uri)?.use { input ->
-                    finalFile.outputStream().use { output -> input.copyTo(output) }
+            // Hiển thị dialog chọn màn hình
+            val options = arrayOf(getString(R.string.home_screen), getString(R.string.lock_screen), getString(R.string.both))
+            AlertDialog.Builder(this)
+                .setTitle(getString(R.string.set_wallpaper))
+                .setItems(options) { _, which ->
+                    try {
+                        val finalFile = File(filesDir, "active_static_wallpaper.jpg")
+                        contentResolver.openInputStream(uri)?.use { input ->
+                            finalFile.outputStream().use { output -> input.copyTo(output) }
+                        }
+                        
+                        val wallpaperManager = WallpaperManager.getInstance(this)
+                        val inputStream = FileInputStream(finalFile)
+                        
+                        val flag = when (which) {
+                            0 -> WallpaperManager.FLAG_SYSTEM
+                            1 -> WallpaperManager.FLAG_LOCK
+                            else -> WallpaperManager.FLAG_SYSTEM or WallpaperManager.FLAG_LOCK
+                        }
+                        
+                        wallpaperManager.setStream(inputStream, null, true, flag)
+                        
+                        val mainIntent = Intent(this, MainActivity::class.java)
+                        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                        mainIntent.putExtra("show_success_msg", true)
+                        startActivity(mainIntent)
+                        finish()
+                    } catch (e: Exception) {
+                        Toast.makeText(this, getString(R.string.error, e.message), Toast.LENGTH_LONG).show()
+                        finish()
+                    }
                 }
-                
-                val wallpaperManager = WallpaperManager.getInstance(this)
-                wallpaperManager.setStream(contentResolver.openInputStream(Uri.fromFile(finalFile)))
-                
-                val mainIntent = Intent(this, pion.tech.pionbase.app.MainActivity::class.java)
-                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                mainIntent.putExtra("show_success_msg", true)
-                startActivity(mainIntent)
-                finish()
-            } catch (e: Exception) {
-                finish()
-            }
+                .show()
         }
     }
 }

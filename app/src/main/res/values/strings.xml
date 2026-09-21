@@ -67,4 +67,13 @@
     <string name="exit">Exit</string>
     <string name="back">Back</string>
     <string name="no_wallpapers_found">No wallpapers found</string>
+    <string name="set_wallpaper_success">Wallpaper set successfully!</string>
+    <string name="error_reading_file">Error reading file: %s</string>
+    <string name="error_crop">Crop Error: %s</string>
+    <string name="set_wallpaper">Set Wallpaper</string>
+    <string name="home_screen">Home Screen</string>
+    <string name="lock_screen">Lock Screen</string>
+    <string name="both">Both</string>
+    <string name="error_set_gif">Error setting GIF: %s</string>
+    <string name="error">Error: %s</string>
 </resources>

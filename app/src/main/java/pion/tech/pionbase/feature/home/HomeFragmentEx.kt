@@ -80,6 +80,10 @@ fun HomeFragment.settingEvent() {
         binding.tabLayout.getTabAt(TAB_HOME)?.select()
     }
 
+    binding.btnUrlWallpaper.setOnClickListener {
+        findNavController().navigate(R.id.action_homeFragment_to_urlWallpaperFragment)
+    }
+
     binding.btnPickPhoto.setPreventDoubleClickScaleView {
         pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }

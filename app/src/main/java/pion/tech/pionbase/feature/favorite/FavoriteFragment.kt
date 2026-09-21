@@ -20,14 +20,10 @@ class FavoriteFragment :
 
     val adapter = TopWallpaperAdapter()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        adapter.setListener(this)
-    }
-
     override fun init(view: View, savedInstanceState: Bundle?) {
         initView()
         settingEvent()
+        adapter.setListener(this)
     }
 
     override fun subscribeObserver(view: View) {

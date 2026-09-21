@@ -27,7 +27,7 @@
                 android:textColor="@color/black"
                 android:layout_gravity="center_horizontal"
                 android:textSize="@dimen/_18sp"
-                android:text="This is demo dialog" />
+                android:text="@string/this_is_demo" />
 
             <Button
                 android:id="@+id/btnClose"

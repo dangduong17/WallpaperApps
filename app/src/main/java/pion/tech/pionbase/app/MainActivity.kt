@@ -12,9 +12,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.android.material.snackbar.Snackbar
 import pion.tech.pionbase.data.repository.dataStore.DataStoreRepository
 import pion.tech.pionbase.feature.language.LanguageManager
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -38,6 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val RESTART_DELAY_MS = 500L
+        private const val EXTRA_SHOW_SUCCESS_MSG = "show_success_msg"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,12 +70,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkSuccessMessage(intent: Intent?) {
-        if (intent?.getBooleanExtra("show_success_msg", false) == true) {
+        if (intent?.getBooleanExtra(EXTRA_SHOW_SUCCESS_MSG, false) == true) {
             window.decorView.post {
-                com.google.android.material.snackbar.Snackbar.make(
+                Snackbar.make(
                     findViewById(android.R.id.content),
-                    "Đã thiết lập hình nền thành công!",
-                    com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
+                    getString(R.string.set_wallpaper_success),
+                    Snackbar.LENGTH_SHORT
                 ).show()
             }
         }
