@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import pion.tech.pionbase.R
 import pion.tech.pionbase.base.BaseFragment
+import pion.tech.pionbase.base.doActionWhenResume
 import pion.tech.pionbase.data.model.wallpaper.CategoryUIModel
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
 import pion.tech.pionbase.databinding.FragmentHomeBinding
@@ -186,12 +187,16 @@ class HomeFragment :
     override fun onClickWallpaper(item: WallpaperUIModel) {
         Timber.d("HomeFragment: onClickWallpaper called for: ${item.imageUrl}")
         val action = HomeFragmentDirections.actionHomeFragmentToWallpaperDetailFragment(item)
-        navigator.navigateTo(action)
+        doActionWhenResume {
+            navigator.navigateTo(action)
+        }
     }
 
     override fun onClickCategory(item: CategoryUIModel) {
         Timber.d("HomeFragment: onClickCategory called for: ${item.title}")
         val action = HomeFragmentDirections.actionHomeFragmentToCategoryDetailFragment(item.title)
-        navigator.navigateTo(action)
+        doActionWhenResume {
+            navigator.navigateTo(action)
+        }
     }
 }

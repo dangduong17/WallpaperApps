@@ -8,6 +8,7 @@ import android.app.AlertDialog
 import android.app.WallpaperManager
 import android.os.Build
 import com.google.android.material.snackbar.Snackbar
+import pion.tech.pionbase.base.doActionWhenResume
 import pion.tech.pionbase.base.launchIO
 import pion.tech.pionbase.base.launchMain
 import pion.tech.pionbase.util.setPreventDoubleClickScaleView
@@ -18,7 +19,9 @@ fun WallpaperDetailFragment.initView() {
 
 fun WallpaperDetailFragment.settingEvent() {
     binding.ivBack.setPreventDoubleClickScaleView {
-        navigator.navigateUp()
+        doActionWhenResume {
+            navigator.navigateUp()
+        }
     }
 
     binding.fabFavorite.setPreventDoubleClickScaleView {
