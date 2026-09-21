@@ -253,6 +253,7 @@ fun ImageView.loadImage(
         .load(source)
         .placeholder(placeholder)
         .error(error)
+        .diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy.ALL)
         .into(this)
 }
 
@@ -265,6 +266,7 @@ fun ImageView.loadImage(source: Any?) {
         .load(source)
         .placeholder(android.R.drawable.ic_menu_gallery)
         .error(android.R.drawable.ic_menu_report_image)
+        .diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy.ALL)
         .into(this)
 }
 
