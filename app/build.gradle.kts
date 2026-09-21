@@ -155,6 +155,9 @@ dependencies {
     // Data store
     implementation(libs.androidx.datastore.preferences)
 
+    // WorkManager
+    implementation("androidx.work:work-runtime-ktx:2.11.2")
+
     // Roundable layout
     implementation(libs.roundablelayout)
 

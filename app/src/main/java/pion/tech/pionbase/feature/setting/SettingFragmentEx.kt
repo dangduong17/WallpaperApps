@@ -5,12 +5,16 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import pion.tech.pionbase.R
 import pion.tech.pionbase.util.setPreventDoubleClickScaleView
+import androidx.appcompat.app.AlertDialog
+import android.widget.NumberPicker
+import androidx.work.*
+import java.util.concurrent.TimeUnit
+import pion.tech.pionbase.worker.AutoWallpaperWorker
 
 fun SettingFragment.backEvent() {
     onSystemBack {
         onBackPressed()
     }
-    // New design uses ivMenu or similar, adding back functionality to ivMenu for now
     binding.ivMenu.setPreventDoubleClickScaleView {
         onBackPressed()
     }
@@ -22,7 +26,6 @@ fun SettingFragment.onBackPressed() {
 
 @SuppressLint("SetTextI18n")
 fun SettingFragment.bindView() {
-    // Version display logic removed from new design layout but kept here for reference
 }
 
 fun SettingFragment.languageEvent() {
@@ -31,43 +34,49 @@ fun SettingFragment.languageEvent() {
     }
 }
 
-fun SettingFragment.developerEvent() {
-    // binding.btnDeveloper.setPreventDoubleClickScaleView {
-    //    DeveloperDialog().show(childFragmentManager)
-    // }
+fun SettingFragment.autoWallpaperEvent() {
+    binding.swAutoChange.setPreventDoubleClickScaleView {
+        val isCurrentlyEnabled = viewModel.uiState.value.autoWallpaperEnabled
+        if (!isCurrentlyEnabled) {
+            showIntervalDialog()
+        } else {
+            viewModel.setAutoWallpaperEnabled(false)
+            WorkManager.getInstance(requireContext()).cancelUniqueWork(AutoWallpaperWorker.WORK_NAME)
+        }
+    }
 }
 
-fun SettingFragment.advertisementEvent() {
-    // binding.btnAdvertisement.setPreventDoubleClickScaleView {
-    //    AdvertisementDialog().show(childFragmentManager)
-    // }
+fun SettingFragment.showIntervalDialog() {
+    val picker = NumberPicker(requireContext()).apply {
+        minValue = AutoWallpaperWorker.MIN_INTERVAL
+        maxValue = AutoWallpaperWorker.MAX_INTERVAL
+        value = viewModel.uiState.value.autoWallpaperInterval.toInt().coerceIn(
+            AutoWallpaperWorker.MIN_INTERVAL, 
+            AutoWallpaperWorker.MAX_INTERVAL
+        )
+    }
+    AlertDialog.Builder(requireContext())
+        .setTitle("Chọn khoảng thời gian (phút)")
+        .setView(picker)
+        .setPositiveButton("OK") { _, _ ->
+            val interval = picker.value.toLong()
+            viewModel.setAutoWallpaperEnabled(true)
+            viewModel.setAutoWallpaperInterval(interval)
+            scheduleAutoWallpaper(interval)
+        }
+        .setNegativeButton("Cancel", null)
+        .show()
 }
 
-fun SettingFragment.policyEvent() {
-    // binding.btnPolicy.setPreventDoubleClickScaleView {
-    //    runCatching {
-    //        val browserIntent =
-    //            Intent(
-    //                Intent.ACTION_VIEW,
-    //                "https://sites.google.com/piontech.co/voicelockscreen".toUri(),
-    //            )
-    //        startActivity(browserIntent)
-    //    }
-    // }
-}
-
-fun SettingFragment.resetIapEvent() {
-    // binding.btnResetIap.isVisible = BuildConfig.DEBUG
-}
-
-fun SettingFragment.gdprEvent() {
-    // binding.btnGdpr.setPreventDoubleClickScaleView { }
-}
-
-fun SettingFragment.resetGDPR() {
-    // if (BuildConfig.DEBUG) {
-    //    binding.btnResetGdpr.isVisible = true
-    // }
+fun SettingFragment.scheduleAutoWallpaper(intervalMinutes: Long) {
+    val workRequest = PeriodicWorkRequestBuilder<AutoWallpaperWorker>(intervalMinutes, TimeUnit.MINUTES)
+        .setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
+        .build()
+    WorkManager.getInstance(requireContext()).enqueueUniquePeriodicWork(
+        AutoWallpaperWorker.WORK_NAME,
+        ExistingPeriodicWorkPolicy.UPDATE,
+        workRequest
+    )
 }
 
 fun SettingFragment.photoPickerEvent() {

@@ -91,4 +91,5 @@
     <string name="url_wallpaper" translatable="false">URL Wallpaper</string>
     <string name="enter_image_url" translatable="false">Enter Image URL</string>
     <string name="preview_image" translatable="false">Preview Image</string>
+    <string name="title_interval_dialog">Chọn khoảng thời gian (phút)</string>
 </resources>

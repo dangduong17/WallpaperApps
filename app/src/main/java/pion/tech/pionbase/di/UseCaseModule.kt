@@ -15,6 +15,8 @@ import pion.tech.pionbase.domain.usecase.wallpaper.GetWallpapersByCategoryUseCas
 import pion.tech.pionbase.domain.usecase.wallpaper.IsFavoriteWallpaperUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.SearchWallpapersUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.ToggleFavoriteUseCase
+import pion.tech.pionbase.domain.usecase.settings.GetAutoWallpaperSettingsUseCase
+import pion.tech.pionbase.domain.usecase.settings.SetAutoWallpaperSettingsUseCase
 
 val homeUseCaseModule = module {
     factoryOf(::GetInstalledAppsUseCase)
@@ -28,6 +30,10 @@ val wallpaperUseCaseModule = module {
     factoryOf(::GetCategoriesUseCase)
     factoryOf(::GetFavoriteWallpapersUseCase)
     factoryOf(::ToggleFavoriteUseCase)
+    factoryOf(::GetAutoWallpaperSettingsUseCase)
+    factoryOf(::SetAutoWallpaperSettingsUseCase)
+    factoryOf(::GetAutoWallpaperSettingsUseCase)
+    factoryOf(::SetAutoWallpaperSettingsUseCase)
     factoryOf(::GetWallpapersByCategoryUseCase)
     factoryOf(::IsFavoriteWallpaperUseCase)
     factoryOf(::SearchWallpapersUseCase)

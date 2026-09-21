@@ -9,6 +9,8 @@ import pion.tech.pionbase.base.BaseFragment
 import pion.tech.pionbase.databinding.FragmentSettingBinding
 import pion.tech.pionbase.util.collectFlowOnView
 import pion.tech.pionbase.util.displayToast
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 class SettingFragment :
     BaseFragment<FragmentSettingBinding, SettingViewModel>(
@@ -27,21 +29,14 @@ class SettingFragment :
         backEvent()
         bindView()
         languageEvent()
-        developerEvent()
-        advertisementEvent()
-        policyEvent()
-        resetIapEvent()
-        gdprEvent()
-        resetGDPR()
+        autoWallpaperEvent()
         photoPickerEvent()
     }
 
     override fun subscribeObserver(view: View) {
-        // Cập nhật tên ngôn ngữ dựa trên lựa chọn hiện tại
         dataStoreRepository.getLanguage().collectFlowOnView(viewLifecycleOwner) { result ->
             if (result is pion.tech.pionbase.util.Result.Success) {
                 val localeCode = result.data
-                // Map localeCode to display name. Simple approach:
                 val languageName = when(localeCode) {
                     "vi" -> getString(R.string.vietnamese)
                     else -> getString(R.string.english_lang)
@@ -49,5 +44,14 @@ class SettingFragment :
                 binding.tvLanguageName.text = languageName
             }
         }
+
+        viewModel.uiState
+            .map { it.autoWallpaperEnabled }
+            .distinctUntilChanged()
+            .collectFlowOnView(viewLifecycleOwner) { isEnabled ->
+                if (binding.swAutoChange.isChecked != isEnabled) {
+                    binding.swAutoChange.isChecked = isEnabled
+                }
+            }
     }
 }

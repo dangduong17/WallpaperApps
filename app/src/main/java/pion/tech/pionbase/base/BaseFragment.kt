@@ -95,8 +95,7 @@ abstract class BaseFragment<Binding : ViewBinding, VM : ViewModel>(
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        val currentDestinationId = findNavController().currentDestination?.id ?: 0
-        _navigator = NavigatorImpl(findNavController(), lifecycle, currentDestinationId)
+        _navigator = NavigatorImpl(findNavController())
         _navigator?.addOnDestinationChangedListener(listener = destChangeListener)
         init(view, savedInstanceState)
         subscribeObserver(view)
