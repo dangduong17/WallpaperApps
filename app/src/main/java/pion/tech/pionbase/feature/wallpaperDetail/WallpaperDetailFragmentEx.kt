@@ -3,6 +3,10 @@ package pion.tech.pionbase.feature.wallpaperDetail
 import android.view.animation.Animation
 import android.view.animation.OvershootInterpolator
 import android.view.animation.ScaleAnimation
+import pion.tech.pionbase.R
+import android.app.AlertDialog
+import android.app.WallpaperManager
+import android.os.Build
 import com.google.android.material.snackbar.Snackbar
 import pion.tech.pionbase.base.launchIO
 import pion.tech.pionbase.base.launchMain
@@ -36,14 +40,19 @@ fun WallpaperDetailFragment.settingEvent() {
     }
 
     binding.btnSetWallpaper.setPreventDoubleClickScaleView {
-        val options = arrayOf("Màn hình chính", "Màn hình khóa", "Cả hai")
-        android.app.AlertDialog.Builder(requireContext())
-            .setTitle("Đặt làm hình nền")
+        val context = requireContext()
+        val options = arrayOf(
+            context.getString(R.string.home_screen),
+            context.getString(R.string.lock_screen),
+            context.getString(R.string.both)
+        )
+        AlertDialog.Builder(context)
+            .setTitle(R.string.set_as_wallpaper)
             .setItems(options) { _, which ->
                 val flag = when(which) {
-                    0 -> android.app.WallpaperManager.FLAG_SYSTEM
-                    1 -> android.app.WallpaperManager.FLAG_LOCK
-                    else -> android.app.WallpaperManager.FLAG_SYSTEM or android.app.WallpaperManager.FLAG_LOCK
+                    0 -> WallpaperManager.FLAG_SYSTEM
+                    1 -> WallpaperManager.FLAG_LOCK
+                    else -> WallpaperManager.FLAG_SYSTEM or WallpaperManager.FLAG_LOCK
                 }
 
                 wallpaperUri?.let { uri ->
@@ -54,25 +63,27 @@ fun WallpaperDetailFragment.settingEvent() {
                         showHideLoading(true)
                         launchIO {
                             try {
-                                val wallpaperManager = android.app.WallpaperManager.getInstance(requireContext())
-                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                                    wallpaperManager.setBitmap(bitmap, null, true, flag)
-                                } else {
-                                    wallpaperManager.setBitmap(bitmap)
+                                kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                                    val wallpaperManager = WallpaperManager.getInstance(context)
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                        wallpaperManager.setBitmap(bitmap, null, true, flag)
+                                    } else {
+                                        wallpaperManager.setBitmap(bitmap)
+                                    }
                                 }
                                 launchMain {
                                     showHideLoading(false)
-                                    Snackbar.make(binding.root, "Đã đặt hình nền thành công!", Snackbar.LENGTH_SHORT).show()
+                                    Snackbar.make(binding.root, R.string.set_wallpaper_success, Snackbar.LENGTH_SHORT).show()
                                 }
                             } catch (e: Exception) {
                                 launchMain {
                                     showHideLoading(false)
-                                    Snackbar.make(binding.root, "Không thể đặt hình nền: ${e.message}", Snackbar.LENGTH_LONG).show()
+                                    Snackbar.make(binding.root, context.getString(R.string.error, e.message ?: ""), Snackbar.LENGTH_LONG).show()
                                 }
                             }
                         }
                     } else {
-                        Snackbar.make(binding.root, "Đang tải ảnh, vui lòng đợi...", Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(binding.root, R.string.please_wait, Snackbar.LENGTH_SHORT).show()
                     }
                 }
             }
