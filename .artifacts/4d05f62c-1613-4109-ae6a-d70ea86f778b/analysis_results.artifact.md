@@ -2,8 +2,8 @@
 
 Sau khi kiểm tra `HomeFragment.kt` và `CategoryDetailFragment.kt`, tôi nhận thấy một khác biệt quan trọng trong cách điều hướng:
 
-1.  **HomeFragment**: Sử dụng trực tiếp `findNavController().navigate(action)` (trực tiếp từ Navigation Component).
-2.  **CategoryDetailFragment**: Sử dụng `navigator.navigateTo(action)` (thông qua `NavigatorImpl` của `BaseFragment`).
+1.  **HomeFragment**: Sử dụng trực tiếp `findNavContr
+vigateTo(action)` (thông qua `NavigatorImpl` của `BaseFragment`).
 
 ### Phân tích
 *   `NavigatorImpl` được thiết kế với cơ chế `safeAction` (đợi `ON_RESUME` và kiểm tra lại `destination`). Cơ chế này có thể gây ra vấn đề khi fragment được khôi phục từ backstack (hệ thống Android có thể xử lý việc khôi phục state/lifecycle khác biệt so với lần đầu khởi tạo).

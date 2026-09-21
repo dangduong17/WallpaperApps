@@ -68,21 +68,7 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
             .distinctUntilChanged()
             .collectFlowOnView(viewLifecycleOwner) { (wallpaper, isGif) ->
                 wallpaper?.let {
-                    Timber.d("DEBUG: URL=${it.imageUrl}, isGif=$isGif")
-                    if (isGif) {
-                        Glide.with(requireContext())
-                            .asGif()
-                            .load(it.imageUrl)
-                            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                            .into(binding.ivFullWallpaper)
-                    } else {
-                        // Nếu là ảnh từ Picker, dùng setImageURI
-                        if (wallpaperUri != null) {
-                            binding.ivFullWallpaper.setImageURI(wallpaperUri)
-                        } else {
-                            binding.ivFullWallpaper.loadImage(it.imageUrl)
-                        }
-                    }
+                    handleWallpaperLoading(it, isGif)
                 }
             }
 
