@@ -2,6 +2,7 @@ package pion.tech.pionbase.feature.urlWallpaper
 
 import android.os.Bundle
 import android.view.View
+import pion.tech.pionbase.R
 import pion.tech.pionbase.base.BaseFragment
 import pion.tech.pionbase.databinding.FragmentUrlWallpaperBinding
 import pion.tech.pionbase.util.collectFlowOnView
@@ -20,10 +21,10 @@ class UrlWallpaperFragment : BaseFragment<FragmentUrlWallpaperBinding, UrlWallpa
         viewModel.uiState.collectFlowOnView(viewLifecycleOwner) { state ->
             binding.progressBar.visibility = if (state.isLoading) View.VISIBLE else View.GONE
             if (state.isSuccess) {
-                displayToast("Wallpaper set successfully!")
+                displayToast(getString(R.string.wallpaper_set_success))
             }
             state.error?.let {
-                displayToast("Error: ${it.message}")
+                displayToast(getString(R.string.error, it.message))
             }
         }
     }

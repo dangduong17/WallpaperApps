@@ -1,6 +1,7 @@
 package pion.tech.pionbase.feature.urlWallpaper
 
 import com.bumptech.glide.Glide
+import pion.tech.pionbase.R
 import pion.tech.pionbase.util.displayToast
 import pion.tech.pionbase.util.setPreventDoubleClickScaleView
 
@@ -10,7 +11,7 @@ fun UrlWallpaperFragment.initView() {
 
 fun UrlWallpaperFragment.settingEvent() {
     binding.apply {
-        btnBack.setOnClickListener {
+        btnBack.setPreventDoubleClickScaleView {
             navigator.navigateUp()
         }
 
@@ -21,7 +22,7 @@ fun UrlWallpaperFragment.settingEvent() {
                     .load(url)
                     .into(ivPreview)
             } else {
-                displayToast("Please enter a URL")
+                displayToast(getString(R.string.please_enter_url))
             }
         }
 
@@ -30,7 +31,7 @@ fun UrlWallpaperFragment.settingEvent() {
             if (url.isNotEmpty()) {
                 viewModel.setWallpaperFromUrl(url)
             } else {
-                displayToast("Please enter a URL")
+                displayToast(getString(R.string.please_enter_url))
             }
         }
     }

@@ -9,6 +9,8 @@ import android.view.animation.Animation
 import androidx.navigation.fragment.navArgs
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import pion.tech.pionbase.R
 import pion.tech.pionbase.base.BaseFragment
 import pion.tech.pionbase.databinding.FragmentWallpaperDetailBinding
@@ -16,6 +18,7 @@ import pion.tech.pionbase.util.collectFlowOnView
 import pion.tech.pionbase.util.displayToast
 import pion.tech.pionbase.util.loadImage
 import pion.tech.pionbase.util.setPreventDoubleClickScaleView
+import timber.log.Timber
 
 class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, WallpaperDetailViewModel>(
     FragmentWallpaperDetailBinding::inflate,
@@ -33,11 +36,11 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
-        timber.log.Timber.d("PermissionCheck Result: $isGranted")
+        Timber.d("PermissionCheck Result: $isGranted")
         if (isGranted) {
             viewModel.downloadWallpaper()
         } else {
-            displayToast("Cần cấp quyền để lưu ảnh")
+            displayToast(getString(R.string.need_permission_to_save))
         }
     }
 
@@ -65,12 +68,12 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
             .distinctUntilChanged()
             .collectFlowOnView(viewLifecycleOwner) { (wallpaper, isGif) ->
                 wallpaper?.let {
-                    timber.log.Timber.d("DEBUG: URL=${it.imageUrl}, isGif=$isGif")
+                    Timber.d("DEBUG: URL=${it.imageUrl}, isGif=$isGif")
                     if (isGif) {
-                        com.bumptech.glide.Glide.with(requireContext())
+                        Glide.with(requireContext())
                             .asGif()
                             .load(it.imageUrl)
-                            .diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy.RESOURCE)
+                            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                             .into(binding.ivFullWallpaper)
                     } else {
                         // Nếu là ảnh từ Picker, dùng setImageURI

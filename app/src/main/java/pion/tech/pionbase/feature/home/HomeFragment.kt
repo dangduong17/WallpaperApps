@@ -10,7 +10,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import com.yalantis.ucrop.UCrop
-import androidx.navigation.fragment.findNavController
+// import androidx.navigation.fragment.findNavController - REMOVED (using navigator instead)
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import pion.tech.pionbase.R
@@ -24,6 +24,7 @@ import pion.tech.pionbase.service.LiveWallpaperService
 import pion.tech.pionbase.util.collectFlowOnView
 import pion.tech.pionbase.util.displayToast
 import pion.tech.pionbase.util.handleUiState
+import timber.log.Timber
 import java.io.File
 
 class HomeFragment :
@@ -48,7 +49,7 @@ class HomeFragment :
     }
 
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        timber.log.Timber.d("HomeFragment: PickVisualMedia result: $uri")
+        Timber.d("HomeFragment: PickVisualMedia result: $uri")
         if (uri != null) {
             val dialog = WallpaperPreviewBottomSheet(uri) { selectedUri ->
                 val destinationUri = Uri.fromFile(File(requireContext().cacheDir, "cropped_" + System.currentTimeMillis() + ".jpg"))
@@ -63,53 +64,56 @@ class HomeFragment :
         }
     }
 
-    private fun showWallpaperOptionsDialog(uri: android.net.Uri) {
-        val options = arrayOf("Màn hình chính", "Màn hình khóa", "Cả hai", "Hình nền động (Live Wallpaper)")
-        android.app.AlertDialog.Builder(requireContext())
-            .setTitle("Đặt làm hình nền")
+    private fun showWallpaperOptionsDialog(uri: Uri) {
+        val options = arrayOf(
+            getString(R.string.home_screen),
+            getString(R.string.lock_screen),
+            getString(R.string.both),
+            getString(R.string.live_wallpaper)
+        )
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.set_wallpaper))
             .setItems(options) { _, which ->
                 if (which == 3) {
                     try {
-                        val outputFile = java.io.File(requireContext().filesDir, "active_gif.gif")
+                        val outputFile = File(requireContext().filesDir, "active_gif.gif")
                         
-                        // Mở stream và copy
                         requireContext().contentResolver.openInputStream(uri)?.use { input ->
                             outputFile.outputStream().use { output ->
                                 input.copyTo(output)
-                                output.flush() // Ép buộc ghi dữ liệu xuống ổ cứng
+                                output.flush()
                             }
                         }
                         
-                        // Kiểm tra file đã tồn tại và có dung lượng > 0
                         if (outputFile.exists() && outputFile.length() > 0) {
                             outputFile.setReadable(true, false)
                             
                             requireContext().getSharedPreferences("wallpaper_prefs", android.content.Context.MODE_PRIVATE)
                                 .edit().putString("selected_gif_path", outputFile.absolutePath).apply()
                             
-                            val intent = android.content.Intent(android.app.WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER)
+                            val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER)
                             intent.putExtra(
-                                android.app.WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
-                                android.content.ComponentName(requireContext(), pion.tech.pionbase.service.LiveWallpaperService::class.java)
+                                WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
+                                ComponentName(requireContext(), LiveWallpaperService::class.java)
                             )
-                            intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             try {
                                 startActivity(intent)
                             } catch (_: android.content.ActivityNotFoundException) {
-                                displayToast("Thiết bị của bạn không hỗ trợ cài đặt hình nền động.")
+                                displayToast(getString(R.string.error_live_wallpaper_not_supported))
                             }
                         } else {
-                            displayToast("Lỗi: Không thể chuẩn bị file ảnh (file rỗng).")
+                            displayToast(getString(R.string.error_prepare_file))
                         }
                     } catch (e: Exception) {
-                        timber.log.Timber.e(e, "Lỗi copy file")
-                        displayToast("Lỗi: ${e.message}")
+                        Timber.e(e, "Lỗi copy file")
+                        displayToast(getString(R.string.error_copying_file))
                     }
                 } else {
                     val flag = when (which) {
-                        0 -> android.app.WallpaperManager.FLAG_SYSTEM
-                        1 -> android.app.WallpaperManager.FLAG_LOCK
-                        else -> android.app.WallpaperManager.FLAG_SYSTEM or android.app.WallpaperManager.FLAG_LOCK
+                        0 -> WallpaperManager.FLAG_SYSTEM
+                        1 -> WallpaperManager.FLAG_LOCK
+                        else -> WallpaperManager.FLAG_SYSTEM or WallpaperManager.FLAG_LOCK
                     }
                     viewModel.setWallpaper(uri, flag)
                 }
@@ -178,14 +182,14 @@ class HomeFragment :
     }
 
     override fun onClickWallpaper(item: WallpaperUIModel) {
-        timber.log.Timber.d("HomeFragment: onClickWallpaper called for: ${item.imageUrl}")
+        Timber.d("HomeFragment: onClickWallpaper called for: ${item.imageUrl}")
         val action = HomeFragmentDirections.actionHomeFragmentToWallpaperDetailFragment(item)
-        findNavController().navigate(action)
+        navigator.navigateTo(action)
     }
 
     override fun onClickCategory(item: CategoryUIModel) {
-        timber.log.Timber.d("HomeFragment: onClickCategory called for: ${item.title}")
+        Timber.d("HomeFragment: onClickCategory called for: ${item.title}")
         val action = HomeFragmentDirections.actionHomeFragmentToCategoryDetailFragment(item.title)
-        findNavController().navigate(action)
+        navigator.navigateTo(action)
     }
 }

@@ -24,7 +24,6 @@ class CategoryDetailFragment :
     // onViewCreated removed: logic moved to init()
 
     override fun init(view: View, savedInstanceState: Bundle?) {
-        timber.log.Timber.d("CategoryDetailFragment: init called")
         initView()
         settingEvent()
         viewModel.getWallpapersByCategory(args.categoryName)

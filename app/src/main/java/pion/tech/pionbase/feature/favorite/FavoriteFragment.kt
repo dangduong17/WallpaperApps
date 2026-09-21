@@ -23,7 +23,6 @@ class FavoriteFragment :
     override fun init(view: View, savedInstanceState: Bundle?) {
         initView()
         settingEvent()
-        adapter.setListener(this)
     }
 
     override fun subscribeObserver(view: View) {

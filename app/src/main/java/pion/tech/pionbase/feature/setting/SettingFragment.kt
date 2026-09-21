@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import pion.tech.pionbase.R
 import pion.tech.pionbase.base.BaseFragment
 import pion.tech.pionbase.databinding.FragmentSettingBinding
 import pion.tech.pionbase.util.collectFlowOnView
@@ -42,8 +43,8 @@ class SettingFragment :
                 val localeCode = result.data
                 // Map localeCode to display name. Simple approach:
                 val languageName = when(localeCode) {
-                    "vi" -> "Tiếng Việt"
-                    else -> "English"
+                    "vi" -> getString(R.string.vietnamese)
+                    else -> getString(R.string.english_lang)
                 }
                 binding.tvLanguageName.text = languageName
             }

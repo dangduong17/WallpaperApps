@@ -13,6 +13,7 @@ import pion.tech.pionbase.feature.home.adapter.TopWallpaperAdapter
 import pion.tech.pionbase.feature.search.adapter.SuggestionAdapter
 import pion.tech.pionbase.util.collectFlowOnView
 import pion.tech.pionbase.util.handleUiState
+import timber.log.Timber
 
 class SearchFragment :
     BaseFragment<FragmentSearchBinding, SearchViewModel>(
@@ -33,7 +34,7 @@ class SearchFragment :
             .map { it.suggestions }
             .distinctUntilChanged()
             .collectFlowOnView(viewLifecycleOwner) { suggestions ->
-                timber.log.Timber.d("SearchFragment: Received suggestions size: ${suggestions.size}")
+                Timber.d("SearchFragment: Received suggestions size: ${suggestions.size}")
                 binding.rvSuggestions.isVisible = suggestions.isNotEmpty()
                 suggestionAdapter.submitList(suggestions)
             }
