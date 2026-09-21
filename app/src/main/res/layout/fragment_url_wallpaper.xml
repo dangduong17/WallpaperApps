@@ -29,7 +29,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="URL Wallpaper"
+            android:text="@string/url_wallpaper"
             android:textColor="@color/white"
             android:textSize="@dimen/_20sp"
             android:textStyle="bold"
@@ -55,7 +55,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter Image URL"
+                android:hint="@string/enter_image_url"
                 android:textColorHint="#80FFFFFF"
                 app:boxStrokeColor="@color/white"
                 app:hintTextColor="@color/white"
@@ -74,7 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_12dp"
-                android:text="Preview Image"
+                android:text="@string/preview_image"
                 app:cornerRadius="@dimen/_8dp"/>
 
             <androidx.cardview.widget.CardView
@@ -91,7 +91,6 @@
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_app"
-                    app:tint="#40FFFFFF"
                     tools:tint="@null"/>
             </androidx.cardview.widget.CardView>
 
@@ -100,7 +99,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_24dp"
-                android:text="Set as Wallpaper"
+                android:text="@string/set_as_wallpaper"
                 android:backgroundTint="#E91E63"
                 app:cornerRadius="@dimen/_8dp"/>
 

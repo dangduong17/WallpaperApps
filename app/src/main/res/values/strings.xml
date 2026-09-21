@@ -88,4 +88,7 @@
     <string name="download_success_message">Wallpaper saved successfully to Pictures/PionBase</string>
     <string name="download_error_message">Error: %1$s</string>
     <string name="english_lang">English</string>
+    <string name="url_wallpaper" translatable="false">URL Wallpaper</string>
+    <string name="enter_image_url" translatable="false">Enter Image URL</string>
+    <string name="preview_image" translatable="false">Preview Image</string>
 </resources>
