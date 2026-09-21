@@ -1,22 +1,22 @@
 package pion.tech.pionbase.feature.wallpaperDetail
 
-import android.view.animation.Animation
-import android.view.animation.OvershootInterpolator
-import android.view.animation.ScaleAnimation
-import pion.tech.pionbase.R
 import android.app.AlertDialog
 import android.app.WallpaperManager
 import android.os.Build
+import android.view.animation.Animation
+import android.view.animation.OvershootInterpolator
+import android.view.animation.ScaleAnimation
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.snackbar.Snackbar
+import pion.tech.pionbase.R
 import pion.tech.pionbase.base.doActionWhenResume
 import pion.tech.pionbase.base.launchIO
 import pion.tech.pionbase.base.launchMain
+import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
 import pion.tech.pionbase.util.loadImage
 import pion.tech.pionbase.util.setPreventDoubleClickScaleView
 import timber.log.Timber
-import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
 
 fun WallpaperDetailFragment.initView() {
     // Initialization logic if needed
@@ -127,22 +127,3 @@ fun WallpaperDetailFragment.handleWallpaperLoading(wallpaper: WallpaperUIModel, 
         }
     }
 }
-
-fun WallpaperDetailFragment.handleWallpaperLoading(wallpaper: pion.tech.pionbase.domain.model.WallpaperUIModel, isGif: Boolean) {
-    Timber.d("DEBUG: URL=${wallpaper.imageUrl}, isGif=$isGif")
-    if (isGif) {
-        Glide.with(requireContext())
-            .asGif()
-            .load(wallpaper.imageUrl)
-            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-            .into(binding.ivFullWallpaper)
-    } else {
-        // Nếu là ảnh từ Picker, dùng setImageURI
-        if (wallpaperUri != null) {
-            binding.ivFullWallpaper.setImageURI(wallpaperUri)
-        } else {
-            binding.ivFullWallpaper.loadImage(wallpaper.imageUrl)
-        }
-    }
-}
-
