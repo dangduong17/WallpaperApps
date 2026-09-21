@@ -33,7 +33,6 @@ import kotlin.getValue
 class MainActivity : AppCompatActivity() {
     private val commonViewModel: CommonViewModel by viewModel()
     val logger: FirebaseAnalyticsLogger by inject()
-    private val dataStoreRepository: DataStoreRepository by inject()
 
     companion object {
         private const val RESTART_DELAY_MS = 500L
@@ -45,8 +44,6 @@ class MainActivity : AppCompatActivity() {
         
         // Hiện Snackbar nếu có thông báo thành công từ EditWallpaperActivity
         checkSuccessMessage(intent)
-        
-        LanguageManager.init(this, dataStoreRepository)
         
         enableEdgeToEdge()
         supportFragmentManager.registerFragmentLifecycleCallbacks(
