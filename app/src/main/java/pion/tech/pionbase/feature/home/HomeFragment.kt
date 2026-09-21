@@ -24,6 +24,7 @@ import pion.tech.pionbase.service.LiveWallpaperService
 import pion.tech.pionbase.util.collectFlowOnView
 import pion.tech.pionbase.util.displayToast
 import pion.tech.pionbase.util.handleUiState
+import pion.tech.pionbase.util.safeShowBottomSheet
 import timber.log.Timber
 import java.io.File
 
@@ -51,14 +52,14 @@ class HomeFragment :
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         Timber.d("HomeFragment: PickVisualMedia result: $uri")
         if (uri != null) {
-            val dialog = WallpaperPreviewBottomSheet(uri) { selectedUri ->
+            val dialog = WallpaperPreviewBottomSheet.newInstance(uri) { selectedUri ->
                 val destinationUri = Uri.fromFile(File(requireContext().cacheDir, "cropped_" + System.currentTimeMillis() + ".jpg"))
                 val intent = UCrop.of(selectedUri, destinationUri)
                     .withAspectRatio(9f, 16f)
                     .getIntent(requireContext())
                 cropImage.launch(intent)
             }
-            dialog.show(childFragmentManager, "WallpaperPreview")
+            safeShowBottomSheet(dialog)
         } else {
             displayToast("Không thể chọn ảnh")
         }
@@ -116,6 +117,7 @@ class HomeFragment :
                         else -> WallpaperManager.FLAG_SYSTEM or WallpaperManager.FLAG_LOCK
                     }
                     viewModel.setWallpaper(uri, flag)
+                    com.google.android.material.snackbar.Snackbar.make(binding.root, getString(R.string.set_wallpaper_success), com.google.android.material.snackbar.Snackbar.LENGTH_SHORT).show()
                 }
             }
             .show()

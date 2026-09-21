@@ -8,31 +8,49 @@ import pion.tech.pionbase.databinding.BottomSheetPreviewWallpaperBinding
 import pion.tech.pionbase.util.setPreventDoubleClickScaleView
 import java.io.File
 
-class WallpaperPreviewBottomSheet(
-    private val uri: Uri,
-    private val onConfirm: (Uri) -> Unit
-) : BaseBottomSheetDialogFragment<BottomSheetPreviewWallpaperBinding>(
+class WallpaperPreviewBottomSheet : BaseBottomSheetDialogFragment<BottomSheetPreviewWallpaperBinding>(
     BottomSheetPreviewWallpaperBinding::inflate
 ) {
 
+    private var uri: Uri? = null
+    private var onConfirm: ((Uri) -> Unit)? = null
+
     companion object {
-        private const val DEFAULT_IMAGE_NAME = "Wallpaper"
+        private const val ARG_URI = "arg_uri"
+        
+        fun newInstance(uri: Uri, onConfirm: (Uri) -> Unit): WallpaperPreviewBottomSheet {
+            return WallpaperPreviewBottomSheet().apply {
+                arguments = Bundle().apply {
+                    putParcelable(ARG_URI, uri)
+                }
+                this.onConfirm = onConfirm
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        @Suppress("DEPRECATION")
+        uri = arguments?.getParcelable(ARG_URI)
     }
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
-        Glide.with(this)
-            .load(uri)
-            .into(binding.imgPreview)
-        binding.tvImageName.text = uri.lastPathSegment ?: DEFAULT_IMAGE_NAME
+        uri?.let {
+            Glide.with(this)
+                .load(it)
+                .into(binding.imgPreview)
+            // binding.tvImageName.text = it.lastPathSegment ?: "Wallpaper" // Removed as requested
+        }
     }
 
     override fun addEvent(savedInstanceState: Bundle?) {
         super.addEvent(savedInstanceState)
         binding.btnSetWallpaper.setPreventDoubleClickScaleView {
-            onConfirm(uri)
-            dismiss()
+            uri?.let { uri ->
+                onConfirm?.invoke(uri)
+                dismiss()
+            }
         }
     }
-
 }
