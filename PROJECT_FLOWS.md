@@ -98,8 +98,8 @@ Luồng xử lý cài đặt hình nền từ màn hình chi tiết (`WallpaperD
    `WallpaperDetailViewModel.applyWallpaper()`   `filesDir/active_gif.gif`
                      │                                         │
                      ▼                                         ▼
-           [SetWallpaperUseCase]              Lưu đường dẫn vào SharedPreferences:
-                     │                        `selected_gif_path`
+           [SetWallpaperUseCase]              Lưu đường dẫn & timestamp vào Prefs:
+                     │                        `selected_gif_path`, `gif_updated_at`
                      ▼                                         │
   `WallpaperManager.setStream()` hoặc                         ▼
    `WallpaperManager.setBitmap()`            Khởi chạy Intent cài đặt Live Wallpaper:
@@ -108,8 +108,10 @@ Luồng xử lý cài đặt hình nền từ màn hình chi tiết (`WallpaperD
      Hiển thị Snackbar thành công                              │
                                                                ▼
                                                   [LiveWallpaperService]
-                                                  Glide tải GIF từ File & vẽ
-                                                  lên Canvas của SurfaceHolder
+                                                  - Chạy luồng vẽ phụ HandlerThread
+                                                  - Tải GIF qua android.graphics.Movie
+                                                  - Lắng nghe Prefs & File timestamp
+                                                    để nạp lại GIF mới tức thì
 ```
 
 #### Chi tiết kỹ thuật:
@@ -117,7 +119,9 @@ Luồng xử lý cài đặt hình nền từ màn hình chi tiết (`WallpaperD
 2. **Hình nền GIF (Live Wallpaper)**:
    * Chuyển hướng qua `EditWallpaperActivity`.
    * Ghi nội dung file GIF vào vùng bộ nhớ riêng của ứng dụng (`filesDir/active_gif.gif`).
-   * Gọi `LiveWallpaperService` (kế thừa từ `android.service.wallpaper.WallpaperService`). Engine `GifWallpaperEngine` dùng **Glide** đọc file GIF và vẽ từng khung hình vòng lặp liên tục (`LOOP_FOREVER`) lên Canvas của `SurfaceHolder`.
+   * Cập nhật SharedPreferences `wallpaper_prefs` lưu `selected_gif_path` và `gif_updated_at`.
+   * Gọi `LiveWallpaperService` (kế thừa từ `android.service.wallpaper.WallpaperService`). Engine `GifWallpaperEngine` sử dụng **`android.graphics.Movie`** (Native GIF Decoder) chạy trên luồng phụ **`HandlerThread("GifWallpaperThread")`** độc lập với Main UI Thread, đảm bảo không bao giờ đơ/lag ứng dụng hay bị ANR ("App buộc dừng").
+   * Lắng nghe sự kiện qua `OnSharedPreferenceChangeListener` và kiểm tra thời gian cập nhật file (`file.lastModified()`) để tự động nạp hình GIF mới tức thì khi người dùng thay đổi hình nền.
 
 ---
 
@@ -197,9 +201,9 @@ Luồng cho phép người dùng chọn bất kỳ ảnh hoặc GIF nào từ m�
         ▼ (Đúng)                                  ▼ (Khái niệm Cắt Ảnh)
  1. Lưu file vào `active_gif.gif`          1. Mở thư viện `UCrop` (Tỷ lệ 9:16)
  2. Lưu pref `selected_gif_path`           2. Lưu kết quả cắt vào `active_static_wallpaper.jpg`
- 3. Khởi chạy `LiveWallpaperService`        3. Hiển thị Dialog chọn Màn hình
- 4. Chuyển về MainActivity                 4. Gọi `WallpaperManager.setStream()`
-                                           5. Chuyển về MainActivity
+    và `gif_updated_at`                    3. Hiển thị Dialog chọn Màn hình
+ 3. Khởi chạy `LiveWallpaperService`        4. Gọi `WallpaperManager.setStream()`
+ 4. Chuyển về MainActivity                 5. Chuyển về MainActivity
 ```
 
 #### Chi tiết xử lý UCrop & Service:
@@ -246,6 +250,7 @@ Cho phép người dùng nhập trực tiếp một đường link ảnh công k
 * **Tìm kiếm (`SearchFragment`)**:
   * Nhập từ khóa -> Trừ khử tìm kiếm qua `SearchWallpapersUseCase`.
   * Thực thi truy vấn SQL `LIKE %query%` trong `WallpaperDao`.
+  * Giao diện sơ đồ danh sách gợi ý (`rvSuggestions`) được căn chỉnh khớp hoàn toàn theo viền khung nhập tìm kiếm (`edtSearch`).
 * **Chi tiết danh mục (`CategoryDetailFragment`)**:
   * Lọc danh sách hình nền thuộc danh mục được chọn qua `GetWallpapersByCategoryUseCase`.
 
