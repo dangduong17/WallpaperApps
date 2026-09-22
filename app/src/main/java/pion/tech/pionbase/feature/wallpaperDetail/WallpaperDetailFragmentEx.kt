@@ -14,6 +14,10 @@ import pion.tech.pionbase.base.doActionWhenResume
 import pion.tech.pionbase.base.launchIO
 import pion.tech.pionbase.base.launchMain
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
+import android.content.Intent
+import androidx.core.net.toUri
+import pion.tech.pionbase.feature.home.EditWallpaperActivity
+import pion.tech.pionbase.util.isGif
 import pion.tech.pionbase.util.loadImage
 import pion.tech.pionbase.util.setPreventDoubleClickScaleView
 import timber.log.Timber
@@ -49,6 +53,21 @@ fun WallpaperDetailFragment.settingEvent() {
 
     binding.btnSetWallpaper.setPreventDoubleClickScaleView {
         val context = requireContext()
+        val isGif = viewModel.uiState.value.isGif || wallpaperUri?.isGif(context.contentResolver) == true
+
+        if (isGif) {
+            val uriToUse = wallpaperUri ?: viewModel.uiState.value.wallpaper?.imageUrl?.toUri()
+            if (uriToUse != null) {
+                val intent = Intent(context, EditWallpaperActivity::class.java).apply {
+                    putExtra("uri", uriToUse)
+                }
+                startActivity(intent)
+            } else {
+                Snackbar.make(binding.root, R.string.error_set_gif, Snackbar.LENGTH_SHORT).show()
+            }
+            return@setPreventDoubleClickScaleView
+        }
+
         val options = arrayOf(
             context.getString(R.string.home_screen),
             context.getString(R.string.lock_screen),

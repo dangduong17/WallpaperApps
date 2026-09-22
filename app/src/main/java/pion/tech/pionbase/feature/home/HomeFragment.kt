@@ -25,7 +25,7 @@ import pion.tech.pionbase.service.LiveWallpaperService
 import pion.tech.pionbase.util.collectFlowOnView
 import pion.tech.pionbase.util.displayToast
 import pion.tech.pionbase.util.handleUiState
-import pion.tech.pionbase.util.safeShowDialog
+import pion.tech.pionbase.util.isGif
 import pion.tech.pionbase.util.safeShowBottomSheet
 import timber.log.Timber
 import java.io.File
@@ -54,14 +54,21 @@ class HomeFragment :
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         Timber.d("HomeFragment: PickVisualMedia result: $uri")
         if (uri != null) {
-            val dialog = WallpaperPreviewBottomSheet.newInstance(uri) { selectedUri ->
-                val destinationUri = Uri.fromFile(File(requireContext().cacheDir, "cropped_" + System.currentTimeMillis() + ".jpg"))
-                val intent = UCrop.of(selectedUri, destinationUri)
-                    .withAspectRatio(9f, 16f)
-                    .getIntent(requireContext())
-                cropImage.launch(intent)
+            if (uri.isGif(requireContext().contentResolver)) {
+                val intent = Intent(requireContext(), EditWallpaperActivity::class.java).apply {
+                    putExtra("uri", uri)
+                }
+                startActivity(intent)
+            } else {
+                val dialog = WallpaperPreviewBottomSheet.newInstance(uri) { selectedUri ->
+                    val destinationUri = Uri.fromFile(File(requireContext().cacheDir, "cropped_" + System.currentTimeMillis() + ".jpg"))
+                    val intent = UCrop.of(selectedUri, destinationUri)
+                        .withAspectRatio(9f, 16f)
+                        .getIntent(requireContext())
+                    cropImage.launch(intent)
+                }
+                safeShowBottomSheet(dialog)
             }
-            safeShowBottomSheet(dialog)
         } else {
             displayToast(R.string.cannot_select_image)
         }

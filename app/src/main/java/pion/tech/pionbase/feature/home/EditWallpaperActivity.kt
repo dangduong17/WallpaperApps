@@ -22,6 +22,15 @@ import android.app.WallpaperManager
 
 class EditWallpaperActivity : AppCompatActivity() {
 
+    private val liveWallpaperLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+        val mainIntent = Intent(this, MainActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            putExtra("show_success_msg", true)
+        }
+        startActivity(mainIntent)
+        finish()
+    }
+
     private val cropLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
             val resultUri = result.data?.let { UCrop.getOutput(it) }
@@ -34,11 +43,16 @@ class EditWallpaperActivity : AppCompatActivity() {
                     applyWallpaper(Uri.fromFile(finalFile))
                 } catch (e: Exception) {
                     Toast.makeText(this, getString(R.string.error_reading_file, e.message), Toast.LENGTH_LONG).show()
+                    finish()
                 }
+            } else {
+                finish()
             }
         } else if (result.resultCode == UCrop.RESULT_ERROR) {
             val cropError = UCrop.getError(result.data!!)
             Toast.makeText(this, getString(R.string.error_crop, cropError?.message), Toast.LENGTH_LONG).show()
+            finish()
+        } else {
             finish()
         }
     }
@@ -75,16 +89,18 @@ class EditWallpaperActivity : AppCompatActivity() {
                 getSharedPreferences("wallpaper_prefs", MODE_PRIVATE)
                     .edit().putString("selected_gif_path", outputFile.absolutePath).apply()
 
-                val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER)
-                intent.putExtra(WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT, ComponentName(this, LiveWallpaperService::class.java))
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-                
-                val mainIntent = Intent(this, MainActivity::class.java)
-                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                mainIntent.putExtra("show_success_msg", true)
-                startActivity(mainIntent)
-                finish()
+                val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER).apply {
+                    putExtra(
+                        WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
+                        ComponentName(this@EditWallpaperActivity, LiveWallpaperService::class.java)
+                    )
+                }
+                try {
+                    liveWallpaperLauncher.launch(intent)
+                } catch (_: Exception) {
+                    Toast.makeText(this, getString(R.string.error_live_wallpaper_not_supported), Toast.LENGTH_LONG).show()
+                    finish()
+                }
             } catch (e: Exception) {
                 Toast.makeText(this, getString(R.string.error_set_gif, e.message), Toast.LENGTH_LONG).show()
                 finish()
@@ -112,15 +128,19 @@ class EditWallpaperActivity : AppCompatActivity() {
                         
                         wallpaperManager.setStream(inputStream, null, true, flag)
                         
-                        val mainIntent = Intent(this, MainActivity::class.java)
-                        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                        mainIntent.putExtra("show_success_msg", true)
+                        val mainIntent = Intent(this, MainActivity::class.java).apply {
+                            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                            putExtra("show_success_msg", true)
+                        }
                         startActivity(mainIntent)
                         finish()
                     } catch (e: Exception) {
                         Toast.makeText(this, getString(R.string.error, e.message), Toast.LENGTH_LONG).show()
                         finish()
                     }
+                }
+                .setOnCancelListener {
+                    finish()
                 }
                 .show()
         }
