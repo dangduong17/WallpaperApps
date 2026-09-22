@@ -99,7 +99,10 @@ class HomeFragment :
                             outputFile.setReadable(true, false)
                             
                             requireContext().getSharedPreferences("wallpaper_prefs", android.content.Context.MODE_PRIVATE)
-                                .edit().putString("selected_gif_path", outputFile.absolutePath).apply()
+                                .edit()
+                                .putString("selected_gif_path", outputFile.absolutePath)
+                                .putLong("gif_updated_at", System.currentTimeMillis())
+                                .apply()
                             
                             val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER)
                             intent.putExtra(

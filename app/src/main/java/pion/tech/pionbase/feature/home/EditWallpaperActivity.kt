@@ -87,7 +87,10 @@ class EditWallpaperActivity : AppCompatActivity() {
                 outputFile.setReadable(true, false)
                 
                 getSharedPreferences("wallpaper_prefs", MODE_PRIVATE)
-                    .edit().putString("selected_gif_path", outputFile.absolutePath).apply()
+                    .edit()
+                    .putString("selected_gif_path", outputFile.absolutePath)
+                    .putLong("gif_updated_at", System.currentTimeMillis())
+                    .apply()
 
                 val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER).apply {
                     putExtra(
