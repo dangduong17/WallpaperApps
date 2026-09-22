@@ -41,6 +41,9 @@
         <action
             android:id="@+id/action_homeFragment_to_categoryDetailFragment"
             app:destination="@id/categoryDetailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_urlWallpaperFragment"
+            app:destination="@id/urlWallpaperFragment" />
     </fragment>
     <fragment
         android:id="@+id/categoryDetailFragment"
@@ -142,4 +145,10 @@
             android:id="@+id/action_searchFragment_to_wallpaperDetailFragment"
             app:destination="@id/wallpaperDetailFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/urlWallpaperFragment"
+        android:name="pion.tech.pionbase.feature.urlWallpaper.UrlWallpaperFragment"
+        android:label="UrlWallpaperFragment"
+        tools:layout="@layout/fragment_url_wallpaper" />
 </navigation>

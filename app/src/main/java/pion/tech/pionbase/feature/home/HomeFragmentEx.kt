@@ -13,6 +13,10 @@ internal const val TAB_CATEGORIES = 1
 
 fun HomeFragment.initView() {
     binding.apply {
+        rvFeatured.adapter = null
+        rvTopWallpaper.adapter = null
+        rvCategories.adapter = null
+        
         featuredAdapter.setListener(this@initView)
         topWallpaperAdapter.setListener(this@initView)
         categoryAdapter.setListener(this@initView)
@@ -20,6 +24,8 @@ fun HomeFragment.initView() {
         rvFeatured.adapter = featuredAdapter
         rvTopWallpaper.adapter = topWallpaperAdapter
         rvCategories.adapter = categoryAdapter
+        
+        timber.log.Timber.d("HomeFragment: FeaturedAdapter listener set to: ${this@initView}")
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -69,8 +75,12 @@ fun HomeFragment.settingEvent() {
         navigator.navigateTo(R.id.action_homeFragment_to_searchFragment)
     }
     
-    binding.btnHome.setPreventDoubleClickScaleView {
+    binding.btnHome.setOnClickListener {
         binding.tabLayout.getTabAt(TAB_HOME)?.select()
+    }
+
+    binding.btnUrlWallpaper.setPreventDoubleClickScaleView {
+        navigator.navigateTo(R.id.action_homeFragment_to_urlWallpaperFragment)
     }
 
     binding.btnPickPhoto.setPreventDoubleClickScaleView {

@@ -12,9 +12,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.android.material.snackbar.Snackbar
+import pion.tech.pionbase.data.repository.dataStore.DataStoreRepository
+import pion.tech.pionbase.feature.language.LanguageManager
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import org.koin.android.ext.android.inject
@@ -35,10 +36,15 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val RESTART_DELAY_MS = 500L
+        private const val EXTRA_SHOW_SUCCESS_MSG = "show_success_msg"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Hiện Snackbar nếu có thông báo thành công từ EditWallpaperActivity
+        checkSuccessMessage(intent)
+        
         enableEdgeToEdge()
         supportFragmentManager.registerFragmentLifecycleCallbacks(
             FragmentLifecycleCallbacksImpl(),
@@ -52,6 +58,24 @@ class MainActivity : AppCompatActivity() {
         }
         setupNavigationLogging()
         subscribeObserver()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        checkSuccessMessage(intent)
+    }
+
+    private fun checkSuccessMessage(intent: Intent?) {
+        if (intent?.getBooleanExtra(EXTRA_SHOW_SUCCESS_MSG, false) == true) {
+            window.decorView.post {
+                Snackbar.make(
+                    findViewById(android.R.id.content),
+                    getString(R.string.set_wallpaper_success),
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     private fun subscribeObserver() {

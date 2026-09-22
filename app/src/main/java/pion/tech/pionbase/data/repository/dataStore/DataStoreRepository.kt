@@ -15,4 +15,16 @@ interface DataStoreRepository {
     fun getIsFirstLaunch(): Flow<Result<Boolean>>
 
     fun setIsFirstLaunch(isFirstLaunch: Boolean): Flow<Result<Unit>>
+
+    fun getLanguage(): Flow<Result<String>>
+
+    fun setLanguage(localeCode: String): Flow<Result<Unit>>
+
+    fun getAutoWallpaperEnabled(): Flow<Result<Boolean>>
+
+    fun setAutoWallpaperEnabled(enabled: Boolean): Flow<Result<Unit>>
+
+    fun getAutoWallpaperInterval(): Flow<Result<Long>>
+
+    fun setAutoWallpaperInterval(intervalMinutes: Long): Flow<Result<Unit>>
 }

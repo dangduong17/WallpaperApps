@@ -21,6 +21,8 @@ class CategoryDetailFragment :
     internal val args: CategoryDetailFragmentArgs by navArgs()
     val adapter = TopWallpaperAdapter()
 
+    // onViewCreated removed: logic moved to init()
+
     override fun init(view: View, savedInstanceState: Bundle?) {
         initView()
         settingEvent()

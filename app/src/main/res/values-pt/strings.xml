@@ -1,29 +1,41 @@
 <resources>
-    <string name="admob_application_id" translatable="false">ca-app-pub-2222869408518511~9607465111</string>
-    <string name="please_wait" translatable="false">Please wait!</string>
     <string name="app_name" translatable="false">Pion base</string>
-    <string name="loading">Carregando</string>
-    <string name="home">Lar</string>
-    <string name="language">Linguagem</string>
-    <string name="loading_ads">Carregando anúncios</string>
-    <string name="something_error">Algo erro</string>
-    <string name="swipe_to_continue">Deslizar para continuar</string>
-    <string name="loading_data">Dados de carregamento</string>
-    <string name="setting">Contexto</string>
-    <string name="general_setting">Configuração geral</string>
-    <string name="information_about">Informações sobre</string>
-    <string name="developer">Desenvolvedor</string>
-    <string name="privacy_policy">política de Privacidade</string>
-    <string name="gdpr">GDPR</string>
-    <string name="store_name">Nome da loja:</string>
-    <string name="website">Site:</string>
-    <string name="why_do_you_see_ads">Por que você vê anúncios\?</string>
-    <string name="des_advertisement_1">Para produção e desenvolvimento, precisamos de financiamento, um dos quais vem da receita do anúncio</string>
-    <string name="des_advertisment_2">1. Para remover os anúncios, você pode nos apoiar comprando a versão premium ou a versão removida do AD.</string>
-    <string name="des_advertisement_3">2. Entre em contato conosco por e -mail a ser considerado para participação no programa piloto, do qual você pode usar versões com menos anúncios, mas não pode ser otimizado para desempenho.</string>
-    <string name="what_ads_type_do_we_use">Que tipo de anúncios usamos\?</string>
-    <string name="des_advertisement_4">Estamos associados a muitos parceiros de rede de anúncios e o maior é o Google AD para os principais formatos de anúncios</string>
-    <string name="des_5">- anúncios de tela cheia intercalados entre telas</string>
-    <string name="des_6">- Banner, os anúncios nativos são personalizados como um componente do anúncio (geralmente com um rótulo amarelo)</string>
-    <string name="des_7">Estamos sempre tentando equilibrar a experiência e o anúncio do usuário</string>
+    <string name="hd_wallpaper" translatable="false">HD Wallpaper</string>
+    <string name="featured">Em destaque</string>
+    <string name="top_wallpaper">Melhores papéis de parede</string>
+    <string name="see_more">Ver mais</string>
+    <string name="home_tab">Início</string>
+    <string name="categories_tab">Categorias</string>
+    <string name="setting">Configurações</string>
+    <string name="update_profile">Atualizar perfil</string>
+    <string name="language">Idioma</string>
+    <string name="dark_theme">Tema escuro</string>
+    <string name="auto_change_wallpaper">Alterar papel de parede automaticamente</string>
+    <string name="enable_notifications">Ativar notificações</string>
+    <string name="rate_this_app">Avalie este aplicativo</string>
+    <string name="share_with_friend">Compartilhar com amigo</string>
+    <string name="select_custom_wallpaper">Selecionar papel de parede personalizado</string>
+    <string name="please_select_language">Por favor, selecione um idioma</string>
+    <string name="close">Fechar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="this_is_demo">Esta é uma caixa de diálogo de demonstração</string>
+    <string name="pion_tech">Pion Tech</string>
+    <string name="website_url" translatable="false">https://piontech.co</string>
+    <string name="facebook">Facebook:</string>
+    <string name="telegram">Telegram:</string>
+    <string name="piontechglobal" translatable="false">\@piontechglobal</string>
+    <string name="my_favorites">Meus favoritos</string>
+    <string name="no_favorites_yet">Nenhum favorito ainda</string>
+    <string name="ok">OK</string>
+    <string name="next">Próximo</string>
+    <string name="no_results_found">Nenhum resultado encontrado</string>
+    <string name="set_as_wallpaper">Definir como papel de parede</string>
+    <string name="animals">Animais</string>
+    <string name="arts">Artes</string>
+    <string name="nature">Natureza</string>
+    <string name="layout_ads">Layout de anúncios</string>
+    <string name="onboard_1">Onboard 1</string>
+    <string name="onboard_2">Onboard 2</string>
+    <string name="onboard_4">Onboard 4</string>
+    <string name="english">Inglês</string>
 </resources>

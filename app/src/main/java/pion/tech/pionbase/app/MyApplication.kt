@@ -2,9 +2,14 @@ package pion.tech.pionbase.app
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.work.Configuration
+import org.koin.androidx.workmanager.factory.KoinWorkerFactory
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.khaipv.recovery.core.Recovery
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -14,7 +19,13 @@ import pion.tech.pionbase.base.lifecycleCallback.ActivityLifecycleCallbacksImpl
 import pion.tech.pionbase.di.appModules
 import timber.log.Timber
 
-class MyApplication : Application() {
+class MyApplication : Application(), Configuration.Provider {
+
+    override val workManagerConfiguration: Configuration
+        get() = Configuration.Builder()
+            .setWorkerFactory(KoinWorkerFactory())
+            .build()
+            
     override fun onCreate() {
         super.onCreate()
         
@@ -24,6 +35,13 @@ class MyApplication : Application() {
             androidContext(this@MyApplication)
             modules(appModules)
         }
+        
+        // Init Language
+        CoroutineScope(Dispatchers.Main).launch {
+            val dataStoreRepository: pion.tech.pionbase.data.repository.dataStore.DataStoreRepository = get()
+            pion.tech.pionbase.feature.language.LanguageManager.init(this@MyApplication, dataStoreRepository)
+        }
+        
         setupRemoteConfig()
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 

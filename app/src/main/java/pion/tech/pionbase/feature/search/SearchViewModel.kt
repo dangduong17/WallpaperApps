@@ -7,43 +7,79 @@ import pion.tech.pionbase.base.BaseViewModel
 import pion.tech.pionbase.base.launchIO
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
 import pion.tech.pionbase.data.model.wallpaper.toPresentation
+import pion.tech.pionbase.domain.usecase.wallpaper.GetCategoriesUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.SearchWallpapersUseCase
+import pion.tech.pionbase.util.Result
 import pion.tech.pionbase.util.UiState
 import pion.tech.pionbase.util.handleApiCall
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SearchViewModel(
-    private val searchWallpapersUseCase: SearchWallpapersUseCase
+    private val searchWallpapersUseCase: SearchWallpapersUseCase,
+    private val getCategoriesUseCase: GetCategoriesUseCase
 ) : BaseViewModel<SearchUiState, Nothing>(SearchUiState()) {
 
-    private val searchTrigger = MutableSharedFlow<Pair<String, Boolean>>() // Pair<Query, IsManual>
+    private val searchTrigger = MutableSharedFlow<Pair<String, Boolean>>()
+    private val suggestionTrigger = MutableSharedFlow<String>()
 
     init {
         observeSearchQuery()
+        observeSuggestions()
+    }
+
+    private fun observeSuggestions() {
+        launchIO {
+            suggestionTrigger.collectLatest { query ->
+                if (query.length >= 2) {
+                    getCategoriesUseCase().collect { result ->
+                        if (result is Result.Success) {
+                            val allCategories = result.data.map { it.toPresentation().title }
+                            
+                            searchWallpapersUseCase(query).collect { wallpaperResult ->
+                                val wallpaperTitles = if (wallpaperResult is Result.Success) {
+                                    wallpaperResult.data.map { it.title.replace(Regex("\\s\\d+$"), "").trim() }
+                                } else {
+                                    emptyList()
+                                }
+                                
+                                val suggestions = (allCategories + wallpaperTitles)
+                                    .filter { it.contains(query, true) }
+                                    .distinct()
+                                    .take(5)
+                                    
+                                setState { copy(suggestions = suggestions) }
+                            }
+                        }
+                    }
+                } else {
+                    setState { copy(suggestions = emptyList()) }
+                }
+            }
+        }
     }
 
     private fun observeSearchQuery() {
         launchIO {
-            searchTrigger
-                .collectLatest { (query, isManual) ->
-                    if (isManual) {
+            searchTrigger.collectLatest { (query, isManual) ->
+                if (isManual) {
+                    performSearch(query)
+                } else {
+                    if (query.isEmpty()) {
+                        performSearch("")
+                    } else if (query.length >= 2) {
+                        kotlinx.coroutines.delay(500)
                         performSearch(query)
-                    } else {
-                        // Debounce only for real-time text changes
-                        // filter empty queries to clear results immediately
-                        if (query.isEmpty()) {
-                            performSearch("")
-                        } else if (query.length >= 2) {
-                            kotlinx.coroutines.delay(700)
-                            performSearch(query)
-                        }
                     }
                 }
+            }
         }
     }
 
     fun onQueryChanged(query: String) {
-        launchIO { searchTrigger.emit(query to false) }
+        launchIO {
+            suggestionTrigger.emit(query)
+            searchTrigger.emit(query to false)
+        }
     }
 
     fun searchNow(query: String) {
@@ -71,5 +107,6 @@ class SearchViewModel(
 }
 
 data class SearchUiState(
-    val searchResultUiState: UiState<List<WallpaperUIModel>> = UiState.None
+    val searchResultUiState: UiState<List<WallpaperUIModel>> = UiState.None,
+    val suggestions: List<String> = emptyList()
 )

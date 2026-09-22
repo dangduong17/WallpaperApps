@@ -9,6 +9,8 @@ import android.view.animation.Animation
 import androidx.navigation.fragment.navArgs
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import pion.tech.pionbase.R
 import pion.tech.pionbase.base.BaseFragment
 import pion.tech.pionbase.databinding.FragmentWallpaperDetailBinding
@@ -16,26 +18,36 @@ import pion.tech.pionbase.util.collectFlowOnView
 import pion.tech.pionbase.util.displayToast
 import pion.tech.pionbase.util.loadImage
 import pion.tech.pionbase.util.setPreventDoubleClickScaleView
+import timber.log.Timber
 
 class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, WallpaperDetailViewModel>(
     FragmentWallpaperDetailBinding::inflate,
     WallpaperDetailViewModel::class
 ) {
     private val args: WallpaperDetailFragmentArgs by navArgs()
+    
+    // Xử lý URI nếu là ảnh từ picker (truyền qua args dưới dạng String)
+    val wallpaperUri: android.net.Uri? by lazy {
+        args.wallpaper.imageUrl.takeIf { it.startsWith("content://") }?.let { android.net.Uri.parse(it) }
+    }
+    
     var favoriteAnim: Animation? = null
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
-        timber.log.Timber.d("PermissionCheck Result: $isGranted")
+        Timber.d("PermissionCheck Result: $isGranted")
         if (isGranted) {
             viewModel.downloadWallpaper()
         } else {
-            displayToast("Cần cấp quyền để lưu ảnh")
+            displayToast(getString(R.string.need_permission_to_save))
         }
     }
 
     override fun init(view: View, savedInstanceState: Bundle?) {
+        // Luôn ưu tiên hiển thị title từ args.wallpaper
+        binding.tvImageName.text = args.wallpaper.title
+        
         viewModel.setWallpaper(args.wallpaper)
         initView()
         settingEvent()
@@ -52,12 +64,20 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
 
     override fun subscribeObserver(view: View) {
         viewModel.uiState
-            .map { it.wallpaper }
+            .map { it.wallpaper to it.isGif }
             .distinctUntilChanged()
-            .collectFlowOnView(viewLifecycleOwner) { wallpaper ->
+            .collectFlowOnView(viewLifecycleOwner) { (wallpaper, isGif) ->
                 wallpaper?.let {
-                    binding.ivFullWallpaper.loadImage(it.imageUrl)
+                    handleWallpaperLoading(it, isGif)
                 }
+            }
+
+        // Thêm observer cho trạng thái loading
+        viewModel.uiState
+            .map { it.isLoading || it.isSettingWallpaper }
+            .distinctUntilChanged()
+            .collectFlowOnView(viewLifecycleOwner) { isLoading ->
+                showHideLoading(isLoading)
             }
 
         viewModel.uiState
@@ -79,16 +99,19 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
                 }
             }
 
-        viewModel.uiState
-            .map { it.isLoading }
-            .distinctUntilChanged()
-            .collectFlowOnView(viewLifecycleOwner) { isLoading ->
-                if (isLoading) {
-                    binding.fabDownload.setImageResource(android.R.drawable.stat_notify_sync)
-                    binding.fabDownload.isEnabled = false
-                } else {
-                    binding.fabDownload.setImageResource(android.R.drawable.stat_sys_download)
-                    binding.fabDownload.isEnabled = true
+        viewModel.uiEvent
+            .collectFlowOnView(viewLifecycleOwner) { event ->
+                when (event) {
+                    is WallpaperDetailEvent.DownloadSuccess -> {
+                        android.app.AlertDialog.Builder(requireContext())
+                            .setTitle(getString(R.string.download_success_title))
+                            .setMessage(getString(R.string.download_success_message))
+                            .setPositiveButton(getString(R.string.ok), null)
+                            .show()
+                    }
+                    is WallpaperDetailEvent.DownloadError -> {
+                        displayToast(getString(R.string.download_error_message, event.throwable.message))
+                    }
                 }
             }
     }

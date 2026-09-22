@@ -16,4 +16,5 @@ val appModules: List<Module> =
         platformModule,
         // UI layer
         viewModelModule,
+        workerModule,
     )

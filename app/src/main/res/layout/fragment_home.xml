@@ -39,6 +39,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/btnUrlWallpaper"
+            android:layout_width="@dimen/_24dp"
+            android:layout_height="@dimen/_24dp"
+            android:layout_marginStart="@dimen/_12dp"
+            android:padding="@dimen/_2dp"
+            android:src="@android:drawable/ic_menu_add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btnPickPhoto"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/white" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -158,24 +170,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnSeeMore"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="#E91E63"
-                        android:insetTop="0dp"
-                        android:insetBottom="0dp"
-                        android:minHeight="0dp"
-                        android:paddingHorizontal="@dimen/_14dp"
-                        android:paddingVertical="@dimen/_4dp"
-                        android:text="@string/see_more"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_11sp"
-                        app:cornerRadius="@dimen/_16dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -274,7 +269,7 @@
                 android:layout_width="@dimen/_28dp"
                 android:layout_height="@dimen/_28dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_user"
+                android:src="@drawable/ic_gear"
                 app:tint="@color/white" />
         </FrameLayout>
 

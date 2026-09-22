@@ -11,6 +11,23 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop" />
 
+    <TextView
+        android:id="@+id/tvImageName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8dp"
+        android:layout_marginEnd="@dimen/_16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/ivBack"
+        app:layout_constraintStart_toEndOf="@id/ivBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ivBack" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="120dp"
@@ -41,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_24dp"
             android:layout_marginEnd="@dimen/_16dp"
-            android:text="Set as Wallpaper"
+            android:text="@string/set_as_wallpaper"
             android:textAllCaps="false"
             android:textColor="@color/white"
             app:cornerRadius="@dimen/_24dp"
