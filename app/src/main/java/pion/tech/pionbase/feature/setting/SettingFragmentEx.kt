@@ -10,6 +10,7 @@ import android.widget.NumberPicker
 import androidx.work.*
 import java.util.concurrent.TimeUnit
 import pion.tech.pionbase.worker.AutoWallpaperWorker
+import timber.log.Timber
 
 fun SettingFragment.backEvent() {
     onSystemBack {
@@ -41,6 +42,7 @@ fun SettingFragment.autoWallpaperEvent() {
             showIntervalDialog()
         } else {
             viewModel.setAutoWallpaperEnabled(false)
+            Timber.d("AutoWallpaper: Attempting to cancel work")
             WorkManager.getInstance(requireContext()).cancelUniqueWork(AutoWallpaperWorker.WORK_NAME)
         }
     }
