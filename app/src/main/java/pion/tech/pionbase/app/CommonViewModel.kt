@@ -1,16 +1,18 @@
 package pion.tech.pionbase.app
 
 import pion.tech.pionbase.base.BaseViewModel
-import pion.tech.pionbase.data.repository.dataStoreRepository.DataStoreRepository
+import pion.tech.pionbase.domain.usecase.common.GetIsPremiumUseCase
+import pion.tech.pionbase.domain.usecase.common.SetIsPremiumUseCase
 import pion.tech.pionbase.util.handleApiCall
 
 class CommonViewModel(
-    private val dataStoreRepository: DataStoreRepository,
+    private val getIsPremiumUseCase: GetIsPremiumUseCase,
+    private val setIsPremiumUseCase: SetIsPremiumUseCase,
 ) : BaseViewModel<CommonUiState, Nothing>(CommonUiState()) {
 
     private fun getIsPremium() {
         handleApiCall(
-            apiCall = { dataStoreRepository.getIsPremium() },
+            apiCall = { getIsPremiumUseCase() },
             onSuccess = { isPremium ->
                 setState { copy(isPremium = isPremium) }
             },
@@ -18,7 +20,7 @@ class CommonViewModel(
     }
 
     fun setPremium(isPremium: Boolean) {
-        handleApiCall(apiCall = { dataStoreRepository.setIsPremium(isPremium) })
+        handleApiCall(apiCall = { setIsPremiumUseCase(isPremium) })
     }
 
     init {

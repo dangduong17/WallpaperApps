@@ -5,19 +5,21 @@ import pion.tech.pionbase.data.model.appCategory.AppCategoryUIModel
 import pion.tech.pionbase.data.model.appCategory.toPresentation
 import pion.tech.pionbase.data.model.template.TemplateUIModel
 import pion.tech.pionbase.data.model.template.toPresentation
-import pion.tech.pionbase.data.repository.apiRepository.ApiRepository
+import pion.tech.pionbase.domain.usecase.api.GetAppCategoryUseCase
+import pion.tech.pionbase.domain.usecase.api.GetTemplateDataUseCase
 import pion.tech.pionbase.util.UiState
 import pion.tech.pionbase.util.handleApiCall
 
 class ApiViewModel(
-    private val apiRepository: ApiRepository,
+    private val getAppCategoryUseCase: GetAppCategoryUseCase,
+    private val getTemplateDataUseCase: GetTemplateDataUseCase,
 ) : BaseViewModel<ApiUiState, Nothing>(ApiUiState()) {
 
     fun getAppId() {
         setState { copy(categoryUiState = UiState.Loading) }
 
         handleApiCall(
-            apiCall = { apiRepository.getAppCategory() },
+            apiCall = { getAppCategoryUseCase() },
             onSuccess = { data ->
                 val categories = data.map { item -> item.toPresentation() }
                 setState { copy(categoryUiState = UiState.Success(categories)) }
@@ -32,7 +34,7 @@ class ApiViewModel(
         setState { copy(templateUiState = UiState.Loading) }
 
         handleApiCall(
-            apiCall = { apiRepository.getTemplateData(categoryId) },
+            apiCall = { getTemplateDataUseCase(categoryId) },
             onSuccess = { data ->
                 val templates = data.map { item -> item.toPresentation() }
                 setState { copy(templateUiState = UiState.Success(templates)) }

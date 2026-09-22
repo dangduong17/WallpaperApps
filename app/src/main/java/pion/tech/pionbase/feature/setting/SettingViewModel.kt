@@ -2,18 +2,21 @@ package pion.tech.pionbase.feature.setting
 
 import pion.tech.pionbase.base.BaseViewModel
 import pion.tech.pionbase.base.launchIO
+import pion.tech.pionbase.domain.usecase.language.GetLanguageUseCase
 import pion.tech.pionbase.domain.usecase.settings.GetAutoWallpaperSettingsUseCase
 import pion.tech.pionbase.domain.usecase.settings.SetAutoWallpaperSettingsUseCase
 import pion.tech.pionbase.util.Result
 
 data class SettingUiState(
     val autoWallpaperEnabled: Boolean = false,
-    val autoWallpaperInterval: Long = 60L
+    val autoWallpaperInterval: Long = 60L,
+    val currentLanguageCode: String = ""
 )
 
 class SettingViewModel(
     private val getSettingsUseCase: GetAutoWallpaperSettingsUseCase,
-    private val setSettingsUseCase: SetAutoWallpaperSettingsUseCase
+    private val setSettingsUseCase: SetAutoWallpaperSettingsUseCase,
+    private val getLanguageUseCase: GetLanguageUseCase
 ) : BaseViewModel<SettingUiState, Nothing>(SettingUiState()) {
 
     init {
@@ -32,6 +35,13 @@ class SettingViewModel(
             getSettingsUseCase.getInterval().collect { result ->
                 if (result is Result.Success) {
                     setState { copy(autoWallpaperInterval = result.data) }
+                }
+            }
+        }
+        launchIO {
+            getLanguageUseCase().collect { result ->
+                if (result is Result.Success) {
+                    setState { copy(currentLanguageCode = result.data) }
                 }
             }
         }

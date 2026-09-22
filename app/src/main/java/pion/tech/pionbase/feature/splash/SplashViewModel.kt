@@ -1,11 +1,11 @@
 package pion.tech.pionbase.feature.splash
 
 import pion.tech.pionbase.base.BaseViewModel
-import pion.tech.pionbase.data.repository.dataStoreRepository.DataStoreRepository
+import pion.tech.pionbase.domain.usecase.language.GetIsFirstLaunchUseCase
 import pion.tech.pionbase.util.handleApiCall
 
 class SplashViewModel(
-    private val dataStoreRepository: DataStoreRepository
+    private val getIsFirstLaunchUseCase: GetIsFirstLaunchUseCase
 ) : BaseViewModel<SplashUiState, Nothing>(SplashUiState()) {
 
     init {
@@ -14,7 +14,7 @@ class SplashViewModel(
 
     private fun checkFirstLaunch() {
         handleApiCall(
-            apiCall = { dataStoreRepository.getIsFirstLaunch() },
+            apiCall = { getIsFirstLaunchUseCase() },
             onSuccess = { isFirstLaunch ->
                 setState { copy(isFirstLaunch = isFirstLaunch) }
             }

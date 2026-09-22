@@ -2,10 +2,20 @@ package pion.tech.pionbase.di
 
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
+import pion.tech.pionbase.domain.usecase.api.GetAppCategoryUseCase
+import pion.tech.pionbase.domain.usecase.api.GetTemplateDataUseCase
+import pion.tech.pionbase.domain.usecase.common.GetIsPremiumUseCase
+import pion.tech.pionbase.domain.usecase.common.SetIsPremiumUseCase
 import pion.tech.pionbase.domain.usecase.home.DownloadImageToBitmapUseCase
 import pion.tech.pionbase.domain.usecase.home.GetInstalledAppsUseCase
 import pion.tech.pionbase.domain.usecase.home.SetWallpaperUseCase
+import pion.tech.pionbase.domain.usecase.language.GetIsFirstLaunchUseCase
+import pion.tech.pionbase.domain.usecase.language.GetLanguageUseCase
 import pion.tech.pionbase.domain.usecase.language.GetLanguagesUseCase
+import pion.tech.pionbase.domain.usecase.language.SetIsFirstLaunchUseCase
+import pion.tech.pionbase.domain.usecase.language.SetLanguageUseCase
+import pion.tech.pionbase.domain.usecase.settings.GetAutoWallpaperSettingsUseCase
+import pion.tech.pionbase.domain.usecase.settings.SetAutoWallpaperSettingsUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.DownloadWallpaperUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.GetCategoriesUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.GetFavoriteWallpapersUseCase
@@ -15,8 +25,6 @@ import pion.tech.pionbase.domain.usecase.wallpaper.GetWallpapersByCategoryUseCas
 import pion.tech.pionbase.domain.usecase.wallpaper.IsFavoriteWallpaperUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.SearchWallpapersUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.ToggleFavoriteUseCase
-import pion.tech.pionbase.domain.usecase.settings.GetAutoWallpaperSettingsUseCase
-import pion.tech.pionbase.domain.usecase.settings.SetAutoWallpaperSettingsUseCase
 
 val homeUseCaseModule = module {
     factoryOf(::GetInstalledAppsUseCase)
@@ -40,12 +48,28 @@ val wallpaperUseCaseModule = module {
 
 val languageUseCaseModule = module {
     factoryOf(::GetLanguagesUseCase)
+    factoryOf(::GetLanguageUseCase)
+    factoryOf(::SetLanguageUseCase)
+    factoryOf(::GetIsFirstLaunchUseCase)
+    factoryOf(::SetIsFirstLaunchUseCase)
+}
+
+val apiUseCaseModule = module {
+    factoryOf(::GetAppCategoryUseCase)
+    factoryOf(::GetTemplateDataUseCase)
+}
+
+val commonUseCaseModule = module {
+    factoryOf(::GetIsPremiumUseCase)
+    factoryOf(::SetIsPremiumUseCase)
 }
 
 val useCaseModule = module {
     includes(
         homeUseCaseModule,
         wallpaperUseCaseModule,
-        languageUseCaseModule
+        languageUseCaseModule,
+        apiUseCaseModule,
+        commonUseCaseModule,
     )
 }

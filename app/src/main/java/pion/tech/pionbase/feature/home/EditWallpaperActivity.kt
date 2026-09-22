@@ -1,6 +1,7 @@
 package pion.tech.pionbase.feature.home
 
 import android.app.AlertDialog
+import android.app.WallpaperManager
 import android.content.ComponentName
 import android.content.Intent
 import android.net.Uri
@@ -16,9 +17,6 @@ import pion.tech.pionbase.util.isGif
 import pion.tech.pionbase.util.parcelable
 import java.io.File
 import java.io.FileInputStream
-import android.app.WallpaperManager
-
-
 
 class EditWallpaperActivity : AppCompatActivity() {
 

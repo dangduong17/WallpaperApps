@@ -3,14 +3,18 @@ package pion.tech.pionbase.feature.language
 import pion.tech.pionbase.base.BaseViewModel
 import pion.tech.pionbase.data.model.language.LanguageUIModel
 import pion.tech.pionbase.data.model.language.toPresentation
+import pion.tech.pionbase.domain.usecase.language.GetLanguageUseCase
 import pion.tech.pionbase.domain.usecase.language.GetLanguagesUseCase
-import pion.tech.pionbase.data.repository.dataStoreRepository.DataStoreRepository
+import pion.tech.pionbase.domain.usecase.language.SetIsFirstLaunchUseCase
+import pion.tech.pionbase.domain.usecase.language.SetLanguageUseCase
 import pion.tech.pionbase.util.UiState
 import pion.tech.pionbase.util.handleApiCall
 
 class LanguageViewModel(
     private val getLanguagesUseCase: GetLanguagesUseCase,
-    private val dataStoreRepository: DataStoreRepository,
+    private val getLanguageUseCase: GetLanguageUseCase,
+    private val setLanguageUseCase: SetLanguageUseCase,
+    private val setIsFirstLaunchUseCase: SetIsFirstLaunchUseCase,
 ) : BaseViewModel<LanguageUiState, Nothing>(LanguageUiState()) {
 
     init {
@@ -25,7 +29,7 @@ class LanguageViewModel(
                 val languages = dtoList.map { it.toPresentation() }
                 // Load saved language or default to "en"
                 handleApiCall(
-                    apiCall = { dataStoreRepository.getLanguage() },
+                    apiCall = { getLanguageUseCase() },
                     onSuccess = { savedLocale ->
                         val selectedLanguage = languages.find { it.localeCode == savedLocale } ?: languages.find { it.localeCode == "en" }
                         setState {
@@ -66,11 +70,11 @@ class LanguageViewModel(
 
     fun applySelectedLanguage() {
         val selected = uiState.value.selectedLanguage ?: return
-        handleApiCall(apiCall = { dataStoreRepository.setLanguage(selected.localeCode) })
+        handleApiCall(apiCall = { setLanguageUseCase(selected.localeCode) })
     }
 
     fun setFirstLaunchFalse() {
-        handleApiCall(apiCall = { dataStoreRepository.setIsFirstLaunch(false) })
+        handleApiCall(apiCall = { setIsFirstLaunchUseCase(false) })
     }
 
     fun getSelectedLanguage(): LanguageUIModel? = uiState.value.selectedLanguage
