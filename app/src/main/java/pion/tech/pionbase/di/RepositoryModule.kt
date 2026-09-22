@@ -12,7 +12,6 @@ import pion.tech.pionbase.data.repository.installedAppRepository.InstalledAppsRe
 import pion.tech.pionbase.data.repository.installedAppRepository.InstalledAppsRepositoryImpl
 import pion.tech.pionbase.data.repository.languageRepository.LanguageRepository
 import pion.tech.pionbase.data.repository.languageRepository.LanguageRepositoryImpl
-import pion.tech.pionbase.data.repository.wallpaper.MockWallpaperRepository
 import pion.tech.pionbase.data.repository.wallpaper.WallpaperRepository
 import pion.tech.pionbase.data.repository.wallpaper.WallpaperRepositoryImpl
 
@@ -23,6 +22,5 @@ val repositoryModule =
         singleOf(::ApiRepositoryImpl) bind ApiRepository::class
         singleOf(::InstalledAppsRepositoryImpl) bind InstalledAppsRepository::class
         singleOf(::WallpaperDataSource)
-        // Dùng Mock để test
-        single { MockWallpaperRepository(get(), get(), get()) } bind WallpaperRepository::class
+        singleOf(::WallpaperRepositoryImpl) bind WallpaperRepository::class
     }
