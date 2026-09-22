@@ -28,7 +28,7 @@ import pion.tech.pionbase.app.CommonViewModel
 import pion.tech.pionbase.base.firebaseAnalytics.FirebaseAnalyticsLogger
 import pion.tech.pionbase.base.navigator.Navigator
 import pion.tech.pionbase.base.navigator.NavigatorImpl
-import pion.tech.pionbase.data.repository.dataStore.DataStoreRepository
+import pion.tech.pionbase.data.repository.dataStoreRepository.DataStoreRepository
 import timber.log.Timber
 import kotlin.reflect.KClass
 

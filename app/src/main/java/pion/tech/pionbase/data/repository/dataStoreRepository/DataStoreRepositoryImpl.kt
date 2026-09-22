@@ -1,4 +1,4 @@
-package pion.tech.pionbase.data.repository.dataStore
+package pion.tech.pionbase.data.repository.dataStoreRepository
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences

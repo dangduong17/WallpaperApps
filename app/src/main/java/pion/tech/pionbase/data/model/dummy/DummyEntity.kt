@@ -19,4 +19,4 @@ data class DummyEntity(
     }
 }
 
-fun DummyEntity.toDomain(): DummyUiModel = DummyUiModel(id = this.id, value = this.value)
+fun DummyEntity.toDomain(): DummyUIModel = DummyUIModel(id = this.id, value = this.value)

@@ -32,8 +32,6 @@ val wallpaperUseCaseModule = module {
     factoryOf(::ToggleFavoriteUseCase)
     factoryOf(::GetAutoWallpaperSettingsUseCase)
     factoryOf(::SetAutoWallpaperSettingsUseCase)
-    factoryOf(::GetAutoWallpaperSettingsUseCase)
-    factoryOf(::SetAutoWallpaperSettingsUseCase)
     factoryOf(::GetWallpapersByCategoryUseCase)
     factoryOf(::IsFavoriteWallpaperUseCase)
     factoryOf(::SearchWallpapersUseCase)

@@ -10,7 +10,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
-import pion.tech.pionbase.data.repository.wallpaper.WallpaperRepository
+import pion.tech.pionbase.data.repository.wallpaperRepository.WallpaperRepository
 import pion.tech.pionbase.util.Result as AppResult
 import timber.log.Timber
 

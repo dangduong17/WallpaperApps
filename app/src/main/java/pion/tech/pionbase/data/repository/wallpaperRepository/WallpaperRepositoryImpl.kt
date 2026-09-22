@@ -1,4 +1,4 @@
-package pion.tech.pionbase.data.repository.wallpaper
+package pion.tech.pionbase.data.repository.wallpaperRepository
 
 import android.content.ContentValues
 import android.graphics.BitmapFactory

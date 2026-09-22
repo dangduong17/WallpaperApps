@@ -6,11 +6,10 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import pion.tech.pionbase.data.model.dummy.DummyEntity
-
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface DummyDAO {
+interface DummyDao {
     @Insert
     suspend fun insert(vararg scale: DummyEntity)
 

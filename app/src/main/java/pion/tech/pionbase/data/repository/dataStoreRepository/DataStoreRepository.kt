@@ -1,4 +1,4 @@
-package pion.tech.pionbase.data.repository.dataStore
+package pion.tech.pionbase.data.repository.dataStoreRepository
 
 import kotlinx.coroutines.flow.Flow
 import pion.tech.pionbase.util.Result

@@ -1,7 +1,7 @@
 package pion.tech.pionbase.app
 
 import pion.tech.pionbase.base.BaseViewModel
-import pion.tech.pionbase.data.repository.dataStore.DataStoreRepository
+import pion.tech.pionbase.data.repository.dataStoreRepository.DataStoreRepository
 import pion.tech.pionbase.util.handleApiCall
 
 class CommonViewModel(

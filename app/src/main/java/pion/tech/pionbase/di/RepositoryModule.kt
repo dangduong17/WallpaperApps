@@ -6,15 +6,14 @@ import org.koin.dsl.module
 import pion.tech.pionbase.data.remote.wallpaper.WallpaperDataSource
 import pion.tech.pionbase.data.repository.apiRepository.ApiRepository
 import pion.tech.pionbase.data.repository.apiRepository.ApiRepositoryImpl
-import pion.tech.pionbase.data.repository.dataStore.DataStoreRepository
-import pion.tech.pionbase.data.repository.dataStore.DataStoreRepositoryImpl
+import pion.tech.pionbase.data.repository.dataStoreRepository.DataStoreRepository
+import pion.tech.pionbase.data.repository.dataStoreRepository.DataStoreRepositoryImpl
 import pion.tech.pionbase.data.repository.installedAppRepository.InstalledAppsRepository
 import pion.tech.pionbase.data.repository.installedAppRepository.InstalledAppsRepositoryImpl
 import pion.tech.pionbase.data.repository.languageRepository.LanguageRepository
 import pion.tech.pionbase.data.repository.languageRepository.LanguageRepositoryImpl
-import pion.tech.pionbase.data.repository.wallpaper.MockWallpaperRepository
-import pion.tech.pionbase.data.repository.wallpaper.WallpaperRepository
-import pion.tech.pionbase.data.repository.wallpaper.WallpaperRepositoryImpl
+import pion.tech.pionbase.data.repository.wallpaperRepository.WallpaperRepository
+import pion.tech.pionbase.data.repository.wallpaperRepository.WallpaperRepositoryImpl
 
 val repositoryModule =
     module {
@@ -25,6 +24,4 @@ val repositoryModule =
         singleOf(::WallpaperDataSource)
         //dung api thật
         singleOf(::WallpaperRepositoryImpl) bind WallpaperRepository::class
-        //dung mockup
-//        single { MockWallpaperRepository(get(), get(),   sget()) } bind WallpaperRepository::class
     }

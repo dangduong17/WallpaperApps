@@ -4,6 +4,7 @@ import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import pion.tech.pionbase.app.ApiViewModel
 import pion.tech.pionbase.app.CommonViewModel
+import pion.tech.pionbase.feature.changeLanguage.ChangeLanguageViewModel
 import pion.tech.pionbase.feature.home.HomeViewModel
 import pion.tech.pionbase.feature.language.LanguageViewModel
 import pion.tech.pionbase.feature.onboard.OnboardViewModel
@@ -19,6 +20,7 @@ val viewModelModule =
     module {
         viewModelOf(::ApiViewModel)
         viewModelOf(::CommonViewModel)
+        viewModelOf(::ChangeLanguageViewModel)
         viewModelOf(::HomeViewModel)
         viewModelOf(::LanguageViewModel)
         viewModelOf(::SplashViewModel)

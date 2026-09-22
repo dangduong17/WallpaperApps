@@ -1,4 +1,4 @@
-package pion.tech.pionbase.data.repository.wallpaper
+package pion.tech.pionbase.data.repository.wallpaperRepository
 
 import kotlinx.coroutines.flow.Flow
 import pion.tech.pionbase.data.model.wallpaper.CategoryDtoModel

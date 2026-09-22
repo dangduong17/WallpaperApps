@@ -6,7 +6,7 @@ import org.koin.dsl.module
 import pion.tech.pionbase.BuildConfig
 import pion.tech.pionbase.data.database.AppDatabase
 import pion.tech.pionbase.data.database.dao.CategoryDao
-import pion.tech.pionbase.data.database.dao.DummyDAO
+import pion.tech.pionbase.data.database.dao.DummyDao
 import pion.tech.pionbase.data.database.dao.WallpaperDao
 
 val databaseModule =
@@ -30,7 +30,7 @@ val databaseModule =
             builder.build()
         }
 
-        single<DummyDAO> { get<AppDatabase>().dummyDAO() }
+        single<DummyDao> { get<AppDatabase>().dummyDao() }
         single<WallpaperDao> { get<AppDatabase>().wallpaperDao() }
         single<CategoryDao> { get<AppDatabase>().categoryDao() }
     }

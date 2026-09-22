@@ -6,7 +6,7 @@ import androidx.core.os.LocaleListCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import pion.tech.pionbase.data.repository.dataStore.DataStoreRepository
+import pion.tech.pionbase.data.repository.dataStoreRepository.DataStoreRepository
 import pion.tech.pionbase.util.Result
 
 object LanguageManager {

@@ -38,7 +38,7 @@ class MyApplication : Application(), Configuration.Provider {
         
         // Init Language
         CoroutineScope(Dispatchers.Main).launch {
-            val dataStoreRepository: pion.tech.pionbase.data.repository.dataStore.DataStoreRepository = get()
+            val dataStoreRepository: pion.tech.pionbase.data.repository.dataStoreRepository.DataStoreRepository = get()
             pion.tech.pionbase.feature.language.LanguageManager.init(this@MyApplication, dataStoreRepository)
         }
         

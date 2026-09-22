@@ -4,7 +4,7 @@ import pion.tech.pionbase.base.BaseViewModel
 import pion.tech.pionbase.data.model.language.LanguageUIModel
 import pion.tech.pionbase.data.model.language.toPresentation
 import pion.tech.pionbase.domain.usecase.language.GetLanguagesUseCase
-import pion.tech.pionbase.data.repository.dataStore.DataStoreRepository
+import pion.tech.pionbase.data.repository.dataStoreRepository.DataStoreRepository
 import pion.tech.pionbase.util.UiState
 import pion.tech.pionbase.util.handleApiCall
 
