@@ -98,6 +98,21 @@
     <string name="cannot_select_image">Cannot select image</string>
     <string name="media_selected">Media selected</string>
     <string name="theme_setting" translatable="false">Theme</string>
+    <string name="text_and_quote" translatable="false">Text &amp; Quote</string>
+    <string name="select_quote" translatable="false">Select Quote</string>
+    <string name="edit_text" translatable="false">Edit Text</string>
+    <string name="font" translatable="false">Font</string>
+    <string name="style" translatable="false">Style</string>
+    <string name="color" translatable="false">Color</string>
+    <string name="shadow" translatable="false">Shadow</string>
+    <string name="text_size" translatable="false">Text Size</string>
+    <string name="text_alignment" translatable="false">Alignment</string>
+    <string name="save_wallpaper" translatable="false">Save Image</string>
+    <string name="save_quote_success" translatable="false">Image saved successfully!</string>
+    <string name="add_quote_on_wallpaper" translatable="false">Add Quote</string>
+    <string name="align_left" translatable="false">Left</string>
+    <string name="align_center" translatable="false">Center</string>
+    <string name="align_right" translatable="false">Right</string>
     <string name="theme_system" translatable="false">System Default</string>
     <string name="theme_light" translatable="false">Light</string>
     <string name="theme_dark" translatable="false">Dark</string>
