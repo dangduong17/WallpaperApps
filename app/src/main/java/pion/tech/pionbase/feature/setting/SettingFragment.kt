@@ -25,6 +25,7 @@ class SettingFragment :
         dynamicColorEvent()
         autoWallpaperEvent()
         batterySaverEvent()
+        cacheEvent()
     }
 
     override fun subscribeObserver(view: View) {
@@ -85,6 +86,20 @@ class SettingFragment :
                 if (binding.swBatterySaver.isChecked != isEnabled) {
                     binding.swBatterySaver.isChecked = isEnabled
                 }
+            }
+
+        viewModel.uiState
+            .map { it.cacheSizeFormatted }
+            .distinctUntilChanged()
+            .collectFlowOnView(viewLifecycleOwner) { formattedSize ->
+                binding.tvCacheSize.text = formattedSize
+            }
+
+        viewModel.uiState
+            .map { it.isClearingCache }
+            .distinctUntilChanged()
+            .collectFlowOnView(viewLifecycleOwner) { isClearing ->
+                showHideLoading(isClearing)
             }
     }
 }

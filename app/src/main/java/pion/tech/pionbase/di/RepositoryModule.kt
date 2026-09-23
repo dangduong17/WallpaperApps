@@ -6,6 +6,8 @@ import org.koin.dsl.module
 import pion.tech.pionbase.data.remote.wallpaper.WallpaperDataSource
 import pion.tech.pionbase.data.repository.apiRepository.ApiRepository
 import pion.tech.pionbase.data.repository.apiRepository.ApiRepositoryImpl
+import pion.tech.pionbase.data.repository.cacheRepository.CacheRepository
+import pion.tech.pionbase.data.repository.cacheRepository.CacheRepositoryImpl
 import pion.tech.pionbase.data.repository.dataStoreRepository.DataStoreRepository
 import pion.tech.pionbase.data.repository.dataStoreRepository.DataStoreRepositoryImpl
 import pion.tech.pionbase.data.repository.installedAppRepository.InstalledAppsRepository
@@ -27,4 +29,5 @@ val repositoryModule =
         singleOf(::WallpaperDataSource)
         singleOf(::WallpaperRepositoryImpl) bind WallpaperRepository::class
         singleOf(::QuoteRepositoryImpl) bind QuoteRepository::class
+        singleOf(::CacheRepositoryImpl) bind CacheRepository::class
     }

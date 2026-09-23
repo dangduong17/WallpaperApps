@@ -116,4 +116,10 @@
     <string name="theme_dark">Chế độ tối</string>
     <string name="choose_theme">Chọn giao diện</string>
     <string name="dynamic_color">Màu sắc động (Material You)</string>
+    <string name="cache_management">Bộ nhớ đệm &amp; Dung lượng</string>
+    <string name="clear_cache">Xóa bộ nhớ đệm</string>
+    <string name="clear_cache_confirm_title">Xóa bộ nhớ đệm</string>
+    <string name="clear_cache_confirm_message">Bạn có chắc chắn muốn xóa bộ nhớ đệm? Hành động này sẽ giúp giải phóng dung lượng bộ nhớ máy.</string>
+    <string name="clear_cache_success">Đã xóa bộ nhớ đệm thành công!</string>
+    <string name="clear_cache_failed">Xóa bộ nhớ đệm thất bại!</string>
 </resources>

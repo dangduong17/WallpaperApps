@@ -2,6 +2,7 @@ package pion.tech.pionbase.feature.setting
 
 import android.annotation.SuppressLint
 import android.widget.NumberPicker
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
@@ -92,6 +93,31 @@ fun SettingFragment.batterySaverEvent() {
         val newEnabled = !isCurrentlyEnabled
         viewModel.setBatterySaverEnabled(newEnabled)
     }
+}
+
+fun SettingFragment.cacheEvent() {
+    binding.btnCache.setPreventDoubleClickScaleView {
+        showClearCacheDialog()
+    }
+}
+
+fun SettingFragment.showClearCacheDialog() {
+    AlertDialog.Builder(requireContext())
+        .setTitle(getString(R.string.clear_cache_confirm_title))
+        .setMessage(getString(R.string.clear_cache_confirm_message))
+        .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+            dialog.dismiss()
+            viewModel.clearCache(
+                onSuccess = {
+                    Toast.makeText(context, getString(R.string.clear_cache_success), Toast.LENGTH_SHORT).show()
+                },
+                onError = {
+                    Toast.makeText(context, getString(R.string.clear_cache_failed), Toast.LENGTH_SHORT).show()
+                },
+            )
+        }
+        .setNegativeButton(getString(R.string.cancel), null)
+        .show()
 }
 
 fun SettingFragment.showIntervalDialog() {

@@ -121,4 +121,10 @@
     <string name="theme_dark" translatable="false">Dark</string>
     <string name="choose_theme" translatable="false">Choose Theme</string>
     <string name="dynamic_color" translatable="false">Dynamic Color (Material You)</string>
+    <string name="cache_management" translatable="false">Cache Management</string>
+    <string name="clear_cache" translatable="false">Clear Cache</string>
+    <string name="clear_cache_confirm_title" translatable="false">Clear Cache</string>
+    <string name="clear_cache_confirm_message" translatable="false">Are you sure you want to clear the cache? This will free up storage space on your device.</string>
+    <string name="clear_cache_success" translatable="false">Cache cleared successfully!</string>
+    <string name="clear_cache_failed" translatable="false">Failed to clear cache!</string>
 </resources>

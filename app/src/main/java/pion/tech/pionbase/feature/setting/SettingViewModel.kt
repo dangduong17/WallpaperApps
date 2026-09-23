@@ -3,9 +3,13 @@ package pion.tech.pionbase.feature.setting
 import com.google.android.material.color.DynamicColors
 import pion.tech.pionbase.base.BaseViewModel
 import pion.tech.pionbase.base.launchIO
+import pion.tech.pionbase.base.launchMain
 import pion.tech.pionbase.domain.usecase.language.GetLanguageUseCase
+import pion.tech.pionbase.domain.usecase.settings.ClearCacheUseCase
+import pion.tech.pionbase.domain.usecase.settings.FormatCacheSizeUseCase
 import pion.tech.pionbase.domain.usecase.settings.GetAutoWallpaperSettingsUseCase
 import pion.tech.pionbase.domain.usecase.settings.GetBatterySaverSettingsUseCase
+import pion.tech.pionbase.domain.usecase.settings.GetCacheSizeUseCase
 import pion.tech.pionbase.domain.usecase.settings.GetThemeSettingsUseCase
 import pion.tech.pionbase.domain.usecase.settings.SetAutoWallpaperSettingsUseCase
 import pion.tech.pionbase.domain.usecase.settings.SetBatterySaverSettingsUseCase
@@ -21,6 +25,8 @@ data class SettingUiState(
     val dynamicColorEnabled: Boolean = true,
     val isDynamicColorAvailable: Boolean = false,
     val batterySaverEnabled: Boolean = false,
+    val cacheSizeFormatted: String = "0 B",
+    val isClearingCache: Boolean = false,
 )
 
 class SettingViewModel(
@@ -30,12 +36,16 @@ class SettingViewModel(
     private val getThemeSettingsUseCase: GetThemeSettingsUseCase,
     private val setThemeSettingsUseCase: SetThemeSettingsUseCase,
     private val getBatterySaverSettingsUseCase: GetBatterySaverSettingsUseCase,
-    private val setBatterySaverSettingsUseCase: SetBatterySaverSettingsUseCase
+    private val setBatterySaverSettingsUseCase: SetBatterySaverSettingsUseCase,
+    private val getCacheSizeUseCase: GetCacheSizeUseCase,
+    private val clearCacheUseCase: ClearCacheUseCase,
+    private val formatCacheSizeUseCase: FormatCacheSizeUseCase,
 ) : BaseViewModel<SettingUiState, Nothing>(SettingUiState()) {
 
     init {
         setState { copy(isDynamicColorAvailable = DynamicColors.isDynamicColorAvailable()) }
         loadSettings()
+        loadCacheSize()
     }
 
     private fun loadSettings() {
@@ -78,6 +88,33 @@ class SettingViewModel(
             getBatterySaverSettingsUseCase().collect { result ->
                 if (result is Result.Success) {
                     setState { copy(batterySaverEnabled = result.data) }
+                }
+            }
+        }
+    }
+
+    fun loadCacheSize() {
+        launchIO {
+            getCacheSizeUseCase().collect { result ->
+                if (result is Result.Success) {
+                    val formatted = formatCacheSizeUseCase(result.data)
+                    setState { copy(cacheSizeFormatted = formatted) }
+                }
+            }
+        }
+    }
+
+    fun clearCache(onSuccess: () -> Unit = {}, onError: () -> Unit = {}) {
+        setState { copy(isClearingCache = true) }
+        launchIO {
+            clearCacheUseCase().collect { result ->
+                if (result is Result.Success) {
+                    loadCacheSize()
+                    setState { copy(isClearingCache = false) }
+                    launchMain { onSuccess() }
+                } else {
+                    setState { copy(isClearingCache = false) }
+                    launchMain { onError() }
                 }
             }
         }
