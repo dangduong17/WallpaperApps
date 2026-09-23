@@ -35,4 +35,8 @@ interface DataStoreRepository {
     fun getDynamicColorEnabled(): Flow<Result<Boolean>>
 
     fun setDynamicColorEnabled(enabled: Boolean): Flow<Result<Unit>>
+
+    fun getBatterySaverEnabled(): Flow<Result<Boolean>>
+
+    fun setBatterySaverEnabled(enabled: Boolean): Flow<Result<Unit>>
 }

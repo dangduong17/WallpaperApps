@@ -23,6 +23,7 @@ class DataStoreRepositoryImpl(
     private val autoWallpaperIntervalKey = longPreferencesKey("autoWallpaperIntervalKey")
     private val themeModeKey = intPreferencesKey("themeModeKey") // 0: SYSTEM, 1: LIGHT, 2: DARK
     private val dynamicColorEnabledKey = booleanPreferencesKey("dynamicColorEnabledKey")
+    private val batterySaverEnabledKey = booleanPreferencesKey("batterySaverEnabledKey")
 
     override fun getIsPremium(): Flow<Result<Boolean>> =
         dataStore.data.executeDataWithFlowCall { prefs ->
@@ -117,6 +118,18 @@ class DataStoreRepositoryImpl(
         executeDataCall {
             dataStore.edit {
                 it[dynamicColorEnabledKey] = enabled
+            }
+        }
+
+    override fun getBatterySaverEnabled(): Flow<Result<Boolean>> =
+        dataStore.data.executeDataWithFlowCall { prefs ->
+            prefs[batterySaverEnabledKey] ?: false // Default: false
+        }
+
+    override fun setBatterySaverEnabled(enabled: Boolean): Flow<Result<Unit>> =
+        executeDataCall {
+            dataStore.edit {
+                it[batterySaverEnabledKey] = enabled
             }
         }
 }

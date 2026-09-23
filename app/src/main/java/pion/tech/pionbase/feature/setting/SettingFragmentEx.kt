@@ -86,6 +86,14 @@ fun SettingFragment.autoWallpaperEvent() {
     }
 }
 
+fun SettingFragment.batterySaverEvent() {
+    binding.swBatterySaver.setPreventDoubleClickScaleView {
+        val isCurrentlyEnabled = viewModel.uiState.value.batterySaverEnabled
+        val newEnabled = !isCurrentlyEnabled
+        viewModel.setBatterySaverEnabled(newEnabled)
+    }
+}
+
 fun SettingFragment.showIntervalDialog() {
     val picker = NumberPicker(requireContext()).apply {
         minValue = AutoWallpaperWorker.MIN_INTERVAL

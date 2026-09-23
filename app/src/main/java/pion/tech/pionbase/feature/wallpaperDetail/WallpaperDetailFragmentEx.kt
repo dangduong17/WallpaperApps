@@ -3,10 +3,10 @@ package pion.tech.pionbase.feature.wallpaperDetail
 import android.app.AlertDialog
 import android.app.WallpaperManager
 import android.content.Intent
-import android.os.Build
 import android.view.animation.Animation
 import android.view.animation.OvershootInterpolator
 import android.view.animation.ScaleAnimation
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -18,7 +18,6 @@ import pion.tech.pionbase.base.launchMain
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
 import pion.tech.pionbase.feature.home.EditWallpaperActivity
 import pion.tech.pionbase.util.isGif
-import pion.tech.pionbase.util.loadImage
 import pion.tech.pionbase.util.loadThumbnailAndFull
 import pion.tech.pionbase.util.setPreventDoubleClickScaleView
 import timber.log.Timber
@@ -86,32 +85,44 @@ fun WallpaperDetailFragment.settingEvent() {
                 wallpaperUri?.let { uri ->
                     viewModel.applyWallpaper(uri, flag)
                 } ?: run {
-                    val bitmap = (binding.ivFullWallpaper.drawable as? android.graphics.drawable.BitmapDrawable)?.bitmap
+                    val drawable = binding.ivFullWallpaper.drawable
+                    val bitmap = try {
+                        drawable?.toBitmap()
+                    } catch (e: Exception) {
+                        null
+                    }
+
                     if (bitmap != null) {
-                        showHideLoading(true)
-                        launchIO {
-                            try {
-                                kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
-                                    val wallpaperManager = WallpaperManager.getInstance(context)
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                        wallpaperManager.setBitmap(bitmap, null, true, flag)
-                                    } else {
-                                        wallpaperManager.setBitmap(bitmap)
+                        viewModel.applyWallpaper(bitmap, flag)
+                    } else {
+                        val imageUrl = viewModel.uiState.value.wallpaper?.imageUrl
+                        if (!imageUrl.isNullOrEmpty()) {
+                            showHideLoading(true)
+                            launchIO {
+                                try {
+                                    val downloadedBitmap = Glide.with(context)
+                                        .asBitmap()
+                                        .load(imageUrl)
+                                        .submit()
+                                        .get()
+                                    launchMain {
+                                        showHideLoading(false)
+                                        if (downloadedBitmap != null) {
+                                            viewModel.applyWallpaper(downloadedBitmap, flag)
+                                        } else {
+                                            Snackbar.make(binding.root, R.string.please_wait, Snackbar.LENGTH_SHORT).show()
+                                        }
+                                    }
+                                } catch (e: Exception) {
+                                    launchMain {
+                                        showHideLoading(false)
+                                        Snackbar.make(binding.root, context.getString(R.string.error, e.message ?: ""), Snackbar.LENGTH_LONG).show()
                                     }
                                 }
-                                launchMain {
-                                    showHideLoading(false)
-                                    Snackbar.make(binding.root, R.string.set_wallpaper_success, Snackbar.LENGTH_SHORT).show()
-                                }
-                            } catch (e: Exception) {
-                                launchMain {
-                                    showHideLoading(false)
-                                    Snackbar.make(binding.root, context.getString(R.string.error, e.message ?: ""), Snackbar.LENGTH_LONG).show()
-                                }
                             }
+                        } else {
+                            Snackbar.make(binding.root, R.string.please_wait, Snackbar.LENGTH_SHORT).show()
                         }
-                    } else {
-                        Snackbar.make(binding.root, R.string.please_wait, Snackbar.LENGTH_SHORT).show()
                     }
                 }
             }

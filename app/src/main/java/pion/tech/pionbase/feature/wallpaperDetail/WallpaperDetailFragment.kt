@@ -44,7 +44,7 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
     }
 
     fun checkPermissionAndDownload() {
-        timber.log.Timber.d("Check Permission Started with PermissionX")
+        Timber.d("Check Permission Started with PermissionX")
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             requestPermissionsWithPermissionX(
                 permissions = listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
@@ -107,6 +107,20 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
                     }
                     is WallpaperDetailEvent.DownloadError -> {
                         displayToast(getString(R.string.download_error_message, event.throwable.message))
+                    }
+                    is WallpaperDetailEvent.SetWallpaperSuccess -> {
+                        com.google.android.material.snackbar.Snackbar.make(
+                            binding.root,
+                            R.string.set_wallpaper_success,
+                            com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
+                        ).show()
+                    }
+                    is WallpaperDetailEvent.SetWallpaperError -> {
+                        com.google.android.material.snackbar.Snackbar.make(
+                            binding.root,
+                            getString(R.string.error, event.throwable.message ?: ""),
+                            com.google.android.material.snackbar.Snackbar.LENGTH_LONG
+                        ).show()
                     }
                 }
             }

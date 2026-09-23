@@ -24,6 +24,7 @@ class SettingFragment :
         themeEvent()
         dynamicColorEvent()
         autoWallpaperEvent()
+        batterySaverEvent()
     }
 
     override fun subscribeObserver(view: View) {
@@ -74,6 +75,15 @@ class SettingFragment :
             .collectFlowOnView(viewLifecycleOwner) { isEnabled ->
                 if (binding.swAutoChange.isChecked != isEnabled) {
                     binding.swAutoChange.isChecked = isEnabled
+                }
+            }
+
+        viewModel.uiState
+            .map { it.batterySaverEnabled }
+            .distinctUntilChanged()
+            .collectFlowOnView(viewLifecycleOwner) { isEnabled ->
+                if (binding.swBatterySaver.isChecked != isEnabled) {
+                    binding.swBatterySaver.isChecked = isEnabled
                 }
             }
     }

@@ -5,8 +5,10 @@ import pion.tech.pionbase.base.BaseViewModel
 import pion.tech.pionbase.base.launchIO
 import pion.tech.pionbase.domain.usecase.language.GetLanguageUseCase
 import pion.tech.pionbase.domain.usecase.settings.GetAutoWallpaperSettingsUseCase
+import pion.tech.pionbase.domain.usecase.settings.GetBatterySaverSettingsUseCase
 import pion.tech.pionbase.domain.usecase.settings.GetThemeSettingsUseCase
 import pion.tech.pionbase.domain.usecase.settings.SetAutoWallpaperSettingsUseCase
+import pion.tech.pionbase.domain.usecase.settings.SetBatterySaverSettingsUseCase
 import pion.tech.pionbase.domain.usecase.settings.SetThemeSettingsUseCase
 import pion.tech.pionbase.util.Result
 import pion.tech.pionbase.util.ThemeManager
@@ -18,6 +20,7 @@ data class SettingUiState(
     val themeMode: Int = ThemeManager.MODE_SYSTEM,
     val dynamicColorEnabled: Boolean = true,
     val isDynamicColorAvailable: Boolean = false,
+    val batterySaverEnabled: Boolean = false,
 )
 
 class SettingViewModel(
@@ -25,7 +28,9 @@ class SettingViewModel(
     private val setSettingsUseCase: SetAutoWallpaperSettingsUseCase,
     private val getLanguageUseCase: GetLanguageUseCase,
     private val getThemeSettingsUseCase: GetThemeSettingsUseCase,
-    private val setThemeSettingsUseCase: SetThemeSettingsUseCase
+    private val setThemeSettingsUseCase: SetThemeSettingsUseCase,
+    private val getBatterySaverSettingsUseCase: GetBatterySaverSettingsUseCase,
+    private val setBatterySaverSettingsUseCase: SetBatterySaverSettingsUseCase
 ) : BaseViewModel<SettingUiState, Nothing>(SettingUiState()) {
 
     init {
@@ -69,6 +74,13 @@ class SettingViewModel(
                 }
             }
         }
+        launchIO {
+            getBatterySaverSettingsUseCase().collect { result ->
+                if (result is Result.Success) {
+                    setState { copy(batterySaverEnabled = result.data) }
+                }
+            }
+        }
     }
 
     fun setAutoWallpaperEnabled(enabled: Boolean) {
@@ -106,6 +118,16 @@ class SettingViewModel(
             setThemeSettingsUseCase.setDynamicColorEnabled(enabled).collect { result ->
                 if (result is Result.Success) {
                     setState { copy(dynamicColorEnabled = enabled) }
+                }
+            }
+        }
+    }
+
+    fun setBatterySaverEnabled(enabled: Boolean) {
+        launchIO {
+            setBatterySaverSettingsUseCase(enabled).collect { result ->
+                if (result is Result.Success) {
+                    setState { copy(batterySaverEnabled = enabled) }
                 }
             }
         }

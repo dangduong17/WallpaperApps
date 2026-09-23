@@ -11,6 +11,7 @@
     <string name="language">Language</string>
     <string name="dark_theme">Dark Theme</string>
     <string name="auto_change_wallpaper">Auto Change Wallpaper</string>
+    <string name="dynamic_battery_saver">Dynamic Battery Saver</string>
     <string name="enable_notifications">Enable Notifications</string>
     <string name="rate_this_app">Rate this App</string>
     <string name="share_with_friend">Share with Friend</string>

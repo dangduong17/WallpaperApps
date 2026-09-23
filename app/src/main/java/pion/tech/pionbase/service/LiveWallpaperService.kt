@@ -8,12 +8,25 @@ import android.os.HandlerThread
 import android.os.SystemClock
 import android.service.wallpaper.WallpaperService
 import android.view.SurfaceHolder
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import pion.tech.pionbase.data.repository.dataStoreRepository.DataStoreRepository
+import pion.tech.pionbase.util.BatterySaverManager
 import pion.tech.pionbase.util.Constant
+import pion.tech.pionbase.util.Result
 import timber.log.Timber
 import java.io.File
 
 @Suppress("DEPRECATION")
-class LiveWallpaperService : WallpaperService() {
+class LiveWallpaperService : WallpaperService(), KoinComponent {
+
+    private val dataStoreRepository: DataStoreRepository by inject()
 
     override fun onCreateEngine(): Engine {
         Timber.d("DEBUG: LiveWallpaperService onCreateEngine")
@@ -29,6 +42,11 @@ class LiveWallpaperService : WallpaperService() {
         private var lastLoadedTimestamp: Long = -1L
         @Volatile
         private var isVisible = false
+        @Volatile
+        private var isBatterySaverActive = false
+
+        private val serviceScope = CoroutineScope(Dispatchers.IO)
+        private var batteryJob: Job? = null
 
         private val frameRunnable = Runnable {
             drawFrame()
@@ -53,6 +71,34 @@ class LiveWallpaperService : WallpaperService() {
 
             getSharedPreferences(Constant.PREF_WALLPAPER, MODE_PRIVATE)
                 .registerOnSharedPreferenceChangeListener(prefChangeListener)
+
+            observeBatterySaver()
+        }
+
+        private fun observeBatterySaver() {
+            batteryJob?.cancel()
+            batteryJob = serviceScope.launch {
+                val batterySaverPrefFlow = dataStoreRepository.getBatterySaverEnabled().map {
+                    (it as? Result.Success)?.data == true
+                }
+                val batteryStateFlow = BatterySaverManager.observeBatterySaverState(applicationContext)
+
+                combine(batterySaverPrefFlow, batteryStateFlow) { prefEnabled, isLowOrPowerSave ->
+                    prefEnabled && isLowOrPowerSave
+                }.collect { active ->
+                    Timber.d("LiveWallpaperService: isBatterySaverActive = $active")
+                    val changed = isBatterySaverActive != active
+                    isBatterySaverActive = active
+                    if (changed && isVisible) {
+                        renderHandler?.post {
+                            if (!active) {
+                                startTime = 0L
+                                scheduleNextFrame(0L)
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         override fun onSurfaceCreated(holder: SurfaceHolder) {
@@ -104,6 +150,7 @@ class LiveWallpaperService : WallpaperService() {
         override fun onDestroy() {
             super.onDestroy()
             Timber.d("DEBUG: onDestroy Engine")
+            batteryJob?.cancel()
             getSharedPreferences(Constant.PREF_WALLPAPER, MODE_PRIVATE)
                 .unregisterOnSharedPreferenceChangeListener(prefChangeListener)
             this.isVisible = false
@@ -150,13 +197,13 @@ class LiveWallpaperService : WallpaperService() {
 
         private fun scheduleNextFrame(delayMs: Long) {
             renderHandler?.removeCallbacks(frameRunnable)
-            if (isVisible && movie != null) {
+            if (isVisible && movie != null && !isBatterySaverActive) {
                 renderHandler?.postDelayed(frameRunnable, delayMs)
             }
         }
 
         private fun drawFrame() {
-            if (!isVisible) return
+            if (!isVisible || isBatterySaverActive) return
 
             val mMovie = movie ?: return
             val holder = surfaceHolder ?: return
@@ -216,7 +263,7 @@ class LiveWallpaperService : WallpaperService() {
                 }
             }
 
-            if (isVisible) {
+            if (isVisible && !isBatterySaverActive) {
                 scheduleNextFrame(33L) // ~30 FPS
             }
         }

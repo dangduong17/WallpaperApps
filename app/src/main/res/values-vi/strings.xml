@@ -11,6 +11,7 @@
     <string name="language">Ngôn ngữ</string>
     <string name="dark_theme">Chế độ tối</string>
     <string name="auto_change_wallpaper">Tự động đổi hình nền</string>
+    <string name="dynamic_battery_saver">Tiết kiệm pin động</string>
     <string name="enable_notifications">Bật thông báo</string>
     <string name="rate_this_app">Đánh giá ứng dụng</string>
     <string name="share_with_friend">Chia sẻ với bạn bè</string>

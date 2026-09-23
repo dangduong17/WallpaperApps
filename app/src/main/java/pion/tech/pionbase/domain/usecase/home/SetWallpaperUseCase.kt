@@ -11,10 +11,10 @@ import pion.tech.pionbase.util.Result
 class SetWallpaperUseCase(
     private val context: Context,
 ) {
-    operator fun invoke(bitmap: Bitmap): Flow<Result<Unit>> = flow {
+    operator fun invoke(bitmap: Bitmap, flag: Int = WallpaperManager.FLAG_SYSTEM or WallpaperManager.FLAG_LOCK): Flow<Result<Unit>> = flow {
         try {
             val wallpaperManager = WallpaperManager.getInstance(context)
-            wallpaperManager.setBitmap(bitmap)
+            wallpaperManager.setBitmap(bitmap, null, true, flag)
             emit(Result.Success(Unit))
         } catch (e: Exception) {
             emit(Result.Error(e))
