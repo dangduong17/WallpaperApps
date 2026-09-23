@@ -184,6 +184,28 @@ fun Fragment.showSuccessSnackbar(@StringRes msgResId: Int) {
     showSuccessSnackbar(getString(msgResId))
 }
 
+fun Fragment.showLoadingSuccessText(msg: String = "Success", onDismiss: () -> Unit = {}) {
+    val loadingFragment = childFragmentManager.fragments.firstOrNull { it is pion.tech.pionbase.base.LoadingDialog }
+    val dialogFragment = loadingFragment as? androidx.fragment.app.DialogFragment
+    val dialogView = dialogFragment?.view ?: dialogFragment?.dialog?.window?.decorView
+    val tvMessage = dialogView?.findViewById<TextView>(pion.tech.pionbase.R.id.tvMessage)
+    if (dialogFragment != null && dialogFragment.isAdded && tvMessage != null) {
+        tvMessage.text = msg
+        safeDelay(1000) {
+            if (dialogFragment.isAdded) {
+                dialogFragment.dismiss()
+            }
+            onDismiss()
+        }
+    } else {
+        onDismiss()
+    }
+}
+
+fun Fragment.showLoadingSuccessText(@StringRes msgResId: Int, onDismiss: () -> Unit = {}) {
+    showLoadingSuccessText(getString(msgResId), onDismiss)
+}
+
 fun Fragment.showErrorSnackbar(msg: String) {
     displayToast(msg)
 }

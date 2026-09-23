@@ -8,9 +8,8 @@ import kotlinx.coroutines.flow.map
 import pion.tech.pionbase.base.BaseFragment
 import pion.tech.pionbase.databinding.FragmentQuoteEditorBinding
 import pion.tech.pionbase.util.collectFlowOnView
-import pion.tech.pionbase.util.displayToast
-import pion.tech.pionbase.util.loadImage
 import pion.tech.pionbase.util.showSuccessSnackbar
+import pion.tech.pionbase.util.showLoadingSuccessText
 import pion.tech.pionbase.util.showErrorSnackbar
 
 import pion.tech.pionbase.util.loadThumbnailAndFull
@@ -83,9 +82,7 @@ class QuoteEditorFragment : BaseFragment<FragmentQuoteEditorBinding, QuoteEditor
                         showErrorSnackbar(getString(pion.tech.pionbase.R.string.error, event.throwable.message))
                     }
                     is QuoteEditorEvent.SetWallpaperSuccess -> {
-                        pion.tech.pionbase.util.safeDelay(300) {
-                            showSuccessSnackbar(getString(pion.tech.pionbase.R.string.set_wallpaper_success))
-                        }
+                        showLoadingSuccessText(getString(pion.tech.pionbase.R.string.success))
                     }
                     is QuoteEditorEvent.SetWallpaperError -> {
                         showErrorSnackbar(getString(pion.tech.pionbase.R.string.error, event.throwable.message))

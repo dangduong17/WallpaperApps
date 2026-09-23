@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.fragment.NavHostFragment
-import com.google.android.material.snackbar.Snackbar
 import pion.tech.pionbase.data.repository.dataStoreRepository.DataStoreRepository
 import pion.tech.pionbase.feature.language.LanguageManager
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -22,10 +21,12 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pion.tech.pionbase.BuildConfig
 import pion.tech.pionbase.R
+import pion.tech.pionbase.base.SuccessDialog
 import pion.tech.pionbase.base.firebaseAnalytics.FirebaseAnalyticsLogger
 import pion.tech.pionbase.base.firebaseAnalytics.FirebaseEventNameSanitizer
 import pion.tech.pionbase.base.lifecycleCallback.FragmentLifecycleCallbacksImpl
 import pion.tech.pionbase.util.AppRemoteConfig
+import pion.tech.pionbase.util.Constant
 import pion.tech.pionbase.util.collectFlowOnView
 import timber.log.Timber
 import kotlin.getValue
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        // Hiện Snackbar nếu có thông báo thành công từ EditWallpaperActivity
+        // Hiện dialog thông báo thành công nếu có intent từ EditWallpaperActivity
         checkSuccessMessage(intent)
         
         enableEdgeToEdge()
@@ -67,13 +68,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkSuccessMessage(intent: Intent?) {
-        if (intent?.getBooleanExtra(EXTRA_SHOW_SUCCESS_MSG, false) == true) {
+        if (intent == null) return
+        val hasExtra = intent.getBooleanExtra(EXTRA_SHOW_SUCCESS_MSG, false) ||
+                intent.getBooleanExtra(Constant.KEY_SHOW_SUCCESS_MSG, false)
+        if (hasExtra) {
+            intent.removeExtra(EXTRA_SHOW_SUCCESS_MSG)
+            intent.removeExtra(Constant.KEY_SHOW_SUCCESS_MSG)
             window.decorView.post {
-                Snackbar.make(
-                    findViewById(android.R.id.content),
-                    getString(R.string.set_wallpaper_success),
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                if (!isFinishing && !isDestroyed) {
+                    SuccessDialog(getString(R.string.set_wallpaper_success))
+                        .show(supportFragmentManager, "SuccessDialog")
+                }
             }
         }
     }

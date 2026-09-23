@@ -9,7 +9,6 @@ import androidx.navigation.fragment.navArgs
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import android.content.ContentResolver
 import androidx.core.net.toUri
 import pion.tech.pionbase.R
@@ -17,11 +16,9 @@ import pion.tech.pionbase.base.BaseFragment
 import pion.tech.pionbase.databinding.FragmentWallpaperDetailBinding
 import pion.tech.pionbase.util.collectFlowOnView
 import pion.tech.pionbase.util.displayToast
-import pion.tech.pionbase.util.showSuccessSnackbar
+import pion.tech.pionbase.util.showLoadingSuccessText
 import pion.tech.pionbase.util.showErrorSnackbar
-import pion.tech.pionbase.util.loadImage
 import pion.tech.pionbase.util.requestPermissionsWithPermissionX
-import pion.tech.pionbase.util.setPreventDoubleClickScaleView
 import timber.log.Timber
 
 class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, WallpaperDetailViewModel>(
@@ -112,9 +109,7 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
                         displayToast(getString(R.string.download_error_message, event.throwable.message))
                     }
                     is WallpaperDetailEvent.SetWallpaperSuccess -> {
-                        pion.tech.pionbase.util.safeDelay(300) {
-                            showSuccessSnackbar(getString(R.string.set_wallpaper_success))
-                        }
+                        showLoadingSuccessText(getString(R.string.success))
                     }
                     is WallpaperDetailEvent.SetWallpaperError -> {
                         showErrorSnackbar(getString(R.string.error, event.throwable.message ?: ""))

@@ -24,6 +24,7 @@ import pion.tech.pionbase.service.LiveWallpaperService
 import pion.tech.pionbase.util.collectFlowOnView
 import pion.tech.pionbase.util.displayToast
 import pion.tech.pionbase.util.showSuccessSnackbar
+import pion.tech.pionbase.util.showLoadingSuccessText
 import pion.tech.pionbase.util.handleUiState
 import pion.tech.pionbase.util.isGif
 import pion.tech.pionbase.util.isVideo
@@ -40,6 +41,10 @@ class HomeFragment :
     val featuredAdapter = FeaturedAdapter()
     val topWallpaperAdapter = TopWallpaperAdapter()
     val categoryAdapter = CategoryAdapter()
+
+    private val liveWallpaperLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+        showSuccessSnackbar(getString(R.string.set_wallpaper_success))
+    }
 
     private val cropImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -106,14 +111,14 @@ class HomeFragment :
                                 .putLong("gif_updated_at", System.currentTimeMillis())
                                 .apply()
                             
-                            val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER)
-                            intent.putExtra(
-                                WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
-                                ComponentName(requireContext(), LiveWallpaperService::class.java)
-                            )
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER).apply {
+                                putExtra(
+                                    WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
+                                    ComponentName(requireContext(), LiveWallpaperService::class.java)
+                                )
+                            }
                             try {
-                                startActivity(intent)
+                                liveWallpaperLauncher.launch(intent)
                             } catch (_: android.content.ActivityNotFoundException) {
                                 displayToast(getString(R.string.error_live_wallpaper_not_supported))
                             }
@@ -131,9 +136,8 @@ class HomeFragment :
                         else -> WallpaperManager.FLAG_SYSTEM or WallpaperManager.FLAG_LOCK
                     }
                     viewModel.setWallpaper(uri, flag)
-                    pion.tech.pionbase.util.safeDelay(300) {
-                        showSuccessSnackbar(getString(R.string.set_wallpaper_success))
-                    }                }
+                    showLoadingSuccessText(getString(R.string.success))
+                }
             }
         
         // Since AlertDialog is not a DialogFragment, we can't use safeShowDialog directly 
