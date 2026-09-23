@@ -18,3 +18,17 @@ fun Uri.isGif(contentResolver: ContentResolver): Boolean {
         false
     }
 }
+
+fun Uri.isVideo(contentResolver: ContentResolver): Boolean {
+    val mimeType = contentResolver.getType(this)
+    if (mimeType?.startsWith("video/") == true) {
+        return true
+    }
+    val uriString = toString().lowercase()
+    return uriString.endsWith(".mp4") ||
+            uriString.endsWith(".mkv") ||
+            uriString.endsWith(".webm") ||
+            uriString.endsWith(".3gp") ||
+            uriString.endsWith(".avi") ||
+            uriString.endsWith(".mov")
+}

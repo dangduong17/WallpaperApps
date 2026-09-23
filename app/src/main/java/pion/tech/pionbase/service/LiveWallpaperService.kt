@@ -8,6 +8,7 @@ import android.os.HandlerThread
 import android.os.SystemClock
 import android.service.wallpaper.WallpaperService
 import android.view.SurfaceHolder
+import pion.tech.pionbase.util.Constant
 import timber.log.Timber
 import java.io.File
 
@@ -34,7 +35,7 @@ class LiveWallpaperService : WallpaperService() {
         }
 
         private val prefChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-            if (key == "selected_gif_path" || key == "gif_updated_at") {
+            if (key == Constant.KEY_SELECTED_GIF_PATH || key == Constant.KEY_GIF_UPDATED_AT) {
                 Timber.d("DEBUG: SharedPreferences updated ($key), reloading GIF movie!")
                 renderHandler?.post {
                     loadGifMovie()
@@ -50,7 +51,7 @@ class LiveWallpaperService : WallpaperService() {
             renderThread = thread
             renderHandler = Handler(thread.looper)
 
-            getSharedPreferences("wallpaper_prefs", MODE_PRIVATE)
+            getSharedPreferences(Constant.PREF_WALLPAPER, MODE_PRIVATE)
                 .registerOnSharedPreferenceChangeListener(prefChangeListener)
         }
 
@@ -68,8 +69,8 @@ class LiveWallpaperService : WallpaperService() {
             this.isVisible = visible
             renderHandler?.post {
                 if (visible) {
-                    val sharedPreferences = getSharedPreferences("wallpaper_prefs", MODE_PRIVATE)
-                    val filePath = sharedPreferences.getString("selected_gif_path", null)
+                    val sharedPreferences = getSharedPreferences(Constant.PREF_WALLPAPER, MODE_PRIVATE)
+                    val filePath = sharedPreferences.getString(Constant.KEY_SELECTED_GIF_PATH, null)
                     val file = if (!filePath.isNullOrEmpty()) File(filePath) else null
                     if (file != null && file.exists() && file.lastModified() != lastLoadedTimestamp) {
                         Timber.d("DEBUG: File timestamp changed on visibility changed, reloading!")
@@ -103,7 +104,7 @@ class LiveWallpaperService : WallpaperService() {
         override fun onDestroy() {
             super.onDestroy()
             Timber.d("DEBUG: onDestroy Engine")
-            getSharedPreferences("wallpaper_prefs", MODE_PRIVATE)
+            getSharedPreferences(Constant.PREF_WALLPAPER, MODE_PRIVATE)
                 .unregisterOnSharedPreferenceChangeListener(prefChangeListener)
             this.isVisible = false
             renderHandler?.removeCallbacks(frameRunnable)
@@ -115,8 +116,8 @@ class LiveWallpaperService : WallpaperService() {
 
         private fun loadGifMovie() {
             try {
-                val sharedPreferences = getSharedPreferences("wallpaper_prefs", MODE_PRIVATE)
-                val filePath = sharedPreferences.getString("selected_gif_path", null)
+                val sharedPreferences = getSharedPreferences(Constant.PREF_WALLPAPER, MODE_PRIVATE)
+                val filePath = sharedPreferences.getString(Constant.KEY_SELECTED_GIF_PATH, null)
                 if (filePath.isNullOrEmpty()) {
                     Timber.e("DEBUG: selected_gif_path is null or empty")
                     return

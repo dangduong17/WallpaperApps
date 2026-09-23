@@ -84,7 +84,7 @@ fun HomeFragment.settingEvent() {
     }
 
     binding.btnPickPhoto.setPreventDoubleClickScaleView {
-        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
     }
 }
 

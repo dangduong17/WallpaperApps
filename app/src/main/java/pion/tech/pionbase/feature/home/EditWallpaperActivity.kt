@@ -12,8 +12,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.yalantis.ucrop.UCrop
 import pion.tech.pionbase.R
 import pion.tech.pionbase.app.MainActivity
+import pion.tech.pionbase.base.launchIO
+import pion.tech.pionbase.base.launchMain
 import pion.tech.pionbase.service.LiveWallpaperService
+import pion.tech.pionbase.service.VideoWallpaperService
+import pion.tech.pionbase.util.Constant
 import pion.tech.pionbase.util.isGif
+import pion.tech.pionbase.util.isVideo
 import pion.tech.pionbase.util.parcelable
 import java.io.File
 import java.io.FileInputStream
@@ -33,15 +38,21 @@ class EditWallpaperActivity : AppCompatActivity() {
         if (result.resultCode == RESULT_OK) {
             val resultUri = result.data?.let { UCrop.getOutput(it) }
             if (resultUri != null) {
-                try {
-                    val finalFile = File(filesDir, "active_final_wallpaper.jpg")
+                launchIO(
+                    onError = { e ->
+                        launchMain {
+                            Toast.makeText(this@EditWallpaperActivity, getString(R.string.error_reading_file, e.message), Toast.LENGTH_LONG).show()
+                            finish()
+                        }
+                    }
+                ) {
+                    val finalFile = File(filesDir, Constant.FILE_ACTIVE_STATIC)
                     contentResolver.openInputStream(resultUri)?.use { input ->
                         finalFile.outputStream().use { output -> input.copyTo(output) }
                     }
-                    applyWallpaper(Uri.fromFile(finalFile))
-                } catch (e: Exception) {
-                    Toast.makeText(this, getString(R.string.error_reading_file, e.message), Toast.LENGTH_LONG).show()
-                    finish()
+                    launchMain {
+                        applyWallpaper(Uri.fromFile(finalFile))
+                    }
                 }
             } else {
                 finish()
@@ -62,7 +73,7 @@ class EditWallpaperActivity : AppCompatActivity() {
 
         val isCropped = intent.getBooleanExtra("is_cropped", false)
         
-        if (uri.isGif(contentResolver) || isCropped) {
+        if (uri.isGif(contentResolver) || uri.isVideo(contentResolver) || isCropped) {
             applyWallpaper(uri)
         } else {
             val destinationUri = Uri.fromFile(File(cacheDir, "cropped_wallpaper_" + System.currentTimeMillis() + ".jpg"))
@@ -72,78 +83,121 @@ class EditWallpaperActivity : AppCompatActivity() {
 
     private fun applyWallpaper(uri: Uri) {
         val isGif = uri.isGif(contentResolver)
+        val isVideo = uri.isVideo(contentResolver)
 
-        if (isGif) {
-            try {
-                val outputFile = File(filesDir, "active_gif.gif")
-                contentResolver.openInputStream(uri)?.use { input ->
-                    outputFile.outputStream().use { output -> 
-                        input.copyTo(output)
-                        output.flush()
-                    }
+        if (isVideo) {
+            setupLiveWallpaper(
+                uri = uri,
+                fileName = Constant.FILE_ACTIVE_VIDEO,
+                pathKey = Constant.KEY_WALLPAPER_PATH,
+                timeKey = Constant.KEY_VIDEO_UPDATED_AT,
+                serviceClass = VideoWallpaperService::class.java,
+                errorResId = R.string.error_set_video
+            )
+        } else if (isGif) {
+            setupLiveWallpaper(
+                uri = uri,
+                fileName = Constant.FILE_ACTIVE_GIF,
+                pathKey = Constant.KEY_SELECTED_GIF_PATH,
+                timeKey = Constant.KEY_GIF_UPDATED_AT,
+                serviceClass = LiveWallpaperService::class.java,
+                errorResId = R.string.error_set_gif
+            )
+        } else {
+            showStaticWallpaperDialog(uri)
+        }
+    }
+
+    private fun setupLiveWallpaper(
+        uri: Uri,
+        fileName: String,
+        pathKey: String,
+        timeKey: String,
+        serviceClass: Class<*>,
+        errorResId: Int
+    ) {
+        launchIO(
+            onError = { e ->
+                launchMain {
+                    Toast.makeText(this@EditWallpaperActivity, getString(errorResId, e.message ?: ""), Toast.LENGTH_LONG).show()
+                    finish()
                 }
-                outputFile.setReadable(true, false)
-                
-                getSharedPreferences("wallpaper_prefs", MODE_PRIVATE)
-                    .edit()
-                    .putString("selected_gif_path", outputFile.absolutePath)
-                    .putLong("gif_updated_at", System.currentTimeMillis())
-                    .apply()
+            }
+        ) {
+            val outputFile = File(filesDir, fileName)
+            contentResolver.openInputStream(uri)?.use { input ->
+                outputFile.outputStream().use { output ->
+                    input.copyTo(output)
+                    output.flush()
+                }
+            }
+            outputFile.setReadable(true, false)
 
+            getSharedPreferences(Constant.PREF_WALLPAPER, MODE_PRIVATE)
+                .edit()
+                .putString(pathKey, outputFile.absolutePath)
+                .putLong(timeKey, System.currentTimeMillis())
+                .apply()
+
+            launchMain {
                 val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER).apply {
                     putExtra(
                         WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
-                        ComponentName(this@EditWallpaperActivity, LiveWallpaperService::class.java)
+                        ComponentName(this@EditWallpaperActivity, serviceClass)
                     )
                 }
                 try {
                     liveWallpaperLauncher.launch(intent)
                 } catch (_: Exception) {
-                    Toast.makeText(this, getString(R.string.error_live_wallpaper_not_supported), Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@EditWallpaperActivity, getString(R.string.error_live_wallpaper_not_supported), Toast.LENGTH_LONG).show()
                     finish()
                 }
-            } catch (e: Exception) {
-                Toast.makeText(this, getString(R.string.error_set_gif, e.message), Toast.LENGTH_LONG).show()
-                finish()
             }
-        } else {
-            // Hiển thị dialog chọn màn hình
-            val options = arrayOf(getString(R.string.home_screen), getString(R.string.lock_screen), getString(R.string.both))
-            AlertDialog.Builder(this)
-                .setTitle(getString(R.string.set_wallpaper))
-                .setItems(options) { _, which ->
-                    try {
-                        val finalFile = File(filesDir, "active_static_wallpaper.jpg")
-                        contentResolver.openInputStream(uri)?.use { input ->
-                            finalFile.outputStream().use { output -> input.copyTo(output) }
+        }
+    }
+
+    private fun showStaticWallpaperDialog(uri: Uri) {
+        val options = arrayOf(getString(R.string.home_screen), getString(R.string.lock_screen), getString(R.string.both))
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.set_wallpaper))
+            .setItems(options) { _, which ->
+                launchIO(
+                    onError = { e ->
+                        launchMain {
+                            Toast.makeText(this@EditWallpaperActivity, getString(R.string.error, e.message ?: ""), Toast.LENGTH_LONG).show()
+                            finish()
                         }
-                        
-                        val wallpaperManager = WallpaperManager.getInstance(this)
-                        val inputStream = FileInputStream(finalFile)
-                        
-                        val flag = when (which) {
-                            0 -> WallpaperManager.FLAG_SYSTEM
-                            1 -> WallpaperManager.FLAG_LOCK
-                            else -> WallpaperManager.FLAG_SYSTEM or WallpaperManager.FLAG_LOCK
-                        }
-                        
-                        wallpaperManager.setStream(inputStream, null, true, flag)
-                        
-                        val mainIntent = Intent(this, MainActivity::class.java).apply {
+                    }
+                ) {
+                    val finalFile = File(filesDir, Constant.FILE_ACTIVE_STATIC)
+                    contentResolver.openInputStream(uri)?.use { input ->
+                        finalFile.outputStream().use { output -> input.copyTo(output) }
+                    }
+                    
+                    val wallpaperManager = WallpaperManager.getInstance(this@EditWallpaperActivity)
+                    val inputStream = FileInputStream(finalFile)
+                    
+                    val flag = when (which) {
+                        0 -> WallpaperManager.FLAG_SYSTEM
+                        1 -> WallpaperManager.FLAG_LOCK
+                        else -> WallpaperManager.FLAG_SYSTEM or WallpaperManager.FLAG_LOCK
+                    }
+                    
+                    wallpaperManager.setStream(inputStream, null, true, flag)
+                    
+                    launchMain {
+                        val mainIntent = Intent(this@EditWallpaperActivity, MainActivity::class.java).apply {
                             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
                             putExtra("show_success_msg", true)
                         }
                         startActivity(mainIntent)
                         finish()
-                    } catch (e: Exception) {
-                        Toast.makeText(this, getString(R.string.error, e.message), Toast.LENGTH_LONG).show()
-                        finish()
                     }
                 }
-                .setOnCancelListener {
-                    finish()
-                }
-                .show()
-        }
+            }
+            .setOnCancelListener {
+                finish()
+            }
+            .show()
     }
 }

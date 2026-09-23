@@ -26,6 +26,7 @@ import pion.tech.pionbase.util.collectFlowOnView
 import pion.tech.pionbase.util.displayToast
 import pion.tech.pionbase.util.handleUiState
 import pion.tech.pionbase.util.isGif
+import pion.tech.pionbase.util.isVideo
 import pion.tech.pionbase.util.safeShowBottomSheet
 import timber.log.Timber
 import java.io.File
@@ -54,7 +55,8 @@ class HomeFragment :
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         Timber.d("HomeFragment: PickVisualMedia result: $uri")
         if (uri != null) {
-            if (uri.isGif(requireContext().contentResolver)) {
+            val contentResolver = requireContext().contentResolver
+            if (uri.isGif(contentResolver) || uri.isVideo(contentResolver)) {
                 val intent = Intent(requireContext(), EditWallpaperActivity::class.java).apply {
                     putExtra("uri", uri)
                 }

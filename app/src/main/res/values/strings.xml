@@ -82,6 +82,7 @@
     <string name="error_prepare_file">Error: Could not prepare image file</string>
     <string name="error_live_wallpaper_not_supported">Device does not support live wallpapers.</string>
     <string name="error_set_gif">Error setting GIF: %s</string>
+    <string name="error_set_video" translatable="false">Error setting video: %s</string>
     <string name="error">Error: %s</string>
     <string name="need_permission_to_save">Need permission to save image.</string>
     <string name="wallpaper_set_success">Wallpaper set successfully!</string>

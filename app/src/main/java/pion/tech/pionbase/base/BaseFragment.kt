@@ -193,7 +193,7 @@ fun Fragment.doActionWhenStop(action: () -> Unit) {
  * @param onError Callback for error handling
  * @param block The coroutine block to execute
  */
-private fun Fragment.launchWithExceptionHandler(
+private fun LifecycleOwner.launchWithExceptionHandler(
     dispatcher: kotlinx.coroutines.CoroutineDispatcher,
     onError: (Throwable) -> Unit = { },
     block: suspend CoroutineScope.() -> Unit,
@@ -208,17 +208,17 @@ private fun Fragment.launchWithExceptionHandler(
     return lifecycleScope.launch(dispatcher + exceptionHandler, block = block)
 }
 
-fun Fragment.launchIO(
+fun LifecycleOwner.launchIO(
     onError: (Throwable) -> Unit = { },
     block: suspend CoroutineScope.() -> Unit,
 ): Job = launchWithExceptionHandler(Dispatchers.IO, onError, block)
 
-fun Fragment.launchDefault(
+fun LifecycleOwner.launchDefault(
     onError: (Throwable) -> Unit = { },
     block: suspend CoroutineScope.() -> Unit,
 ): Job = launchWithExceptionHandler(Dispatchers.Default, onError, block)
 
-fun Fragment.launchMain(
+fun LifecycleOwner.launchMain(
     onError: (Throwable) -> Unit = { },
     block: suspend CoroutineScope.() -> Unit,
 ): Job = launchWithExceptionHandler(Dispatchers.Main, onError, block)
