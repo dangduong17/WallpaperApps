@@ -117,6 +117,14 @@ fun WallpaperDetailFragment.settingEvent() {
             .show()
     }
     
+    binding.fabAddQuote.setPreventDoubleClickScaleView {
+        val currentWallpaper = viewModel.uiState.value.wallpaper
+        if (currentWallpaper != null) {
+            val action = WallpaperDetailFragmentDirections.actionWallpaperDetailFragmentToQuoteEditorFragment(currentWallpaper)
+            navigator.navigateTo(action)
+        }
+    }
+
     binding.fabDownload.setPreventDoubleClickScaleView {
         checkPermissionAndDownload()
     }

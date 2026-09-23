@@ -71,9 +71,25 @@
             android:textSize="14sp"
             app:cornerRadius="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/fabDownload"
+            app:layout_constraintEnd_toStartOf="@id/fabAddQuote"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabAddQuote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_8dp"
+            android:contentDescription="@string/add_quote_on_wallpaper"
+            android:src="@drawable/ic_text_quote"
+            app:backgroundTint="?attr/colorPrimaryContainer"
+            app:fabCustomSize="48dp"
+            app:maxImageSize="22dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/fabDownload"
+            app:layout_constraintStart_toEndOf="@id/btnSetWallpaper"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?attr/colorOnPrimaryContainer" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabDownload"
@@ -87,7 +103,7 @@
             app:maxImageSize="22dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/fabShare"
-            app:layout_constraintStart_toEndOf="@id/btnSetWallpaper"
+            app:layout_constraintStart_toEndOf="@id/fabAddQuote"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="?attr/colorOnPrimaryContainer" />
 

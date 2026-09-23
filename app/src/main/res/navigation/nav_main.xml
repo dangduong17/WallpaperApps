@@ -125,6 +125,19 @@
         <argument
             android:name="wallpaper"
             app:argType="pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel" />
+        <action
+            android:id="@+id/action_wallpaperDetailFragment_to_quoteEditorFragment"
+            app:destination="@id/quoteEditorFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/quoteEditorFragment"
+        android:name="pion.tech.pionbase.feature.quoteEditor.QuoteEditorFragment"
+        android:label="QuoteEditorFragment"
+        tools:layout="@layout/fragment_quote_editor">
+        <argument
+            android:name="wallpaper"
+            app:argType="pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel" />
     </fragment>
 
     <fragment
