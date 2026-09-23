@@ -176,8 +176,7 @@ fun Fragment.displayToast(
 }
 
 fun Fragment.showSuccessSnackbar(msg: String) {
-    val dialog = pion.tech.pionbase.base.SuccessDialog(msg)
-    safeShowDialog(dialog)
+    displayToast(msg)
 }
 
 fun Fragment.showSuccessSnackbar(@StringRes msgResId: Int) {
