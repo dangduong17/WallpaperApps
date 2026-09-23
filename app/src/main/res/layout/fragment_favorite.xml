@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#12121D">
+    android:background="@color/main_background">
 
     <!-- Header Section -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,14 +24,14 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
+            app:tint="@color/icon_tint" />
 
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="My Favorites"
-            android:textColor="@color/white"
+            android:text="@string/my_favorites"
+            android:textColor="@color/text_primary"
             android:textSize="@dimen/_22sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -57,8 +57,8 @@
         android:id="@+id/tvEmpty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No favorites yet"
-        android:textColor="#80FFFFFF"
+        android:text="@string/no_favorites_yet"
+        android:textColor="@color/text_secondary"
         android:textSize="@dimen/_16sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

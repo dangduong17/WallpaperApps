@@ -17,6 +17,7 @@ import pion.tech.pionbase.databinding.FragmentWallpaperDetailBinding
 import pion.tech.pionbase.util.collectFlowOnView
 import pion.tech.pionbase.util.displayToast
 import pion.tech.pionbase.util.loadImage
+import pion.tech.pionbase.util.requestPermissionsWithPermissionX
 import pion.tech.pionbase.util.setPreventDoubleClickScaleView
 import timber.log.Timber
 
@@ -33,17 +34,6 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
     
     var favoriteAnim: Animation? = null
 
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        Timber.d("PermissionCheck Result: $isGranted")
-        if (isGranted) {
-            viewModel.downloadWallpaper()
-        } else {
-            displayToast(getString(R.string.need_permission_to_save))
-        }
-    }
-
     override fun init(view: View, savedInstanceState: Bundle?) {
         // Luôn ưu tiên hiển thị title từ args.wallpaper
         binding.tvImageName.text = args.wallpaper.title
@@ -54,9 +44,15 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
     }
 
     fun checkPermissionAndDownload() {
-        timber.log.Timber.d("Check Permission Started")
+        timber.log.Timber.d("Check Permission Started with PermissionX")
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            requestPermissionsWithPermissionX(
+                permissions = listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                explainMessage = getString(R.string.need_permission_to_save),
+                onGranted = {
+                    viewModel.downloadWallpaper()
+                }
+            )
         } else {
             viewModel.downloadWallpaper()
         }

@@ -73,11 +73,11 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_16dp"
             android:src="@android:drawable/stat_sys_download"
-            app:backgroundTint="#FFFFFF"
+            app:backgroundTint="?attr/colorPrimaryContainer"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/fabFavorite"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/black" />
+            app:tint="?attr/colorOnPrimaryContainer" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabFavorite"
@@ -85,11 +85,11 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_24dp"
             android:src="@drawable/ic_heart"
-            app:backgroundTint="#FFFFFF"
+            app:backgroundTint="?attr/colorPrimaryContainer"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/black" />
+            app:tint="?attr/colorOnPrimaryContainer" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

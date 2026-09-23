@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#12121D">
+    android:background="@color/main_background">
 
     <!-- Header Section -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,14 +24,14 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
+            app:tint="@color/icon_tint" />
 
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/hd_wallpaper"
-            android:textColor="@color/white"
+            android:textColor="@color/text_primary"
             android:textSize="@dimen/_22sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -49,7 +49,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/btnPickPhoto"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
+            app:tint="@color/icon_tint" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -66,20 +66,20 @@
                 android:layout_height="@dimen/_20dp"
                 android:layout_marginEnd="@dimen/_12dp"
                 android:src="@android:drawable/ic_lock_idle_alarm"
-                app:tint="@color/white" />
+                app:tint="@color/icon_tint" />
 
             <ImageView
                 android:layout_width="@dimen/_20dp"
                 android:layout_height="@dimen/_20dp"
                 android:layout_marginEnd="@dimen/_8dp"
                 android:src="@android:drawable/ic_menu_compass"
-                app:tint="@color/white" />
+                app:tint="@color/icon_tint" />
 
             <ImageView
                 android:layout_width="@dimen/_20dp"
                 android:layout_height="@dimen/_20dp"
                 android:src="@android:drawable/ic_menu_info_details"
-                app:tint="@color/white" />
+                app:tint="@color/icon_tint" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -91,11 +91,11 @@
         android:layout_marginTop="@dimen/_8dp"
         android:background="@android:color/transparent"
         app:layout_constraintTop_toBottomOf="@id/headerBar"
-        app:tabIndicatorColor="@color/white"
+        app:tabIndicatorColor="@color/text_primary"
         app:tabIndicatorFullWidth="false"
         app:tabIndicatorHeight="@dimen/_3dp"
-        app:tabSelectedTextColor="@color/white"
-        app:tabTextColor="#80FFFFFF">
+        app:tabSelectedTextColor="@color/text_primary"
+        app:tabTextColor="@color/text_secondary">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
@@ -137,7 +137,7 @@
                     android:layout_marginStart="@dimen/_16dp"
                     android:layout_marginTop="@dimen/_20dp"
                     android:text="@string/featured"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/_18sp"
                     android:textStyle="bold" />
 
@@ -163,7 +163,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/top_wallpaper"
-                        android:textColor="@color/white"
+                        android:textColor="@color/text_primary"
                         android:textSize="@dimen/_18sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -202,7 +202,7 @@
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_64dp"
-        android:background="#12121D"
+        android:background="@color/main_background"
         android:orientation="horizontal"
         android:baselineAligned="false"
         android:gravity="center_vertical"
@@ -238,7 +238,7 @@
                 android:layout_height="@dimen/_28dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_heart"
-                app:tint="@color/white" />
+                app:tint="@color/icon_tint" />
         </FrameLayout>
 
         <FrameLayout
@@ -254,7 +254,7 @@
                 android:layout_height="@dimen/_28dp"
                 android:layout_gravity="center"
                 android:src="@android:drawable/ic_menu_search"
-                app:tint="@color/white" />
+                app:tint="@color/icon_tint" />
         </FrameLayout>
 
         <FrameLayout
@@ -270,7 +270,7 @@
                 android:layout_height="@dimen/_28dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_gear"
-                app:tint="@color/white" />
+                app:tint="@color/icon_tint" />
         </FrameLayout>
 
     </LinearLayout>

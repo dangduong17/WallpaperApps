@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#12121D">
+    android:background="@color/main_background">
 
     <!-- Header -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,13 +24,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
+            app:tint="@color/icon_tint" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/url_wallpaper"
-            android:textColor="@color/white"
+            android:textColor="@color/text_primary"
             android:textSize="@dimen/_20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -56,16 +56,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/enter_image_url"
-                android:textColorHint="#80FFFFFF"
-                app:boxStrokeColor="@color/white"
-                app:hintTextColor="@color/white"
+                android:textColorHint="@color/text_secondary"
+                app:boxStrokeColor="@color/text_primary"
+                app:hintTextColor="@color/text_primary"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etImageUrl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_primary"
                     android:inputType="textUri"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,7 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_300dp"
                 android:layout_marginTop="@dimen/_24dp"
-                app:cardBackgroundColor="#1E1E2C"
+                app:cardBackgroundColor="@color/card_bg"
                 app:cardCornerRadius="@dimen/_12dp"
                 app:cardElevation="0dp">
 
@@ -100,7 +100,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_24dp"
                 android:text="@string/set_as_wallpaper"
-                android:backgroundTint="#E91E63"
                 app:cornerRadius="@dimen/_8dp"/>
 
         </LinearLayout>

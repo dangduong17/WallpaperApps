@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#12121D">
+    android:background="@color/main_background">
 
     <ImageView
         android:id="@+id/ivBack"
@@ -17,7 +17,7 @@
         app:layout_constraintBottom_toBottomOf="@id/edtSearch"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/edtSearch"
-        app:tint="@color/white" />
+        app:tint="@color/icon_tint" />
 
     <EditText
         android:id="@+id/edtSearch"
@@ -31,8 +31,8 @@
         android:inputType="text"
         android:paddingHorizontal="@dimen/_16dp"
         android:paddingVertical="@dimen/_10dp"
-        android:textColor="@color/white"
-        android:textColorHint="#80FFFFFF"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_secondary"
         android:textSize="@dimen/_14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/ivBack"
@@ -43,7 +43,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_4dp"
-        android:background="#FFFFFF"
+        android:background="@color/card_bg"
         android:elevation="10dp"
         android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -69,8 +69,8 @@
         android:id="@+id/tvNoResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No results found"
-        android:textColor="#80FFFFFF"
+        android:text="@string/no_results_found"
+        android:textColor="@color/text_secondary"
         android:textSize="@dimen/_16sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
