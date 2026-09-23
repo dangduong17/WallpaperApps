@@ -45,7 +45,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="@dimen/_24dp"
             android:padding="@dimen/_6dp"
-            android:text="Ok"
+            android:text="@string/ok"
             android:textAllCaps="true"
             android:visibility="gone" />
 

@@ -11,13 +11,13 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Layout ads" />
+        android:text="@string/layout_ads" />
 
     <TextView
         android:id="@+id/tv_next"
         android:gravity="center"
         android:layout_width="@dimen/_50dp"
         android:layout_height="@dimen/_50dp"
-        android:text="Next" />
+        android:text="@string/next" />
 
 </LinearLayout>

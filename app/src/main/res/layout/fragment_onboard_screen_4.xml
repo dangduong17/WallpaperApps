@@ -11,7 +11,7 @@
         android:layout_width="@dimen/_32dp"
         android:layout_height="@dimen/_32dp"
         android:layout_marginEnd="@dimen/_16dp"
-        android:text="Next"
+        android:text="@string/next"
         android:textColor="@color/white"
         android:background="#123123"
         app:layout_constraintBottom_toTopOf="@id/layoutAds"
@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:background="#D8D8D8"
+                android:background="@color/color_grey_D8D8D8"
                 android:gravity="center"
                 android:text="@string/loading_ads"
                 android:textColor="@color/black" />

@@ -20,8 +20,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_15dp"
             android:progress="0"
-            app:indicatorColor="#5D37EE"
-            app:trackColor="#9A999D"
+            app:indicatorColor="@color/color_purple_5D37EE"
+            app:trackColor="@color/color_grey_9A999D"
             app:trackCornerRadius="@dimen/_20dp"
             app:trackThickness="@dimen/_8dp" />
 

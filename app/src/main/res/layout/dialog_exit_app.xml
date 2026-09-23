@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:background="#5F5E5E">
+        tools:background="@color/color_transparent_grey_5F">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,7 +33,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:background="#D8D8D8"
+                    android:background="@color/color_grey_D8D8D8"
                     android:gravity="center"
                     android:text="@string/loading_ads"
                     android:textColor="@color/black" />
@@ -70,7 +70,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginEnd="@dimen/_24dp"
                     android:layout_weight="1"
-                    android:backgroundTint="#D40202"
+                    android:backgroundTint="@color/color_red_D40202"
                     android:fontFamily="@font/font_700"
                     android:gravity="center"
                     android:paddingVertical="@dimen/_6dp"
@@ -87,8 +87,8 @@
                     android:background="@drawable/bg_radius_4_stroke_blue"
                     android:fontFamily="@font/font_700"
                     android:gravity="center"
-                    android:text="Cancel"
-                    android:textColor="#0A97E2"
+                    android:text="@string/cancel"
+                    android:textColor="@color/color_blue_0A97E2"
                     android:textSize="@dimen/_16sp" />
             </LinearLayout>
 

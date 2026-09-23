@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:background="#4D000000">
+    tools:background="@color/color_transparent_black_4D">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -25,7 +25,7 @@
             android:textColor="@color/black"
             android:layout_gravity="center_horizontal"
             android:textSize="@dimen/_18sp"
-            android:text="This is demo dialog" />
+            android:text="@string/this_is_demo" />
 
         <Button
             android:id="@+id/btnClose"
@@ -33,7 +33,7 @@
             android:paddingBottom="@dimen/_200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Close"
+            android:text="@string/close"
             android:layout_marginTop="@dimen/_16dp" />
 
     </LinearLayout>

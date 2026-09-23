@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:background="#4D000000">
+    tools:background="@color/color_transparent_black_4D">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/font_300"
             android:text="@string/store_name"
-            android:textColor="#E38007"
+            android:textColor="@color/color_orange_E38007"
             android:textSize="@dimen/_16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -45,8 +45,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_3dp"
             android:fontFamily="@font/font_400"
-            android:text="Pion Tech"
-            android:textColor="#0054D3"
+            android:text="@string/pion_tech"
+            android:textColor="@color/color_blue_0054D3"
             android:textSize="@dimen/_16sp"
             app:layout_constraintStart_toEndOf="@id/tvStoreName"
             app:layout_constraintTop_toTopOf="parent" />
@@ -58,7 +58,7 @@
             android:layout_marginTop="@dimen/_13dp"
             android:fontFamily="@font/font_300"
             android:text="@string/website"
-            android:textColor="#E38007"
+            android:textColor="@color/color_orange_E38007"
             android:textSize="@dimen/_16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvStoreName" />
@@ -70,8 +70,8 @@
             android:layout_marginStart="@dimen/_3dp"
             android:layout_marginTop="@dimen/_13dp"
             android:fontFamily="@font/font_400"
-            android:text="https://piontech.co"
-            android:textColor="#0054D3"
+            android:text="@string/website_url"
+            android:textColor="@color/color_blue_0054D3"
             android:textSize="@dimen/_16sp"
             app:layout_constraintStart_toEndOf="@+id/tvWebsite"
             app:layout_constraintTop_toBottomOf="@+id/tvStoreName" />
@@ -82,8 +82,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_13dp"
             android:fontFamily="@font/font_300"
-            android:text="Facebook:"
-            android:textColor="#E38007"
+            android:text="@string/facebook"
+            android:textColor="@color/color_orange_E38007"
             android:textSize="@dimen/_16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvWebsite" />
@@ -94,8 +94,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_13dp"
             android:fontFamily="@font/font_300"
-            android:text="Telegram:"
-            android:textColor="#E38007"
+            android:text="@string/telegram"
+            android:textColor="@color/color_orange_E38007"
             android:textSize="@dimen/_16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvFacebook" />
@@ -107,8 +107,8 @@
             android:layout_marginStart="@dimen/_3dp"
             android:layout_marginTop="@dimen/_13dp"
             android:fontFamily="@font/font_400"
-            android:text="\@piontechglobal"
-            android:textColor="#0054D3"
+            android:text="@string/piontechglobal"
+            android:textColor="@color/color_blue_0054D3"
             android:textSize="@dimen/_16sp"
             app:layout_constraintStart_toEndOf="@+id/tvTelegram"
             app:layout_constraintTop_toBottomOf="@+id/tvFacebook" />
