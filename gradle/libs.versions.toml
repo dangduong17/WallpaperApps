@@ -11,6 +11,7 @@ recovery = "1.0.0"
 retrofit = "2.11.0"
 roundablelayout = "1.1.4"
 roundedimageview = "2.3.0"
+permissionx = "1.8.1"
 compileSdkVersion = "36"
 minSdkVersion = "28"
 targetSdkVersion = "36"
@@ -103,6 +104,7 @@ recovery = { module = "com.zxy.android:recovery", version.ref = "recovery" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 roundablelayout = { module = "com.github.zladnrms:RoundableLayout", version.ref = "roundablelayout" }
 roundedimageview = { module = "com.makeramen:roundedimageview", version.ref = "roundedimageview" }
+permissionx = { module = "com.guolindev.permissionx:permissionx", version.ref = "permissionx" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "media3" }
 androidx-media3-common = { module = "androidx.media3:media3-common", version.ref = "media3" }

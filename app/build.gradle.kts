@@ -164,6 +164,9 @@ dependencies {
     // Roundable layout
     implementation(libs.roundablelayout)
 
+    // PermissionX
+    implementation(libs.permissionx)
+
     // uCrop
     implementation("com.github.yalantis:ucrop:2.2.9")
 }

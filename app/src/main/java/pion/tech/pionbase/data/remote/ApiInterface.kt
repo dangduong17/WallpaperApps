@@ -3,6 +3,8 @@ package pion.tech.pionbase.data.remote
 import pion.tech.pionbase.data.model.ApiObjectResponseData
 import pion.tech.pionbase.data.model.appCategory.AppCategoryDtoModel
 import pion.tech.pionbase.data.model.template.TemplateResponseDtoModel
+import pion.tech.pionbase.data.model.wallpaper.CategoryDtoModel
+import pion.tech.pionbase.data.model.wallpaper.WallpaperDtoModel
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -14,4 +16,18 @@ interface ApiInterface {
     suspend fun getAllTemplate(
         @Query("category_id") categoryId: String,
     ): ApiObjectResponseData<List<TemplateResponseDtoModel>>
+
+    @GET("api/v1.0/public/wallpapers/featured")
+    suspend fun getFeaturedWallpapers(): ApiObjectResponseData<List<WallpaperDtoModel>>
+
+    @GET("api/v1.0/public/wallpapers/top")
+    suspend fun getTopWallpapers(): ApiObjectResponseData<List<WallpaperDtoModel>>
+
+    @GET("api/v1.0/public/wallpapers/categories")
+    suspend fun getWallpaperCategories(): ApiObjectResponseData<List<CategoryDtoModel>>
+
+    @GET("api/v1.0/public/wallpapers")
+    suspend fun getWallpapersByCategory(
+        @Query("category") categoryName: String,
+    ): ApiObjectResponseData<List<WallpaperDtoModel>>
 }

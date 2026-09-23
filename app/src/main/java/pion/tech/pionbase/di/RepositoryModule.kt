@@ -12,6 +12,7 @@ import pion.tech.pionbase.data.repository.installedAppRepository.InstalledAppsRe
 import pion.tech.pionbase.data.repository.installedAppRepository.InstalledAppsRepositoryImpl
 import pion.tech.pionbase.data.repository.languageRepository.LanguageRepository
 import pion.tech.pionbase.data.repository.languageRepository.LanguageRepositoryImpl
+import pion.tech.pionbase.data.repository.wallpaperRepository.MockWallpaperRepository
 import pion.tech.pionbase.data.repository.wallpaperRepository.WallpaperRepository
 import pion.tech.pionbase.data.repository.wallpaperRepository.WallpaperRepositoryImpl
 
@@ -22,6 +23,8 @@ val repositoryModule =
         singleOf(::ApiRepositoryImpl) bind ApiRepository::class
         singleOf(::InstalledAppsRepositoryImpl) bind InstalledAppsRepository::class
         singleOf(::WallpaperDataSource)
-        //dung api thật
+        // dùng MockWallpaperRepository đọc từ file JSON ở assets thay vì Retrofit API thật
+//        single { MockWallpaperRepository(get(), get(), get()) } bind WallpaperRepository::class
+        //
         singleOf(::WallpaperRepositoryImpl) bind WallpaperRepository::class
     }
