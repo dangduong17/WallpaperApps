@@ -11,7 +11,6 @@ import android.view.View
 import android.widget.EditText
 import androidx.core.graphics.drawable.toBitmap
 import pion.tech.pionbase.R
-import pion.tech.pionbase.base.doActionWhenResume
 import pion.tech.pionbase.base.launchIO
 import pion.tech.pionbase.base.launchMain
 import pion.tech.pionbase.data.model.quote.QuoteUIModel
@@ -133,7 +132,7 @@ fun QuoteEditorFragment.highlightTab(index: Int) {
 
 fun QuoteEditorFragment.settingEvent() {
     binding.ivBack.setPreventDoubleClick {
-        doActionWhenResume {
+        if (isResumed && navigator.getCurrentDestinationId() == R.id.quoteEditorFragment) {
             navigator.navigateUp()
         }
     }

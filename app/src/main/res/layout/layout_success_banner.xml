@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginTop="32dp"
+    app:cardBackgroundColor="#E8F5E9"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp">
+
+    <TextView
+        android:id="@+id/tvBannerMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:drawableStartCompat="@drawable/ic_check_circle"
+        android:drawablePadding="12dp"
+        app:drawableTint="#4CAF50"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center_vertical"
+        android:padding="16dp"
+        android:textColor="#2E7D32"
+        android:textSize="15sp" />
+
+</androidx.cardview.widget.CardView>

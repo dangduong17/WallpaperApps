@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.view.isVisible
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import pion.tech.pionbase.R
 import pion.tech.pionbase.base.BaseFragment
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
 import pion.tech.pionbase.databinding.FragmentFavoriteBinding
@@ -40,7 +41,9 @@ class FavoriteFragment :
     }
 
     override fun onClickWallpaper(item: WallpaperUIModel) {
-        val action = FavoriteFragmentDirections.actionFavoriteFragmentToWallpaperDetailFragment(item)
-        navigator.navigateTo(action)
+        if (isResumed && navigator.getCurrentDestinationId() == R.id.favoriteFragment) {
+            val action = FavoriteFragmentDirections.actionFavoriteFragmentToWallpaperDetailFragment(item)
+            navigator.navigateTo(action)
+        }
     }
 }

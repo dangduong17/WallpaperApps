@@ -5,6 +5,7 @@ import android.view.View
 import androidx.navigation.fragment.navArgs
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import pion.tech.pionbase.R
 import pion.tech.pionbase.base.BaseFragment
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
 import pion.tech.pionbase.databinding.FragmentCategoryDetailBinding
@@ -51,7 +52,9 @@ class CategoryDetailFragment :
     }
 
     override fun onClickWallpaper(item: WallpaperUIModel) {
-        val action = CategoryDetailFragmentDirections.actionCategoryDetailFragmentToWallpaperDetailFragment(item)
-        navigator.navigateTo(action)
+        if (isResumed && navigator.getCurrentDestinationId() == R.id.categoryDetailFragment) {
+            val action = CategoryDetailFragmentDirections.actionCategoryDetailFragmentToWallpaperDetailFragment(item)
+            navigator.navigateTo(action)
+        }
     }
 }

@@ -11,7 +11,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 import pion.tech.pionbase.R
-import pion.tech.pionbase.base.doActionWhenResume
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
 import pion.tech.pionbase.feature.home.EditWallpaperActivity
 import pion.tech.pionbase.util.displayToast
@@ -28,7 +27,7 @@ fun WallpaperDetailFragment.initView() {
 
 fun WallpaperDetailFragment.settingEvent() {
     binding.ivBack.setPreventDoubleClickScaleView {
-        doActionWhenResume {
+        if (isResumed && navigator.getCurrentDestinationId() == R.id.wallpaperDetailFragment) {
             navigator.navigateUp()
         }
     }
@@ -98,7 +97,7 @@ fun WallpaperDetailFragment.settingEvent() {
     
     binding.fabAddQuote.setPreventDoubleClickScaleView {
         val currentWallpaper = viewModel.uiState.value.wallpaper
-        if (currentWallpaper != null) {
+        if (currentWallpaper != null && isResumed && navigator.getCurrentDestinationId() == R.id.wallpaperDetailFragment) {
             val action = WallpaperDetailFragmentDirections.actionWallpaperDetailFragmentToQuoteEditorFragment(currentWallpaper)
             navigator.navigateTo(action)
         }

@@ -6,6 +6,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import pion.tech.pionbase.R
 import pion.tech.pionbase.base.BaseFragment
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
 import pion.tech.pionbase.databinding.FragmentSearchBinding
@@ -57,7 +58,9 @@ class SearchFragment :
     }
 
     override fun onClickWallpaper(item: WallpaperUIModel) {
-        val action = SearchFragmentDirections.actionSearchFragmentToWallpaperDetailFragment(item)
-        navigator.navigateTo(action)
+        if (isResumed && navigator.getCurrentDestinationId() == R.id.searchFragment) {
+            val action = SearchFragmentDirections.actionSearchFragmentToWallpaperDetailFragment(item)
+            navigator.navigateTo(action)
+        }
     }
 }
