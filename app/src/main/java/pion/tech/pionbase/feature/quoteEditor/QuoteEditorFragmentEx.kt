@@ -14,6 +14,7 @@ import pion.tech.pionbase.R
 import pion.tech.pionbase.base.doActionWhenResume
 import pion.tech.pionbase.base.launchIO
 import pion.tech.pionbase.base.launchMain
+import pion.tech.pionbase.data.model.quote.QuoteUIModel
 import pion.tech.pionbase.feature.quoteEditor.adapter.ColorAdapter
 import pion.tech.pionbase.feature.quoteEditor.adapter.FontAdapter
 import pion.tech.pionbase.feature.quoteEditor.adapter.FontItem
@@ -197,16 +198,18 @@ fun QuoteEditorFragment.openQuoteBottomSheet() {
     val dynamicCategories = state.quotes.map { it.category }.distinct().filter { it.isNotEmpty() }
     val categories = listOf("All") + dynamicCategories
     
-    val bottomSheet = QuoteBottomSheet(
-        quotes = state.quotes,
-        categories = categories,
-        onQuoteSelected = { quote ->
-            viewModel.updateQuoteText(quote.quote)
-        },
-        onCategorySelected = { category ->
-            viewModel.loadQuotes(category)
-        }
-    )
+    val bottomSheet = QuoteBottomSheet.newInstance().apply {
+        setData(state.quotes, categories)
+        setListener(object : QuoteBottomSheet.Listener {
+            override fun onQuoteSelected(quote: QuoteUIModel) {
+                viewModel.updateQuoteText(quote.quote)
+            }
+
+            override fun onCategorySelected(category: String) {
+                viewModel.loadQuotes(category)
+            }
+        })
+    }
     safeShowBottomSheet(bottomSheet)
 }
 

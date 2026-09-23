@@ -5,6 +5,8 @@ import pion.tech.pionbase.base.BaseDialogFragment
 import pion.tech.pionbase.databinding.DialogDemoBinding
 import pion.tech.pionbase.util.BundleKey
 
+import pion.tech.pionbase.util.setPreventDoubleClick
+
 class DemoDialog :
     BaseDialogFragment<DialogDemoBinding>(
         DialogDemoBinding::inflate,
@@ -33,7 +35,7 @@ class DemoDialog :
     }
 
     override fun addEvent(savedInstanceState: Bundle?) {
-        binding.btnClose.setOnClickListener {
+        binding.btnClose.setPreventDoubleClick {
             listener?.onDialogNegativeClick()
             dismiss()
         }

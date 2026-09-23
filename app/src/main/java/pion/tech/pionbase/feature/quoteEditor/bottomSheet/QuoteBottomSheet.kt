@@ -7,35 +7,45 @@ import pion.tech.pionbase.data.model.quote.QuoteUIModel
 import pion.tech.pionbase.databinding.BottomSheetQuoteSelectorBinding
 import pion.tech.pionbase.feature.quoteEditor.adapter.QuoteAdapter
 
-class QuoteBottomSheet(
-    private val quotes: List<QuoteUIModel>,
-    private val categories: List<String>,
-    private val onQuoteSelected: (QuoteUIModel) -> Unit,
-    private val onCategorySelected: (String) -> Unit
-) : BaseBottomSheetDialogFragment<BottomSheetQuoteSelectorBinding>(
+class QuoteBottomSheet : BaseBottomSheetDialogFragment<BottomSheetQuoteSelectorBinding>(
     BottomSheetQuoteSelectorBinding::inflate
 ) {
+    interface Listener {
+        fun onQuoteSelected(quote: QuoteUIModel)
+        fun onCategorySelected(category: String)
+    }
+
+    private var listener: Listener? = null
+    private var quotes: List<QuoteUIModel> = emptyList()
+    private var categories: List<String> = emptyList()
     private val quoteAdapter = QuoteAdapter()
+
+    fun setListener(listener: Listener) {
+        this.listener = listener
+    }
+
+    fun setData(quotes: List<QuoteUIModel>, categories: List<String>) {
+        this.quotes = quotes
+        this.categories = categories
+        if (isAdded) {
+            updateUI()
+        }
+    }
 
     override fun initView(savedInstanceState: Bundle?) {
         quoteAdapter.setListener(object : QuoteAdapter.Listener {
             override fun onSelectQuote(quote: QuoteUIModel) {
-                onQuoteSelected(quote)
+                listener?.onQuoteSelected(quote)
                 dismiss()
             }
         })
         binding.rvQuotes.adapter = quoteAdapter
-        quoteAdapter.submitList(quotes)
-
-        binding.tabCategories.removeAllTabs()
-        categories.forEach { category ->
-            binding.tabCategories.addTab(binding.tabCategories.newTab().setText(category))
-        }
+        updateUI()
 
         binding.tabCategories.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 tab?.text?.toString()?.let { category ->
-                    onCategorySelected(category)
+                    listener?.onCategorySelected(category)
                 }
             }
 
@@ -44,7 +54,20 @@ class QuoteBottomSheet(
         })
     }
 
+    private fun updateUI() {
+        quoteAdapter.submitList(quotes)
+        binding.tabCategories.removeAllTabs()
+        categories.forEach { category ->
+            binding.tabCategories.addTab(binding.tabCategories.newTab().setText(category))
+        }
+    }
+
     fun updateQuotes(newQuotes: List<QuoteUIModel>) {
+        this.quotes = newQuotes
         quoteAdapter.submitList(newQuotes)
+    }
+
+    companion object {
+        fun newInstance(): QuoteBottomSheet = QuoteBottomSheet()
     }
 }

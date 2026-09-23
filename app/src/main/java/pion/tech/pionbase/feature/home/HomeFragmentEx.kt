@@ -6,6 +6,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.tabs.TabLayout
 import pion.tech.pionbase.R
 import pion.tech.pionbase.feature.home.dialog.ExitAppDialog
+import pion.tech.pionbase.util.safeShowDialog
 import pion.tech.pionbase.util.setPreventDoubleClickScaleView
 
 internal const val TAB_HOME = 0
@@ -58,7 +59,7 @@ fun HomeFragment.onBackEvent() {
 
 fun HomeFragment.backEvent() {
     val dialog = ExitAppDialog()
-    dialog.show(childFragmentManager)
+    safeShowDialog(dialog)
 }
 
 fun HomeFragment.settingEvent() {
@@ -75,7 +76,7 @@ fun HomeFragment.settingEvent() {
         navigator.navigateTo(R.id.action_homeFragment_to_searchFragment)
     }
     
-    binding.btnHome.setOnClickListener {
+    binding.btnHome.setPreventDoubleClickScaleView {
         binding.tabLayout.getTabAt(TAB_HOME)?.select()
     }
 
