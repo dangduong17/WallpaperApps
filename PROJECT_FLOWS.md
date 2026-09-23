@@ -81,21 +81,21 @@ Luồng này cho phép người dùng xem hình nền ở độ phân giải đ�
 
 ### 🎨 LUỒNG 2: XEM VÀ CÀI ĐẶT HÌNH NỀN (View & Set Wallpaper)
 
-Luồng xử lý cài đặt hình nền từ màn hình chi tiết (`WallpaperDetailFragment`), phân biệt giữa **Hình nền Tĩnh (Static Image)** và **Hình nền Động (GIF)**.
+Luồng xử lý cài đặt hình nền từ màn hình chi tiết (`WallpaperDetailFragment`), phân biệt giữa **Hình nền Tĩnh (Static Image)** và **Hình nền Động (GIF / Video)**.
 
 ```
 [WallpaperDetailFragment] ──► Người dùng nhấn "Set Wallpaper"
                                           │
                      ┌────────────────────┴────────────────────┐
                      │                                         │
-               [Ảnh Tĩnh (Static)]                     [Ảnh Động (GIF)]
+               [Ảnh Tĩnh (Static)]                 [Ảnh Động (GIF / Video)]
                      │                                         │
                      ▼                                         ▼
    Hiển thị Dialog chọn Màn hình              Mở EditWallpaperActivity
    (Màn chính / Màn khóa / Cả hai)                           │
                      │                                         ▼
                      ▼                       Sao chép file vào internal storage:
-   `WallpaperDetailViewModel.applyWallpaper()`   `filesDir/active_gif.gif`
+   `WallpaperDetailViewModel.applyWallpaper()`   `filesDir/active_gif.gif` (hoặc video)
                      │                                         │
                      ▼                                         ▼
            [SetWallpaperUseCase]              Lưu đường dẫn & timestamp vào Prefs:
@@ -104,24 +104,24 @@ Luồng xử lý cài đặt hình nền từ màn hình chi tiết (`WallpaperD
   `WallpaperManager.setStream()` hoặc                         ▼
    `WallpaperManager.setBitmap()`            Khởi chạy Intent cài đặt Live Wallpaper:
                      │                        `WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER`
-                     ▼                        Trỏ tới `LiveWallpaperService`
+                     ▼                        Trỏ tới `LiveWallpaperService` / `VideoWallpaperService`
      Hiển thị Snackbar thành công                              │
                                                                ▼
-                                                  [LiveWallpaperService]
-                                                  - Chạy luồng vẽ phụ HandlerThread
-                                                  - Tải GIF qua android.graphics.Movie
-                                                  - Lắng nghe Prefs & File timestamp
-                                                    để nạp lại GIF mới tức thì
+                                              [LiveWallpaperService / VideoWallpaperService]
+                                              - Chạy luồng vẽ phụ HandlerThread / SurfaceView
+                                              - Tải GIF qua Movie hoặc Video qua MediaPlayer
+                                              - Lắng nghe Prefs & File timestamp
 ```
 
 #### Chi tiết kỹ thuật:
 1. **Hình nền Tĩnh**: Sử dụng `WallpaperManager` gốc của Android truyền `FLAG_SYSTEM`, `FLAG_LOCK`, hoặc kết hợp cả hai.
 2. **Hình nền GIF (Live Wallpaper)**:
    * Chuyển hướng qua `EditWallpaperActivity`.
-   * Ghi nội dung file GIF vào vùng bộ nhớ riêng của ứng dụng (`filesDir/active_gif.gif`).
-   * Cập nhật SharedPreferences `wallpaper_prefs` lưu `selected_gif_path` và `gif_updated_at`.
-   * Gọi `LiveWallpaperService` (kế thừa từ `android.service.wallpaper.WallpaperService`). Engine `GifWallpaperEngine` sử dụng **`android.graphics.Movie`** (Native GIF Decoder) chạy trên luồng phụ **`HandlerThread("GifWallpaperThread")`** độc lập với Main UI Thread, đảm bảo không bao giờ đơ/lag ứng dụng hay bị ANR ("App buộc dừng").
-   * Lắng nghe sự kiện qua `OnSharedPreferenceChangeListener` và kiểm tra thời gian cập nhật file (`file.lastModified()`) để tự động nạp hình GIF mới tức thì khi người dùng thay đổi hình nền.
+   * Ghi nội dung file GIF vào bộ nhớ riêng của ứng dụng (`filesDir/active_gif.gif`).
+   * Cập nhật SharedPreferences lưu `selected_gif_path` và `gif_updated_at`.
+   * Gọi `LiveWallpaperService` sử dụng `android.graphics.Movie` chạy trên luồng phụ `HandlerThread("GifWallpaperThread")`.
+3. **Hình nền Video (Live Video Wallpaper)**:
+   * Sử dụng `VideoWallpaperService` quản lý `MediaPlayer` gắn mặt phẳng hiển thị `SurfaceView`, tự động `start()` / `pause()` theo vòng đời hiển thị màn hình để tiết kiệm pin tối đa.
 
 ---
 
@@ -198,21 +198,13 @@ Luồng cho phép người dùng chọn bất kỳ ảnh hoặc GIF nào từ m�
         │                                         │
   [Kiểm tra: Is GIF?]                       [Ảnh Tĩnh (JPEG/PNG)]
         │                                         │
-        ▼ (Đúng)                                  ▼ (Khái niệm Cắt Ảnh)
+        ▼ (Đúng)                                  ▼ (Cắt ảnh)
  1. Lưu file vào `active_gif.gif`          1. Mở thư viện `UCrop` (Tỷ lệ 9:16)
  2. Lưu pref `selected_gif_path`           2. Lưu kết quả cắt vào `active_static_wallpaper.jpg`
     và `gif_updated_at`                    3. Hiển thị Dialog chọn Màn hình
  3. Khởi chạy `LiveWallpaperService`        4. Gọi `WallpaperManager.setStream()`
  4. Chuyển về MainActivity                 5. Chuyển về MainActivity
 ```
-
-#### Chi tiết xử lý UCrop & Service:
-* Khi là **Ảnh tĩnh**: Ứng dụng tự động ép tỷ lệ cắt chuẩn màn hình điện thoại **9:16** thông qua thư viện `UCrop`.
-* Sau khi đặt hình nền thành công, `EditWallpaperActivity` quay về `MainActivity` và gửi cờ `show_success_msg = true` để thông báo cho người dùng.
-
----
-
-## ➕ 3. BỔ SUNG CÁC LUỒNG QUAN TRỌNG KHÁC TRONG DỰ ÁN
 
 ---
 
@@ -256,13 +248,24 @@ Cho phép người dùng nhập trực tiếp một đường link ảnh công k
 
 ---
 
-### 🎬 LUỒNG 8: MÔ-ĐUN VIDEO WALLPAPER SERVICE (Video Wallpaper Flow)
+### 🚀 LUỒNG 8: KHỞI ĐỘNG VÀ ONBOARDING (Splash & Onboard Flow)
 
-* **Service**: `VideoWallpaperService` (kế thừa `WallpaperService`).
-* **Nguyên lý**:
-  * Lấy đường dẫn video từ SharedPreferences (`wallpaper_path`).
-  * Khởi tạo `MediaPlayer`, gắn mặt phẳng hiển thị `setSurface(holder.surface)` và đặt `isLooping = true`.
-  * Quản lý vòng đời phát Video: Tự động `start()` khi màn hình hiển thị (`onVisibilityChanged(true)`) và `pause()` khi ẩn màn hình (`onVisibilityChanged(false)`) để tiết kiệm pin tối đa.
+* **Splash (`SplashFragment`)**:
+  * Kiểm tra trạng thái lần đầu mở ứng dụng (`GetIsFirstLaunchUseCase`), cấu hình Remote Config (`AppRemoteConfig`).
+  * Tự động chuyển hướng đến `OnboardFragment` hoặc `HomeFragment` sau 2 giây.
+* **Onboarding (`OnboardFragment`)**:
+  * Gồm 5 màn hình giới thiệu tính năng ứng dụng sử dụng `ViewPager2` và `OnboardFragmentStateAdapter`.
+  * Khi hoàn tất, cập nhật trạng thái `setIsFirstLaunch(false)` và điều hướng vào màn hình chính `HomeFragment`.
+
+---
+
+### 🌐 LUỒNG 9: THAY ĐỔI NGÔN NGỮ (Language Flow)
+
+* **Màn hình**: `LanguageFragment`, `ChangeLanguageFragment`.
+* **Quy trình**:
+  * Hiển thị danh sách ngôn ngữ hỗ trợ qua `GetLanguagesUseCase` và `LanguageAdapter`.
+  * Người dùng chọn ngôn ngữ -> Lưu vào DataStore thông qua `SetLanguageUseCase`.
+  * Gọi `LanguageManager.setLocale()` để cập nhật cấu hình ngôn ngữ ứng dụng (`Configuration` & `Context`) và khởi động lại `MainActivity` áp dụng ngay lập tức.
 
 ---
 
@@ -277,4 +280,4 @@ Cho phép người dùng nhập trực tiếp một đường link ảnh công k
 | **Api/Result Extension** | Dùng `handleApiCall()` để tự động catch exception và emit trạng thái UI Clean. |
 
 ---
-*Tài liệu được tổng hợp tự động từ mã nguồn dự án Pion-Base.*
+*Tài liệu được cập nhật mới nhất cho dự án Pion-Base.*
