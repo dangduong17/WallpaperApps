@@ -69,7 +69,7 @@ fun SettingFragment.dynamicColorEvent() {
         val isCurrentlyEnabled = viewModel.uiState.value.dynamicColorEnabled
         val newEnabled = !isCurrentlyEnabled
         viewModel.setDynamicColorEnabled(newEnabled)
-        ThemeManager.applyDynamicColorsIfEnabled(requireActivity().application, newEnabled)
+        ThemeManager.setDynamicColorEnabled(newEnabled)
         requireActivity().recreate()
     }
 }
