@@ -112,16 +112,17 @@ class HomeViewModel(
     }
 
     fun setWallpaperFromUrl(url: String) {
+        setState { copy(isSettingWallpaper = true) }
         handleApiCall(
             apiCall = { downloadImageToBitmapUseCase(url) },
             onSuccess = { bitmap ->
                 handleApiCall(
                     apiCall = { setWallpaperUseCase(bitmap) },
-                    onSuccess = { /* Success */ },
-                    onError = { /* Error */ }
+                    onSuccess = { setState { copy(isSettingWallpaper = false) } },
+                    onError = { setState { copy(isSettingWallpaper = false) } }
                 )
             },
-            onError = { /* Error */ }
+            onError = { setState { copy(isSettingWallpaper = false) } }
         )
     }
 }

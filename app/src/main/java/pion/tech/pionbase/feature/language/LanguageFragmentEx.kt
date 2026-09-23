@@ -4,9 +4,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.core.view.isVisible
 import pion.tech.pionbase.R
-import pion.tech.pionbase.base.launchMain
-import kotlinx.coroutines.delay
-import pion.tech.pionbase.util.AppRemoteConfig
 import pion.tech.pionbase.util.displayToast
 import pion.tech.pionbase.util.setPreventDoubleClick
 import pion.tech.pionbase.util.setPreventDoubleClickScaleView
@@ -32,13 +29,7 @@ fun LanguageFragment.handleApplyEvent() {
     viewModel.applySelectedLanguage()
     applySelectedLanguage()
     viewModel.setFirstLaunchFalse()
-    
-    showHideLoading(true)
-    launchMain {
-        delay(1300L)
-        showHideLoading(false)
-        navigateToNextScreen()
-    }
+    navigateToNextScreen()
 }
 
 fun LanguageFragment.applySelectedLanguage() {
@@ -50,7 +41,7 @@ fun LanguageFragment.navigateToNextScreen() {
     if (isCameFromSetting()) {
         navigator.navigateTo(R.id.action_languageFragment_to_splashFragment)
     } else {
-        navigator.navigateTo(R.id.action_languageFragment_to_homeFragment)
+        navigator.navigateTo(R.id.action_languageFragment_to_changeLanguageFragment)
     }
 }
 

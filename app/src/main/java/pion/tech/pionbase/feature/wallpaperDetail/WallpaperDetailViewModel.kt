@@ -2,6 +2,7 @@ package pion.tech.pionbase.feature.wallpaperDetail
 
 import kotlinx.coroutines.flow.Flow
 import pion.tech.pionbase.base.BaseViewModel
+import pion.tech.pionbase.base.launchIO
 import pion.tech.pionbase.base.launchMain
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
 import pion.tech.pionbase.domain.usecase.home.DownloadImageToBitmapUseCase
@@ -62,39 +63,71 @@ class WallpaperDetailViewModel(
 
     fun applyWallpaperFromUrl(url: String, which: Int) {
         setState { copy(isSettingWallpaper = true) }
-        handleApiCall(
-            apiCall = { downloadImageToBitmapUseCase(url) },
-            onSuccess = { bitmap ->
-                executeApplyWallpaper { setWallpaperUseCase(bitmap, which) }
-            },
+        launchIO(
             onError = { throwable ->
                 launchMain {
                     setState { copy(isSettingWallpaper = false) }
                     setEvent(WallpaperDetailEvent.SetWallpaperError(throwable))
                 }
             }
-        )
+        ) {
+            try {
+                downloadImageToBitmapUseCase(url).collect { result ->
+                    when (result) {
+                        is Result.Success -> {
+                            executeApplyWallpaper { setWallpaperUseCase(result.data, which) }
+                        }
+                        is Result.Error -> {
+                            launchMain {
+                                setState { copy(isSettingWallpaper = false) }
+                                setEvent(WallpaperDetailEvent.SetWallpaperError(result.error))
+                            }
+                        }
+                    }
+                }
+            } catch (e: Throwable) {
+                launchMain {
+                    setState { copy(isSettingWallpaper = false) }
+                    setEvent(WallpaperDetailEvent.SetWallpaperError(if (e is Exception) e else Exception(e)))
+                }
+            }
+        }
     }
 
     private fun executeApplyWallpaper(apiCall: () -> Flow<Result<Unit>>) {
         setState { copy(isSettingWallpaper = true) }
-        handleApiCall(
-            apiCall = apiCall,
-            onSuccess = {
-                launchMain {
-                    kotlinx.coroutines.delay(ACTION_DELAY_MS)
-                    setState { copy(isSettingWallpaper = false) }
-                    setEvent(WallpaperDetailEvent.SetWallpaperSuccess)
-                }
-            },
+        launchIO(
             onError = { throwable ->
                 launchMain {
-                    kotlinx.coroutines.delay(ACTION_DELAY_MS)
                     setState { copy(isSettingWallpaper = false) }
                     setEvent(WallpaperDetailEvent.SetWallpaperError(throwable))
                 }
             }
-        )
+        ) {
+            try {
+                apiCall().collect { result ->
+                    when (result) {
+                        is Result.Success -> {
+                            launchMain {
+                                kotlinx.coroutines.delay(ACTION_DELAY_MS)
+                                setEvent(WallpaperDetailEvent.SetWallpaperSuccess)
+                            }
+                        }
+                        is Result.Error -> {
+                            launchMain {
+                                kotlinx.coroutines.delay(ACTION_DELAY_MS)
+                                setEvent(WallpaperDetailEvent.SetWallpaperError(result.error))
+                            }
+                        }
+                    }
+                }
+            } finally {
+                // Đảm bảo tắt loading trong mọi trường hợp (thành công, thất bại, hoặc ngoại lệ)
+                launchMain {
+                    setState { copy(isSettingWallpaper = false) }
+                }
+            }
+        }
     }
 
     private fun checkFavoriteStatus(url: String) {
