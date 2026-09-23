@@ -14,6 +14,8 @@ import pion.tech.pionbase.domain.usecase.language.GetLanguageUseCase
 import pion.tech.pionbase.domain.usecase.language.GetLanguagesUseCase
 import pion.tech.pionbase.domain.usecase.language.SetIsFirstLaunchUseCase
 import pion.tech.pionbase.domain.usecase.language.SetLanguageUseCase
+import pion.tech.pionbase.domain.usecase.quote.GetQuotesUseCase
+import pion.tech.pionbase.domain.usecase.quote.SaveQuoteWallpaperUseCase
 import pion.tech.pionbase.domain.usecase.settings.GetAutoWallpaperSettingsUseCase
 import pion.tech.pionbase.domain.usecase.settings.GetThemeSettingsUseCase
 import pion.tech.pionbase.domain.usecase.settings.SetAutoWallpaperSettingsUseCase
@@ -68,6 +70,11 @@ val commonUseCaseModule = module {
     factoryOf(::SetIsPremiumUseCase)
 }
 
+val quoteUseCaseModule = module {
+    factoryOf(::GetQuotesUseCase)
+    factoryOf(::SaveQuoteWallpaperUseCase)
+}
+
 val useCaseModule = module {
     includes(
         homeUseCaseModule,
@@ -75,5 +82,6 @@ val useCaseModule = module {
         languageUseCaseModule,
         apiUseCaseModule,
         commonUseCaseModule,
+        quoteUseCaseModule,
     )
 }

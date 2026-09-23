@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "quote": "The only way to do great work is to love what you do.",
+    "author": "Steve Jobs",
+    "category": "Motivation"
+  },
+  {
+    "id": 2,
+    "quote": "Believe you can and you're halfway there.",
+    "author": "Theodore Roosevelt",
+    "category": "Motivation"
+  },
+  {
+    "id": 3,
+    "quote": "It always seems impossible until it's done.",
+    "author": "Nelson Mandela",
+    "category": "Motivation"
+  },
+  {
+    "id": 4,
+    "quote": "Don't watch the clock; do what it does. Keep going.",
+    "author": "Sam Levenson",
+    "category": "Motivation"
+  },
+  {
+    "id": 5,
+    "quote": "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+    "author": "Winston Churchill",
+    "category": "Success"
+  },
+  {
+    "id": 6,
+    "quote": "The secret of getting ahead is getting started.",
+    "author": "Mark Twain",
+    "category": "Success"
+  },
+  {
+    "id": 7,
+    "quote": "Dream big and dare to fail.",
+    "author": "Norman Vaughan",
+    "category": "Success"
+  },
+  {
+    "id": 8,
+    "quote": "Life is what happens when you're busy making other plans.",
+    "author": "John Lennon",
+    "category": "Life"
+  },
+  {
+    "id": 9,
+    "quote": "In three words I can sum up everything I've learned about life: it goes on.",
+    "author": "Robert Frost",
+    "category": "Life"
+  },
+  {
+    "id": 10,
+    "quote": "Turn your wounds into wisdom.",
+    "author": "Oprah Winfrey",
+    "category": "Wisdom"
+  },
+  {
+    "id": 11,
+    "quote": "Silence is a true friend who never betrays.",
+    "author": "Confucius",
+    "category": "Wisdom"
+  },
+  {
+    "id": 12,
+    "quote": "Love all, trust a few, do wrong to none.",
+    "author": "William Shakespeare",
+    "category": "Love"
+  },
+  {
+    "id": 13,
+    "quote": "Where there is love there is life.",
+    "author": "Mahatma Gandhi",
+    "category": "Love"
+  },
+  {
+    "id": 14,
+    "quote": "You miss 100% of the shots you don't take.",
+    "author": "Wayne Gretzky",
+    "category": "Motivation"
+  },
+  {
+    "id": 15,
+    "quote": "Be the change that you wish to see in the world.",
+    "author": "Mahatma Gandhi",
+    "category": "Wisdom"
+  }
+]
