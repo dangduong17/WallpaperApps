@@ -1,24 +1,20 @@
 package pion.tech.pionbase.feature.wallpaperDetail
 
-import android.app.AlertDialog
 import android.app.WallpaperManager
 import android.content.Intent
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import android.view.animation.Animation
 import android.view.animation.OvershootInterpolator
 import android.view.animation.ScaleAnimation
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 import pion.tech.pionbase.R
 import pion.tech.pionbase.base.doActionWhenResume
-import pion.tech.pionbase.base.launchIO
-import pion.tech.pionbase.base.launchMain
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
 import pion.tech.pionbase.feature.home.EditWallpaperActivity
 import pion.tech.pionbase.util.displayToast
-import pion.tech.pionbase.util.showSuccessSnackbar
 import pion.tech.pionbase.util.showErrorSnackbar
 import pion.tech.pionbase.util.isGif
 import pion.tech.pionbase.util.loadImage
@@ -45,7 +41,7 @@ fun WallpaperDetailFragment.settingEvent() {
         favoriteAnim = ScaleAnimation(
             1.0f, 1.5f, 1.0f, 1.5f,
             Animation.RELATIVE_TO_SELF, 0.5f,
-            Animation.RELATIVE_TO_SELF, 0.5f
+            Animation.RELATIVE_TO_SELF, 0.5f,
         ).apply {
             duration = 400
             interpolator = OvershootInterpolator()
@@ -57,7 +53,7 @@ fun WallpaperDetailFragment.settingEvent() {
 
     binding.btnSetWallpaper.setPreventDoubleClickScaleView {
         val context = requireContext()
-        val isGif = viewModel.uiState.value.isGif || wallpaperUri?.isGif(context.contentResolver) == true
+        val isGif = viewModel.uiState.value.isGif || (wallpaperUri?.isGif(context.contentResolver) == true)
 
         if (isGif) {
             val uriToUse = wallpaperUri ?: viewModel.uiState.value.wallpaper?.imageUrl?.toUri()
@@ -77,7 +73,7 @@ fun WallpaperDetailFragment.settingEvent() {
             context.getString(R.string.lock_screen),
             context.getString(R.string.both)
         )
-        AlertDialog.Builder(context)
+        MaterialAlertDialogBuilder(context)
             .setTitle(R.string.set_as_wallpaper)
             .setItems(options) { _, which ->
                 val flag = when(which) {
@@ -113,8 +109,7 @@ fun WallpaperDetailFragment.settingEvent() {
     }
 
     binding.fabShare.setPreventDoubleClickScaleView {
-        val currentWallpaper = viewModel.uiState.value.wallpaper
-        if (currentWallpaper != null) {
+        viewModel.uiState.value.wallpaper?.let { currentWallpaper ->
             shareWallpaper(currentWallpaper)
         }
     }

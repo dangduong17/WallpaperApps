@@ -20,7 +20,7 @@ class WallpaperDetailViewModel(
     private val isFavoriteWallpaperUseCase: IsFavoriteWallpaperUseCase,
     private val downloadWallpaperUseCase: DownloadWallpaperUseCase,
     private val setWallpaperUseCase: SetWallpaperUseCase,
-    private val downloadImageToBitmapUseCase: DownloadImageToBitmapUseCase
+    private val downloadImageToBitmapUseCase: DownloadImageToBitmapUseCase,
 ) : BaseViewModel<WallpaperDetailUiState, WallpaperDetailEvent>(WallpaperDetailUiState()) {
 
     fun downloadWallpaper() {
@@ -46,7 +46,7 @@ class WallpaperDetailViewModel(
     }
 
     fun setWallpaper(item: WallpaperUIModel) {
-        val isGif = item.imageUrl.lowercase().contains(".gif")
+        val isGif = item.imageUrl.endsWith(".gif", ignoreCase = true)
         Timber.d("DEBUG: URL=${item.imageUrl}, isGif=$isGif")
         setState { copy(wallpaper = item, isGif = isGif) }
         checkFavoriteStatus(item.imageUrl)
