@@ -1,14 +1,15 @@
 package pion.tech.pionbase.feature.setting
 
 import android.annotation.SuppressLint
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
-import pion.tech.pionbase.R
-import pion.tech.pionbase.util.setPreventDoubleClickScaleView
-import androidx.appcompat.app.AlertDialog
 import android.widget.NumberPicker
-import androidx.work.*
+import androidx.appcompat.app.AlertDialog
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import java.util.concurrent.TimeUnit
+import pion.tech.pionbase.R
+import pion.tech.pionbase.util.ThemeManager
+import pion.tech.pionbase.util.setPreventDoubleClickScaleView
 import pion.tech.pionbase.worker.AutoWallpaperWorker
 import timber.log.Timber
 
@@ -35,6 +36,43 @@ fun SettingFragment.languageEvent() {
     }
 }
 
+fun SettingFragment.themeEvent() {
+    binding.btnTheme.setPreventDoubleClickScaleView {
+        showThemeDialog()
+    }
+}
+
+fun SettingFragment.showThemeDialog() {
+    val currentTheme = viewModel.uiState.value.themeMode
+    val options = arrayOf(
+        getString(R.string.theme_system),
+        getString(R.string.theme_light),
+        getString(R.string.theme_dark),
+    )
+
+    AlertDialog.Builder(requireContext())
+        .setTitle(getString(R.string.choose_theme))
+        .setSingleChoiceItems(options, currentTheme) { dialog, which ->
+            if (which != currentTheme) {
+                viewModel.setThemeMode(which)
+                ThemeManager.applyThemeMode(which)
+            }
+            dialog.dismiss()
+        }
+        .setNegativeButton(getString(R.string.cancel), null)
+        .show()
+}
+
+fun SettingFragment.dynamicColorEvent() {
+    binding.swDynamicColor.setPreventDoubleClickScaleView {
+        val isCurrentlyEnabled = viewModel.uiState.value.dynamicColorEnabled
+        val newEnabled = !isCurrentlyEnabled
+        viewModel.setDynamicColorEnabled(newEnabled)
+        ThemeManager.applyDynamicColorsIfEnabled(requireActivity().application, newEnabled)
+        requireActivity().recreate()
+    }
+}
+
 fun SettingFragment.autoWallpaperEvent() {
     binding.swAutoChange.setPreventDoubleClickScaleView {
         val isCurrentlyEnabled = viewModel.uiState.value.autoWallpaperEnabled
@@ -54,7 +92,7 @@ fun SettingFragment.showIntervalDialog() {
         maxValue = AutoWallpaperWorker.MAX_INTERVAL
         value = viewModel.uiState.value.autoWallpaperInterval.toInt().coerceIn(
             AutoWallpaperWorker.MIN_INTERVAL, 
-            AutoWallpaperWorker.MAX_INTERVAL
+            AutoWallpaperWorker.MAX_INTERVAL,
         )
     }
     AlertDialog.Builder(requireContext())
@@ -76,12 +114,6 @@ fun SettingFragment.scheduleAutoWallpaper(intervalMinutes: Long) {
     WorkManager.getInstance(requireContext()).enqueueUniquePeriodicWork(
         AutoWallpaperWorker.WORK_NAME,
         ExistingPeriodicWorkPolicy.UPDATE,
-        workRequest
+        workRequest,
     )
-}
-
-fun SettingFragment.photoPickerEvent() {
-    binding.btnPickPhoto.setPreventDoubleClickScaleView {
-        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-    }
 }

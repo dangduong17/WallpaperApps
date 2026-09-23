@@ -27,4 +27,12 @@ interface DataStoreRepository {
     fun getAutoWallpaperInterval(): Flow<Result<Long>>
 
     fun setAutoWallpaperInterval(intervalMinutes: Long): Flow<Result<Unit>>
+
+    fun getThemeMode(): Flow<Result<Int>>
+
+    fun setThemeMode(themeMode: Int): Flow<Result<Unit>>
+
+    fun getDynamicColorEnabled(): Flow<Result<Boolean>>
+
+    fun setDynamicColorEnabled(enabled: Boolean): Flow<Result<Unit>>
 }

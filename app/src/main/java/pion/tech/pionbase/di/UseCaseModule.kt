@@ -15,7 +15,9 @@ import pion.tech.pionbase.domain.usecase.language.GetLanguagesUseCase
 import pion.tech.pionbase.domain.usecase.language.SetIsFirstLaunchUseCase
 import pion.tech.pionbase.domain.usecase.language.SetLanguageUseCase
 import pion.tech.pionbase.domain.usecase.settings.GetAutoWallpaperSettingsUseCase
+import pion.tech.pionbase.domain.usecase.settings.GetThemeSettingsUseCase
 import pion.tech.pionbase.domain.usecase.settings.SetAutoWallpaperSettingsUseCase
+import pion.tech.pionbase.domain.usecase.settings.SetThemeSettingsUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.DownloadWallpaperUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.GetCategoriesUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.GetFavoriteWallpapersUseCase
@@ -40,6 +42,8 @@ val wallpaperUseCaseModule = module {
     factoryOf(::ToggleFavoriteUseCase)
     factoryOf(::GetAutoWallpaperSettingsUseCase)
     factoryOf(::SetAutoWallpaperSettingsUseCase)
+    factoryOf(::GetThemeSettingsUseCase)
+    factoryOf(::SetThemeSettingsUseCase)
     factoryOf(::GetWallpapersByCategoryUseCase)
     factoryOf(::IsFavoriteWallpaperUseCase)
     factoryOf(::SearchWallpapersUseCase)

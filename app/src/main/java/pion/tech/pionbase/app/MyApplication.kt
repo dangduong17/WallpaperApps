@@ -1,7 +1,6 @@
 package pion.tech.pionbase.app
 
 import android.app.Application
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.work.Configuration
 import org.koin.androidx.workmanager.factory.KoinWorkerFactory
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -36,14 +35,14 @@ class MyApplication : Application(), Configuration.Provider {
             modules(appModules)
         }
         
-        // Init Language
+        // Init Language and Theme
         CoroutineScope(Dispatchers.Main).launch {
             val dataStoreRepository: pion.tech.pionbase.data.repository.dataStoreRepository.DataStoreRepository = get()
             pion.tech.pionbase.feature.language.LanguageManager.init(this@MyApplication, dataStoreRepository)
+            pion.tech.pionbase.util.ThemeManager.init(this@MyApplication, dataStoreRepository)
         }
         
         setupRemoteConfig()
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         if (BuildConfig.DEBUG) {
             Recovery

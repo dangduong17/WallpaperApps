@@ -66,4 +66,10 @@
     <string name="exit">Thoát</string>
     <string name="back">Quay lại</string>
     <string name="no_wallpapers_found">Không tìm thấy hình nền</string>
+    <string name="theme_setting">Giao diện</string>
+    <string name="theme_system">Theo hệ thống</string>
+    <string name="theme_light">Chế độ sáng</string>
+    <string name="theme_dark">Chế độ tối</string>
+    <string name="choose_theme">Chọn giao diện</string>
+    <string name="dynamic_color">Màu sắc động (Material You)</string>
 </resources>

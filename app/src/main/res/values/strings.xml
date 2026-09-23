@@ -94,4 +94,10 @@
     <string name="title_interval_dialog">Chọn khoảng thời gian (phút)</string>
     <string name="cannot_select_image">Cannot select image</string>
     <string name="media_selected">Media selected</string>
+    <string name="theme_setting" translatable="false">Theme</string>
+    <string name="theme_system" translatable="false">System Default</string>
+    <string name="theme_light" translatable="false">Light</string>
+    <string name="theme_dark" translatable="false">Dark</string>
+    <string name="choose_theme" translatable="false">Choose Theme</string>
+    <string name="dynamic_color" translatable="false">Dynamic Color (Material You)</string>
 </resources>

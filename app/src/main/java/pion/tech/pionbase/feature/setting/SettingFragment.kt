@@ -1,15 +1,14 @@
 package pion.tech.pionbase.feature.setting
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isVisible
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import pion.tech.pionbase.R
 import pion.tech.pionbase.base.BaseFragment
 import pion.tech.pionbase.databinding.FragmentSettingBinding
-import pion.tech.pionbase.feature.home.EditWallpaperActivity
+import pion.tech.pionbase.util.ThemeManager
 import pion.tech.pionbase.util.collectFlowOnView
 
 class SettingFragment :
@@ -18,21 +17,13 @@ class SettingFragment :
         SettingViewModel::class,
     ) {
 
-    val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        if (uri != null) {
-            val intent = Intent(requireContext(), EditWallpaperActivity::class.java).apply {
-                putExtra("uri", uri)
-            }
-            startActivity(intent)
-        }
-    }
-
     override fun init(view: View, savedInstanceState: Bundle?) {
         backEvent()
         bindView()
         languageEvent()
+        themeEvent()
+        dynamicColorEvent()
         autoWallpaperEvent()
-        photoPickerEvent()
     }
 
     override fun subscribeObserver(view: View) {
@@ -47,6 +38,34 @@ class SettingFragment :
                     }
                     binding.tvLanguageName.text = languageName
                 }
+            }
+
+        viewModel.uiState
+            .map { it.themeMode }
+            .distinctUntilChanged()
+            .collectFlowOnView(viewLifecycleOwner) { mode ->
+                val themeText = when (mode) {
+                    ThemeManager.MODE_LIGHT -> getString(R.string.theme_light)
+                    ThemeManager.MODE_DARK -> getString(R.string.theme_dark)
+                    else -> getString(R.string.theme_system)
+                }
+                binding.tvThemeValue.text = themeText
+            }
+
+        viewModel.uiState
+            .map { it.dynamicColorEnabled }
+            .distinctUntilChanged()
+            .collectFlowOnView(viewLifecycleOwner) { isEnabled ->
+                if (binding.swDynamicColor.isChecked != isEnabled) {
+                    binding.swDynamicColor.isChecked = isEnabled
+                }
+            }
+
+        viewModel.uiState
+            .map { it.isDynamicColorAvailable }
+            .distinctUntilChanged()
+            .collectFlowOnView(viewLifecycleOwner) { isAvailable ->
+                binding.btnDynamicColor.isVisible = isAvailable
             }
 
         viewModel.uiState

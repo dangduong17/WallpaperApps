@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#12121D">
+    android:background="@color/main_background">
 
     <!-- Top Bar -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,11 +18,11 @@
             android:layout_width="@dimen/_28dp"
             android:layout_height="@dimen/_28dp"
             android:layout_marginStart="@dimen/_16dp"
-            android:src="@drawable/ic_gear"
+            android:src="@drawable/ic_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
+            app:tint="@color/icon_tint" />
 
         <ImageView
             android:id="@+id/ivLogo"
@@ -33,17 +33,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/ivNotification"
-            android:layout_width="@dimen/_28dp"
-            android:layout_height="@dimen/_28dp"
-            android:layout_marginEnd="@dimen/_16dp"
-            android:src="@android:drawable/ic_popup_reminder"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Content -->
@@ -65,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_24dp"
                 android:text="@string/setting"
-                android:textColor="@color/white"
+                android:textColor="@color/text_primary"
                 android:textSize="@dimen/_22sp"
                 android:textStyle="bold" />
 
@@ -84,14 +73,14 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
+                    app:tint="@color/icon_tint" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_16dp"
                     android:text="@string/update_profile"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/_16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/ivProfileArrow"
@@ -106,7 +95,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
+                    app:tint="@color/icon_tint" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- Language -->
@@ -125,7 +114,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
+                    app:tint="@color/icon_tint" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -141,7 +130,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/language"
-                        android:textColor="@color/white"
+                        android:textColor="@color/text_primary"
                         android:textSize="@dimen/_16sp" />
 
                     <TextView
@@ -149,7 +138,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/english"
-                        android:textColor="#80FFFFFF"
+                        android:textColor="@color/text_secondary"
                         android:textSize="@dimen/_12sp" />
                 </LinearLayout>
 
@@ -161,11 +150,12 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
+                    app:tint="@color/icon_tint" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- Dark Theme -->
+            <!-- Theme Setting -->
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/btnTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_8dp"
@@ -179,30 +169,83 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
+                    app:tint="@color/icon_tint" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_16dp"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/ivThemeArrow"
+                    app:layout_constraintStart_toEndOf="@id/ivDarkIcon"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/theme_setting"
+                        android:textColor="@color/text_primary"
+                        android:textSize="@dimen/_16sp" />
+
+                    <TextView
+                        android:id="@+id/tvThemeValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/theme_system"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="@dimen/_12sp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/ivThemeArrow"
+                    android:layout_width="@dimen/_24dp"
+                    android:layout_height="@dimen/_24dp"
+                    android:src="@android:drawable/ic_media_play"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/icon_tint" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Dynamic Color (Material You) -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/btnDynamicColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8dp"
+                android:paddingVertical="@dimen/_12dp">
+
+                <ImageView
+                    android:id="@+id/ivDynamicColorIcon"
+                    android:layout_width="@dimen/_24dp"
+                    android:layout_height="@dimen/_24dp"
+                    android:src="@android:drawable/ic_menu_compass"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/icon_tint" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_16dp"
-                    android:text="@string/dark_theme"
-                    android:textColor="@color/white"
+                    android:text="@string/dynamic_color"
+                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/_16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/swDarkTheme"
-                    app:layout_constraintStart_toEndOf="@id/ivDarkIcon"
+                    app:layout_constraintEnd_toStartOf="@id/swDynamicColor"
+                    app:layout_constraintStart_toEndOf="@id/ivDynamicColorIcon"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/swDarkTheme"
+                    android:id="@+id/swDynamicColor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:thumbTint="@color/white"
-                    app:trackTint="#7E57C2" />
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- Auto Change Wallpaper -->
@@ -220,14 +263,14 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
+                    app:tint="@color/icon_tint" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_16dp"
                     android:text="@string/auto_change_wallpaper"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/_16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/swAutoChange"
@@ -241,142 +284,6 @@
                     android:checked="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:thumbTint="@color/white"
-                    app:trackTint="#7E57C2" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <!-- Enable Notifications -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8dp"
-                android:paddingVertical="@dimen/_12dp">
-
-                <ImageView
-                    android:id="@+id/ivNotifyIcon"
-                    android:layout_width="@dimen/_24dp"
-                    android:layout_height="@dimen/_24dp"
-                    android:src="@android:drawable/ic_popup_reminder"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_16dp"
-                    android:text="@string/enable_notifications"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/swNotifications"
-                    app:layout_constraintStart_toEndOf="@id/ivNotifyIcon"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/swNotifications"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:thumbTint="@color/white"
-                    app:trackTint="#7E57C2" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <!-- Rate this App -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/btnRate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8dp"
-                android:paddingVertical="@dimen/_12dp">
-
-                <ImageView
-                    android:id="@+id/ivRateIcon"
-                    android:layout_width="@dimen/_24dp"
-                    android:layout_height="@dimen/_24dp"
-                    android:src="@android:drawable/btn_star_big_off"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_16dp"
-                    android:text="@string/rate_this_app"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/ivRateIcon"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <!-- Share with friend -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/btnShare"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8dp"
-                android:paddingVertical="@dimen/_12dp">
-
-                <ImageView
-                    android:id="@+id/ivShareIcon"
-                    android:layout_width="@dimen/_24dp"
-                    android:layout_height="@dimen/_24dp"
-                    android:src="@android:drawable/ic_menu_share"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_16dp"
-                    android:text="@string/share_with_friend"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/ivShareIcon"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <!-- Custom Photo Picker -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/btnPickPhoto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8dp"
-                android:paddingVertical="@dimen/_12dp">
-
-                <ImageView
-                    android:id="@+id/ivGalleryIcon"
-                    android:layout_width="@dimen/_24dp"
-                    android:layout_height="@dimen/_24dp"
-                    android:src="@android:drawable/ic_menu_gallery"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_16dp"
-                    android:text="@string/select_custom_wallpaper"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/ivGalleryIcon"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
