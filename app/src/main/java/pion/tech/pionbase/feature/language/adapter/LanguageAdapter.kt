@@ -7,7 +7,7 @@ import pion.tech.pionbase.base.BaseListAdapter
 import pion.tech.pionbase.base.createDiffCallback
 import pion.tech.pionbase.data.model.language.LanguageUIModel
 import pion.tech.pionbase.databinding.ItemLanguageBinding
-import pion.tech.pionbase.util.loadImage
+import pion.tech.pionbase.util.loadFlagImage
 import pion.tech.pionbase.util.setPreventDoubleClick
 
 class LanguageAdapter :
@@ -53,7 +53,7 @@ class LanguageAdapter :
 
         loadBackground()
         binding.tvName.text = item.nameCountry
-        binding.ivFlag.loadImage(item.thumbnail)
+        binding.ivFlag.loadFlagImage(item.thumbnail)
         binding.root.setPreventDoubleClick {
             listener?.onClickLanguage(item, position)
         }

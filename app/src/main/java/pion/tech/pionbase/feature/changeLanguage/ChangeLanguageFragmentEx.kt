@@ -2,16 +2,12 @@ package pion.tech.pionbase.feature.changeLanguage
 
 import android.animation.ValueAnimator
 import android.view.animation.LinearInterpolator
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.withTimeoutOrNull
+import kotlinx.coroutines.delay
 import pion.tech.pionbase.R
 import pion.tech.pionbase.base.launchMain
-import pion.tech.pionbase.util.AppRemoteConfig
-import pion.tech.pionbase.util.OnboardAds
-import pion.tech.pionbase.util.OnboardFullAds
 import timber.log.Timber
+
+private const val CHANGE_LANGUAGE_ANIM_DURATION = 1300L
 
 fun ChangeLanguageFragment.initView() {
     onSystemBack { /* No-op */ }
@@ -21,7 +17,7 @@ fun ChangeLanguageFragment.initView() {
 fun ChangeLanguageFragment.startProgressAnimation() {
     progressAnimator =
         ValueAnimator.ofInt(0, 100).apply {
-            duration = AppRemoteConfig.maxTimeShowChangeLanguageScreen
+            duration = CHANGE_LANGUAGE_ANIM_DURATION
             interpolator = LinearInterpolator()
             addUpdateListener { animator ->
                 runCatching {
@@ -33,15 +29,13 @@ fun ChangeLanguageFragment.startProgressAnimation() {
         }
 }
 
-// Dọn dẹp: Đã xóa loadAdSuspend và các import không dùng đến
-
 fun ChangeLanguageFragment.preloadAndNav() {
     val tag = "preloadAndNav"
-    // Giữ logic preload, xóa code comment thừa
+    viewModel.preloadDataAndImages()
     preloadJob = launchMain {
         try {
-             // ... logic hiện có
-             goToNextScreen()
+            delay(CHANGE_LANGUAGE_ANIM_DURATION)
+            goToNextScreen()
         } catch (e: Exception) {
             Timber.tag(tag).e(e, "exception occurred")
             goToNextScreen()
@@ -50,7 +44,7 @@ fun ChangeLanguageFragment.preloadAndNav() {
 }
 
 fun ChangeLanguageFragment.goToNextScreen() {
-    navigator.navigateTo(R.id.action_changeLanguageFragment_to_homeFragment)
+    navigator.navigateTo(R.id.action_changeLanguageFragment_to_onboardFragment)
 }
 
 fun ChangeLanguageFragment.releaseAnimation() {

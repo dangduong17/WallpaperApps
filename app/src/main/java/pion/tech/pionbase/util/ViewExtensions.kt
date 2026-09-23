@@ -30,7 +30,9 @@ import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import java.lang.Exception
@@ -240,10 +242,21 @@ fun Context.openBrowser(url: String) {
     }
 }
 
+fun ImageView.loadFlagImage(source: Any?) {
+    if (this.context is android.app.Activity && ((this.context as android.app.Activity).isFinishing || (this.context as android.app.Activity).isDestroyed)) {
+        return
+    }
+    Glide
+        .with(this)
+        .load(source)
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .into(this)
+}
+
 fun ImageView.loadImage(
     source: Any?,
-    placeholder: Int = android.R.drawable.ic_menu_gallery,
-    error: Int = android.R.drawable.ic_menu_report_image
+    placeholder: Int = pion.tech.pionbase.R.drawable.bg_image_placeholder,
+    error: Int = pion.tech.pionbase.R.drawable.bg_image_placeholder
 ) {
     if (this.context is android.app.Activity && ((this.context as android.app.Activity).isFinishing || (this.context as android.app.Activity).isDestroyed)) {
         return
@@ -253,7 +266,8 @@ fun ImageView.loadImage(
         .load(source)
         .placeholder(placeholder)
         .error(error)
-        .diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy.ALL)
+        .transition(DrawableTransitionOptions.withCrossFade())
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
         .into(this)
 }
 
@@ -264,9 +278,33 @@ fun ImageView.loadImage(source: Any?) {
     Glide
         .with(this)
         .load(source)
-        .placeholder(android.R.drawable.ic_menu_gallery)
-        .error(android.R.drawable.ic_menu_report_image)
-        .diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy.ALL)
+        .placeholder(pion.tech.pionbase.R.drawable.bg_image_placeholder)
+        .error(pion.tech.pionbase.R.drawable.bg_image_placeholder)
+        .transition(DrawableTransitionOptions.withCrossFade())
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .into(this)
+}
+
+fun ImageView.loadThumbnailAndFull(
+    thumbnailUrl: Any?,
+    fullUrl: Any?,
+    placeholder: Int = pion.tech.pionbase.R.drawable.bg_image_placeholder
+) {
+    if (this.context is android.app.Activity && ((this.context as android.app.Activity).isFinishing || (this.context as android.app.Activity).isDestroyed)) {
+        return
+    }
+    Glide
+        .with(this)
+        .load(fullUrl)
+        .thumbnail(
+            Glide.with(this)
+                .load(thumbnailUrl)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+        )
+        .placeholder(placeholder)
+        .error(placeholder)
+        .transition(DrawableTransitionOptions.withCrossFade())
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
         .into(this)
 }
 
@@ -284,6 +322,10 @@ fun ImageView.loadWithCallback(
     Glide
         .with(this)
         .load(data)
+        .placeholder(pion.tech.pionbase.R.drawable.bg_image_placeholder)
+        .error(pion.tech.pionbase.R.drawable.bg_image_placeholder)
+        .transition(DrawableTransitionOptions.withCrossFade())
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
         .listener(
             object : RequestListener<Drawable> {
                 override fun onResourceReady(

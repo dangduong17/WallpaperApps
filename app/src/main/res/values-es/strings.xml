@@ -1,44 +1,119 @@
 <resources>
+    <string name="app_name" translatable="false">Pion base</string>
+    <string name="hd_wallpaper" translatable="false">HD Wallpaper</string>
+    <string name="featured">Destacados</string>
+    <string name="top_wallpaper">Mejores fondos de pantalla</string>
+    <string name="see_more">Ver más</string>
+    <string name="home_tab">Inicio</string>
+    <string name="categories_tab">Categorías</string>
+    <string name="setting">Configuración</string>
+    <string name="update_profile">Actualizar perfil</string>
+    <string name="language">Idioma</string>
+    <string name="dark_theme">Tema oscuro</string>
+    <string name="auto_change_wallpaper">Cambiar fondo automáticamente</string>
+    <string name="enable_notifications">Activar notificaciones</string>
+    <string name="rate_this_app">Calificar esta aplicación</string>
+    <string name="share_with_friend">Compartir con un amigo</string>
+    <string name="share_wallpaper">Compartir fondo de pantalla</string>
+    <string name="download_wallpaper">Descargar fondo de pantalla</string>
+    <string name="favorite_wallpaper">Fondo de pantalla favorito</string>
+    <string name="select_custom_wallpaper">Seleccionar fondo personalizado</string>
+    <string name="please_select_language">Por favor seleccione un idioma</string>
+    <string name="close">Cerrar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="this_is_demo">Este es un diálogo de demostración</string>
+    <string name="pion_tech">Pion Tech</string>
+    <string name="website_url" translatable="false">https://piontech.co</string>
+    <string name="facebook">Facebook:</string>
+    <string name="telegram">Telegram:</string>
+    <string name="piontechglobal" translatable="false">\@piontechglobal</string>
+    <string name="my_favorites">Mis favoritos</string>
+    <string name="no_favorites_yet">Aún no hay favoritos</string>
+    <string name="ok">Aceptar</string>
+    <string name="next">Siguiente</string>
+    <string name="no_results_found">No se encontraron resultados</string>
+    <string name="search_wallpapers">Buscar fondos de pantalla&#8230;</string>
+    <string name="set_as_wallpaper">Establecer como fondo</string>
+    <string name="animals">Animales</string>
+    <string name="arts">Arte</string>
+    <string name="nature">Naturaleza</string>
+    <string name="layout_ads">Diseño de anuncios</string>
+    <string name="onboard_1">Bienvenida 1</string>
+    <string name="onboard_2">Bienvenida 2</string>
+    <string name="onboard_4">Bienvenida 4</string>
+    <string name="english">Inglés</string>
     <string name="admob_application_id" translatable="false">ca-app-pub-2222869408518511~9607465111</string>
     <string name="please_wait" translatable="false">Please wait!</string>
-    <string name="app_name" translatable="false">Pion base</string>
+    <string name="home">Inicio</string>
     <string name="loading">Cargando</string>
-    <string name="home">Hogar</string>
-    <string name="language">Idioma</string>
     <string name="loading_ads">Cargando anuncios</string>
-    <string name="something_error">algo error</string>
+    <string name="something_error">Ocurrió un error</string>
     <string name="swipe_to_continue">Desliza para continuar</string>
     <string name="loading_data">Cargando datos</string>
-    <string name="setting">Configuración</string>
     <string name="general_setting">Configuración general</string>
     <string name="information_about">Información sobre</string>
-    <string name="developer">Revelador</string>
-    <string name="privacy_policy">política de privacidad</string>
+    <string name="developer">Desarrollador</string>
+    <string name="privacy_policy">Política de privacidad</string>
     <string name="gdpr">RGPD</string>
     <string name="store_name">Nombre de la tienda:</string>
     <string name="website">Sitio web:</string>
-    <string name="why_do_you_see_ads">¿Por qué ves anuncios?</string>
-    <string name="des_advertisement_1">Para la producción y el desarrollo necesitamos financiación, una de las cuales proviene de los ingresos publicitarios.</string>
-    <string name="des_advertisment_2">1. Para eliminar anuncios, puede ayudarnos comprando la versión premium o la versión sin anuncios.</string>
-    <string name="des_advertisement_3">2. Contáctenos por correo electrónico para ser considerado para participar en el programa piloto, desde el cual puede usar versiones con menos anuncios pero es posible que no estén optimizadas para el rendimiento.</string>
-    <string name="what_ads_type_do_we_use">¿Qué tipo de anuncios utilizamos?</string>
-    <string name="des_advertisement_4">Estamos asociados con muchos socios de redes publicitarias y el más grande es Google Ad para los principales formatos de anuncios.</string>
-    <string name="des_5">- Anuncios de pantalla completa intercalados entre pantallas.</string>
-    <string name="des_6">- Los anuncios nativos de banner se personalizan como un componente de AD (generalmente con una etiqueta amarilla)</string>
-    <string name="des_7">Siempre intentamos equilibrar la experiencia del usuario y la publicidad.</string>
-    <string name="please_select_language">Por favor seleccione idioma</string>
-    <string name="do_you_want_to_exit">¿Quieres salir?</string>
-    <string name="exit">Salida</string>
-    <string name="hd_wallpaper" translatable="false">HD Wallpaper</string>
-    <string name="home_tab" translatable="false">HOME</string>
-    <string name="categories_tab" translatable="false">CATEGORIES</string>
-    <string name="featured" translatable="false">Featured</string>
-    <string name="top_wallpaper" translatable="false">Top Wallpaper</string>
-    <string name="see_more" translatable="false">See More</string>
-    <string name="update_profile" translatable="false">Update Profile</string>
-    <string name="dark_theme" translatable="false">Dark Theme</string>
-    <string name="auto_change_wallpaper" translatable="false">Auto Change Wallpaper</string>
-    <string name="enable_notifications" translatable="false">Enable Notifications</string>
-    <string name="rate_this_app" translatable="false">Rate this App</string>
-    <string name="share_with_friend" translatable="false">Share with friend</string>
+    <string name="why_do_you_see_ads">¿Por qué ves anuncios\?</string>
+    <string name="des_advertisement_1">Para la producción y el desarrollo necesitamos financiación, que proviene de los ingresos publicitarios.</string>
+    <string name="des_advertisment_2">1. Puedes apoyarnos comprando la versión premium sin anuncios.</string>
+    <string name="des_advertisement_3">2. Contáctanos por correo electrónico para participar en el programa piloto.</string>
+    <string name="what_ads_type_do_we_use">¿Qué tipo de anuncios utilizamos\?</string>
+    <string name="des_advertisement_4">Estamos asociados con muchas redes publicitarias, principalmente Google Ads.</string>
+    <string name="des_5">- Anuncios a pantalla completa entre pantallas</string>
+    <string name="des_6">- Anuncios nativos y banners</string>
+    <string name="des_7">Siempre intentamos equilibrar la experiencia del usuario y los anuncios.</string>
+    <string name="customize_wallpaper">Personalizar fondo de pantalla</string>
+    <string name="do_you_want_to_exit">¿Quieres salir\?</string>
+    <string name="exit">Salir</string>
+    <string name="back">Volver</string>
+    <string name="no_wallpapers_found">No se encontraron fondos de pantalla</string>
+    <string name="set_wallpaper_success">¡Fondo de pantalla establecido con éxito!</string>
+    <string name="error_reading_file">Error al leer el archivo: %s</string>
+    <string name="error_crop">Error de recorte: %s</string>
+    <string name="set_wallpaper">Establecer fondo de pantalla</string>
+    <string name="home_screen">Pantalla de inicio</string>
+    <string name="lock_screen">Pantalla de bloqueo</string>
+    <string name="both">Ambas</string>
+    <string name="live_wallpaper">Fondo animado</string>
+    <string name="error_copying_file">Error al copiar el archivo</string>
+    <string name="error_prepare_file">Error: No se pudo preparar el archivo de imagen</string>
+    <string name="error_live_wallpaper_not_supported">El dispositivo no admite fondos animados.</string>
+    <string name="error_set_gif">Error al establecer GIF: %s</string>
+    <string name="error">Error: %s</string>
+    <string name="need_permission_to_save">Se requiere permiso para guardar la imagen.</string>
+    <string name="wallpaper_set_success">¡Fondo de pantalla establecido con éxito!</string>
+    <string name="please_enter_url">Por favor ingresa una URL</string>
+    <string name="vietnamese">Vietnamita</string>
+    <string name="download_success_title">Notificación</string>
+    <string name="download_success_message">Fondo de pantalla guardado con éxito en Pictures/PionBase</string>
+    <string name="download_error_message">Error: %1$s</string>
+    <string name="english_lang">Inglés</string>
+    <string name="title_interval_dialog">Seleccionar intervalo de tiempo (minutos)</string>
+    <string name="cannot_select_image">No se puede seleccionar la imagen</string>
+    <string name="media_selected">Multimedia seleccionada</string>
+    <string name="theme_setting">Tema</string>
+    <string name="text_and_quote">Texto y Cita</string>
+    <string name="select_quote">Seleccionar cita</string>
+    <string name="edit_text">Editar texto</string>
+    <string name="font">Fuente</string>
+    <string name="style">Estilo</string>
+    <string name="color">Color</string>
+    <string name="shadow">Sombra</string>
+    <string name="text_size">Tamaño de texto</string>
+    <string name="text_alignment">Alineación</string>
+    <string name="save_wallpaper">Guardar imagen</string>
+    <string name="save_quote_success">¡Imagen guardada con éxito!</string>
+    <string name="add_quote_on_wallpaper">Añadir cita</string>
+    <string name="align_left">Izquierda</string>
+    <string name="align_center">Centro</string>
+    <string name="align_right">Derecha</string>
+    <string name="theme_system">Predeterminado del sistema</string>
+    <string name="theme_light">Claro</string>
+    <string name="theme_dark">Oscuro</string>
+    <string name="choose_theme">Elegir tema</string>
+    <string name="dynamic_color">Color dinámico (Material You)</string>
 </resources>

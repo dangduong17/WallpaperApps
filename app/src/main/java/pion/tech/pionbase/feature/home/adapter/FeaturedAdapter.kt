@@ -41,7 +41,7 @@ class FeaturedAdapter :
     ) {
         binding.apply {
             tvFeaturedTitle.text = item.title
-            ivFeatured.loadImage(item.imageUrl)
+            ivFeatured.loadImage(item.resolvedThumbnailUrl)
             root.setPreventDoubleClick {
                 listener?.onClickWallpaper(item)
             }

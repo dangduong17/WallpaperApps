@@ -9,6 +9,7 @@ data class WallpaperEntity(
     val id: Long = 0,
     val title: String,
     val imageUrl: String,
+    val thumbnailUrl: String = "",
     val categoryName: String = "General",
     val isFeatured: Boolean = false,
     val isFavorite: Boolean = false
@@ -17,5 +18,6 @@ data class WallpaperEntity(
 fun WallpaperEntity.toDto() = WallpaperDtoModel(
     title = this.title,
     imageUrl = this.imageUrl,
+    thumbnailUrl = this.thumbnailUrl,
     categoryName = this.categoryName
 )

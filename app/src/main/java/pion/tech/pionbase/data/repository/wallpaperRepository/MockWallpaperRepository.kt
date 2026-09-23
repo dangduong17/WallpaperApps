@@ -18,6 +18,7 @@ import kotlinx.coroutines.withContext
 import pion.tech.pionbase.data.database.dao.WallpaperDao
 import pion.tech.pionbase.data.model.wallpaper.CategoryDtoModel
 import pion.tech.pionbase.data.model.wallpaper.WallpaperDtoModel
+import pion.tech.pionbase.data.model.wallpaper.toDto
 import pion.tech.pionbase.data.model.wallpaper.toEntity
 import pion.tech.pionbase.util.Result
 import timber.log.Timber
@@ -30,7 +31,7 @@ class MockWallpaperRepository(
 
     override fun getFavoriteWallpapers(): Flow<Result<List<WallpaperDtoModel>>> = 
         wallpaperDao.getFavoriteWallpapers().map { entities ->
-            val dtos = entities.map { WallpaperDtoModel(it.title, it.imageUrl, it.categoryName) }
+            val dtos = entities.map { it.toDto() }
             Result.Success(dtos)
         }
 
@@ -42,10 +43,10 @@ class MockWallpaperRepository(
         val all = loadFromAssets()
         if (all is Result.Success) {
             val categories = all.data
-                .map { it.categoryName }
+                .map { it.categoryName ?: "General" }
                 .distinct()
                 .map { category ->
-                    val imageUrl = all.data.firstOrNull { it.categoryName == category }?.imageUrl ?: ""
+                    val imageUrl = all.data.firstOrNull { (it.categoryName ?: "General") == category }?.safeImageUrl ?: ""
                     CategoryDtoModel(title = category, imageUrl = imageUrl)
                 }
             emit(Result.Success(categories))
@@ -58,7 +59,7 @@ class MockWallpaperRepository(
     override fun getWallpapersByCategory(categoryName: String): Flow<Result<List<WallpaperDtoModel>>> = flow {
         val all = loadFromAssets()
         if (all is Result.Success) {
-            emit(Result.Success(all.data.filter { it.categoryName.equals(categoryName, true) }))
+            emit(Result.Success(all.data.filter { (it.categoryName ?: "General").equals(categoryName, true) }))
         } else {
             emit(all as Result.Error)
         }
@@ -70,7 +71,7 @@ class MockWallpaperRepository(
     override fun searchWallpapers(query: String): Flow<Result<List<WallpaperDtoModel>>> = flow {
         val all = loadFromAssets()
         if (all is Result.Success) {
-            emit(Result.Success(all.data.filter { it.title.contains(query, true) }))
+            emit(Result.Success(all.data.filter { it.safeTitle.contains(query, true) }))
         } else {
             emit(all as Result.Error)
         }

@@ -19,6 +19,7 @@ import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
 import pion.tech.pionbase.feature.home.EditWallpaperActivity
 import pion.tech.pionbase.util.isGif
 import pion.tech.pionbase.util.loadImage
+import pion.tech.pionbase.util.loadThumbnailAndFull
 import pion.tech.pionbase.util.setPreventDoubleClickScaleView
 import timber.log.Timber
 
@@ -180,7 +181,10 @@ fun WallpaperDetailFragment.handleWallpaperLoading(wallpaper: WallpaperUIModel, 
         if (wallpaperUri != null) {
             binding.ivFullWallpaper.setImageURI(wallpaperUri)
         } else {
-            binding.ivFullWallpaper.loadImage(wallpaper.imageUrl)
+            binding.ivFullWallpaper.loadThumbnailAndFull(
+                thumbnailUrl = wallpaper.resolvedThumbnailUrl,
+                fullUrl = wallpaper.imageUrl
+            )
         }
     }
 }

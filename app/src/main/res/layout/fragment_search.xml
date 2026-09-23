@@ -26,7 +26,7 @@
         android:layout_marginHorizontal="@dimen/_16dp"
         android:layout_marginTop="@dimen/_16dp"
         android:background="@drawable/bg_radius_4_stroke_blue"
-        android:hint="Search wallpapers..."
+        android:hint="@string/search_wallpapers"
         android:imeOptions="actionSearch"
         android:inputType="text"
         android:paddingHorizontal="@dimen/_16dp"

@@ -41,7 +41,7 @@ class CategoryAdapter :
     ) {
         binding.apply {
             tvCategoryTitle.text = item.title
-            ivCategory.loadImage(item.imageUrl)
+            ivCategory.loadImage(item.resolvedThumbnailUrl)
             root.setPreventDoubleClick {
                 listener?.onClickCategory(item)
             }

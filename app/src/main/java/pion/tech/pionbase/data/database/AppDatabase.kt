@@ -9,7 +9,7 @@ import pion.tech.pionbase.data.database.dao.CategoryDao
 import pion.tech.pionbase.data.model.wallpaper.WallpaperEntity
 import pion.tech.pionbase.data.model.wallpaper.CategoryEntity
 
-@Database(entities = [DummyEntity::class, WallpaperEntity::class, CategoryEntity::class], version = 4)
+@Database(entities = [DummyEntity::class, WallpaperEntity::class, CategoryEntity::class], version = 5)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun dummyDao(): DummyDao
     abstract fun wallpaperDao(): WallpaperDao

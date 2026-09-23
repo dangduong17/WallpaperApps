@@ -11,6 +11,8 @@ import pion.tech.pionbase.util.collectFlowOnView
 import pion.tech.pionbase.util.displayToast
 import pion.tech.pionbase.util.loadImage
 
+import pion.tech.pionbase.util.loadThumbnailAndFull
+
 class QuoteEditorFragment : BaseFragment<FragmentQuoteEditorBinding, QuoteEditorViewModel>(
     FragmentQuoteEditorBinding::inflate,
     QuoteEditorViewModel::class
@@ -20,7 +22,7 @@ class QuoteEditorFragment : BaseFragment<FragmentQuoteEditorBinding, QuoteEditor
     override fun init(view: View, savedInstanceState: Bundle?) {
         initView()
         settingEvent()
-        binding.ivBackgroundWallpaper.loadImage(args.wallpaper.imageUrl)
+        binding.ivBackgroundWallpaper.loadThumbnailAndFull(args.wallpaper.resolvedThumbnailUrl, args.wallpaper.imageUrl)
     }
 
     override fun subscribeObserver(view: View) {

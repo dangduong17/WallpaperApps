@@ -37,7 +37,7 @@ class SearchViewModel(
                             
                             searchWallpapersUseCase(query).collect { wallpaperResult ->
                                 val wallpaperTitles = if (wallpaperResult is Result.Success) {
-                                    wallpaperResult.data.map { it.title.replace(Regex("\\s\\d+$"), "").trim() }
+                                    wallpaperResult.data.map { it.safeTitle.replace(Regex("\\s\\d+$"), "").trim() }
                                 } else {
                                     emptyList()
                                 }

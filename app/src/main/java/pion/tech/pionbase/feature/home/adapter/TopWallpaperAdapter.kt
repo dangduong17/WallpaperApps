@@ -40,7 +40,7 @@ class TopWallpaperAdapter :
         position: Int,
     ) {
         binding.apply {
-            ivWallpaper.loadImage(item.imageUrl)
+            ivWallpaper.loadImage(item.resolvedThumbnailUrl)
             root.setPreventDoubleClick {
                 listener?.onClickWallpaper(item)
             }

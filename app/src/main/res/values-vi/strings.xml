@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">Pion base</string>
-    <string name="hd_wallpaper">Hình nền HD</string>
+    <string name="hd_wallpaper" translatable="false">HD Wallpaper</string>
     <string name="featured">Nổi bật</string>
     <string name="top_wallpaper">Hình nền hàng đầu</string>
     <string name="see_more">Xem thêm</string>
@@ -23,7 +23,7 @@
     <string name="cancel">Hủy</string>
     <string name="this_is_demo">Đây là dialog demo</string>
     <string name="pion_tech">Pion Tech</string>
-    <string name="website_url">https://piontech.co</string>
+    <string name="website_url" translatable="false">https://piontech.co</string>
     <string name="facebook">Facebook:</string>
     <string name="telegram">Telegram:</string>
     <string name="piontechglobal" translatable="false">\@piontechglobal</string>
@@ -32,6 +32,7 @@
     <string name="ok">OK</string>
     <string name="next">Tiếp theo</string>
     <string name="no_results_found">Không tìm thấy kết quả</string>
+    <string name="search_wallpapers">Tìm kiếm hình nền&#8230;</string>
     <string name="set_as_wallpaper">Đặt làm hình nền</string>
     <string name="animals">Động vật</string>
     <string name="arts">Nghệ thuật</string>
@@ -69,7 +70,46 @@
     <string name="exit">Thoát</string>
     <string name="back">Quay lại</string>
     <string name="no_wallpapers_found">Không tìm thấy hình nền</string>
+    <string name="set_wallpaper_success">Đặt hình nền thành công!</string>
+    <string name="error_reading_file">Lỗi đọc tệp: %s</string>
+    <string name="error_crop">Lỗi Cắt ảnh: %s</string>
+    <string name="set_wallpaper">Đặt hình nền</string>
+    <string name="home_screen">Màn hình chính</string>
+    <string name="lock_screen">Màn hình khóa</string>
+    <string name="both">Cả hai</string>
+    <string name="live_wallpaper">Hình nền động</string>
+    <string name="error_copying_file">Lỗi sao chép tệp</string>
+    <string name="error_prepare_file">Lỗi: Không thể chuẩn bị tệp hình ảnh</string>
+    <string name="error_live_wallpaper_not_supported">Thiết bị không hỗ trợ hình nền động.</string>
+    <string name="error_set_gif">Lỗi đặt GIF: %s</string>
+    <string name="error">Lỗi: %s</string>
+    <string name="need_permission_to_save">Cần cấp quyền để lưu hình ảnh.</string>
+    <string name="wallpaper_set_success">Đặt hình nền thành công!</string>
+    <string name="please_enter_url">Vui lòng nhập URL</string>
+    <string name="vietnamese">Tiếng Việt</string>
+    <string name="download_success_title">Thông báo</string>
+    <string name="download_success_message">Đã lưu hình nền thành công vào Pictures/PionBase</string>
+    <string name="download_error_message">Lỗi: %1$s</string>
+    <string name="english_lang">Tiếng Anh</string>
+    <string name="title_interval_dialog">Chọn khoảng thời gian (phút)</string>
+    <string name="cannot_select_image">Không thể chọn hình ảnh</string>
+    <string name="media_selected">Đã chọn tệp phương tiện</string>
     <string name="theme_setting">Giao diện</string>
+    <string name="text_and_quote">Văn bản &amp; Câu nói</string>
+    <string name="select_quote">Chọn câu nói</string>
+    <string name="edit_text">Chỉnh sửa văn bản</string>
+    <string name="font">Phông chữ</string>
+    <string name="style">Kiểu chữ</string>
+    <string name="color">Màu sắc</string>
+    <string name="shadow">Bóng chữ</string>
+    <string name="text_size">Kích thước chữ</string>
+    <string name="text_alignment">Căn lề</string>
+    <string name="save_wallpaper">Lưu hình ảnh</string>
+    <string name="save_quote_success">Đã lưu hình ảnh thành công!</string>
+    <string name="add_quote_on_wallpaper">Thêm câu nói</string>
+    <string name="align_left">Trái</string>
+    <string name="align_center">Giữa</string>
+    <string name="align_right">Phải</string>
     <string name="theme_system">Theo hệ thống</string>
     <string name="theme_light">Chế độ sáng</string>
     <string name="theme_dark">Chế độ tối</string>
