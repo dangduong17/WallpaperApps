@@ -28,10 +28,14 @@ class EditWallpaperActivity : AppCompatActivity() {
     private val liveWallpaperLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
         val mainIntent = Intent(this, MainActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            putExtra("show_success_msg", true)
+            putExtra(Constant.KEY_SHOW_SUCCESS_MSG, true)
         }
         startActivity(mainIntent)
         finish()
+    }
+
+    private fun showToast(msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
     }
 
     private val cropLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -41,7 +45,7 @@ class EditWallpaperActivity : AppCompatActivity() {
                 launchIO(
                     onError = { e ->
                         launchMain {
-                            Toast.makeText(this@EditWallpaperActivity, getString(R.string.error_reading_file, e.message), Toast.LENGTH_LONG).show()
+                            showToast(getString(R.string.error_reading_file, e.message))
                             finish()
                         }
                     }
@@ -59,7 +63,7 @@ class EditWallpaperActivity : AppCompatActivity() {
             }
         } else if (result.resultCode == UCrop.RESULT_ERROR) {
             val cropError = UCrop.getError(result.data!!)
-            Toast.makeText(this, getString(R.string.error_crop, cropError?.message), Toast.LENGTH_LONG).show()
+            showToast(getString(R.string.error_crop, cropError?.message))
             finish()
         } else {
             finish()
@@ -69,9 +73,9 @@ class EditWallpaperActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        val uri = intent.parcelable<Uri>("uri") ?: return finish()
+        val uri = intent.parcelable<Uri>(Constant.KEY_URI) ?: return finish()
 
-        val isCropped = intent.getBooleanExtra("is_cropped", false)
+        val isCropped = intent.getBooleanExtra(Constant.KEY_IS_CROPPED, false)
         
         if (uri.isGif(contentResolver) || uri.isVideo(contentResolver) || isCropped) {
             applyWallpaper(uri)
@@ -119,7 +123,7 @@ class EditWallpaperActivity : AppCompatActivity() {
         launchIO(
             onError = { e ->
                 launchMain {
-                    Toast.makeText(this@EditWallpaperActivity, getString(errorResId, e.message ?: ""), Toast.LENGTH_LONG).show()
+                    showToast(getString(errorResId, e.message ?: ""))
                     finish()
                 }
             }
@@ -149,7 +153,7 @@ class EditWallpaperActivity : AppCompatActivity() {
                 try {
                     liveWallpaperLauncher.launch(intent)
                 } catch (_: Exception) {
-                    Toast.makeText(this@EditWallpaperActivity, getString(R.string.error_live_wallpaper_not_supported), Toast.LENGTH_LONG).show()
+                    showToast(getString(R.string.error_live_wallpaper_not_supported))
                     finish()
                 }
             }
@@ -164,7 +168,7 @@ class EditWallpaperActivity : AppCompatActivity() {
                 launchIO(
                     onError = { e ->
                         launchMain {
-                            Toast.makeText(this@EditWallpaperActivity, getString(R.string.error, e.message ?: ""), Toast.LENGTH_LONG).show()
+                            showToast(getString(R.string.error, e.message ?: ""))
                             finish()
                         }
                     }

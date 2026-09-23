@@ -3,6 +3,8 @@ package pion.tech.pionbase.feature.home.adapter
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import pion.tech.pionbase.R
 import pion.tech.pionbase.base.BaseListAdapter
 import pion.tech.pionbase.base.createDiffCallback
 import pion.tech.pionbase.databinding.ItemFilterBinding
@@ -46,7 +48,7 @@ class FilterAdapter :
         binding.apply {
             tvFilterName.text = item.name
             if (item.isSelected) {
-                cardFilter.setCardBackgroundColor(Color.parseColor("#E91E63"))
+                cardFilter.setCardBackgroundColor(ContextCompat.getColor(root.context, R.color.color_pink_E91E63))
                 cardFilter.strokeWidth = 0
             } else {
                 cardFilter.setCardBackgroundColor(Color.TRANSPARENT)

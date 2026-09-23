@@ -58,7 +58,7 @@ class HomeFragment :
             val contentResolver = requireContext().contentResolver
             if (uri.isGif(contentResolver) || uri.isVideo(contentResolver)) {
                 val intent = Intent(requireContext(), EditWallpaperActivity::class.java).apply {
-                    putExtra("uri", uri)
+                    putExtra(pion.tech.pionbase.util.Constant.KEY_URI, uri)
                 }
                 startActivity(intent)
             } else {

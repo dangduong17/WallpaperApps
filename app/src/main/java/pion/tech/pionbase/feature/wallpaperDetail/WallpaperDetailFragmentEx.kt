@@ -59,7 +59,7 @@ fun WallpaperDetailFragment.settingEvent() {
             val uriToUse = wallpaperUri ?: viewModel.uiState.value.wallpaper?.imageUrl?.toUri()
             if (uriToUse != null) {
                 val intent = Intent(context, EditWallpaperActivity::class.java).apply {
-                    putExtra("uri", uriToUse)
+                    putExtra(pion.tech.pionbase.util.Constant.KEY_URI, uriToUse)
                 }
                 startActivity(intent)
             } else {

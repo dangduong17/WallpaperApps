@@ -13,4 +13,8 @@ object Constant {
     const val FILE_ACTIVE_VIDEO = "active_video.mp4"
     const val FILE_ACTIVE_GIF = "active_gif.gif"
     const val FILE_ACTIVE_STATIC = "active_static_wallpaper.jpg"
+
+    const val KEY_SHOW_SUCCESS_MSG = "show_success_msg"
+    const val KEY_URI = "uri"
+    const val KEY_IS_CROPPED = "is_cropped"
 }
