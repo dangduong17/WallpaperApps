@@ -14,6 +14,9 @@
     <string name="enable_notifications">Enable Notifications</string>
     <string name="rate_this_app">Rate this App</string>
     <string name="share_with_friend">Share with Friend</string>
+    <string name="share_wallpaper" translatable="false">Share Wallpaper</string>
+    <string name="download_wallpaper" translatable="false">Download Wallpaper</string>
+    <string name="favorite_wallpaper" translatable="false">Favorite Wallpaper</string>
     <string name="select_custom_wallpaper">Select Custom Wallpaper</string>
     <string name="please_select_language">Please select a language</string>
     <string name="close">Close</string>

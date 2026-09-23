@@ -2,10 +2,12 @@ package pion.tech.pionbase.feature.wallpaperDetail
 
 import android.app.AlertDialog
 import android.app.WallpaperManager
+import android.content.Intent
 import android.os.Build
 import android.view.animation.Animation
 import android.view.animation.OvershootInterpolator
 import android.view.animation.ScaleAnimation
+import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.snackbar.Snackbar
@@ -14,8 +16,6 @@ import pion.tech.pionbase.base.doActionWhenResume
 import pion.tech.pionbase.base.launchIO
 import pion.tech.pionbase.base.launchMain
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
-import android.content.Intent
-import androidx.core.net.toUri
 import pion.tech.pionbase.feature.home.EditWallpaperActivity
 import pion.tech.pionbase.util.isGif
 import pion.tech.pionbase.util.loadImage
@@ -120,6 +120,36 @@ fun WallpaperDetailFragment.settingEvent() {
     binding.fabDownload.setPreventDoubleClickScaleView {
         checkPermissionAndDownload()
     }
+
+    binding.fabShare.setPreventDoubleClickScaleView {
+        val currentWallpaper = viewModel.uiState.value.wallpaper
+        if (currentWallpaper != null) {
+            shareWallpaper(currentWallpaper)
+        }
+    }
+}
+
+fun WallpaperDetailFragment.shareWallpaper(wallpaper: WallpaperUIModel) {
+    val imageUrl = wallpaper.imageUrl
+
+    val shareIntent = if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+        Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_SUBJECT, wallpaper.title)
+            putExtra(Intent.EXTRA_TEXT, "${wallpaper.title}\n$imageUrl")
+        }
+    } else {
+        val uriToShare = wallpaperUri ?: imageUrl.toUri()
+        Intent(Intent.ACTION_SEND).apply {
+            type = "image/*"
+            putExtra(Intent.EXTRA_STREAM, uriToShare)
+            putExtra(Intent.EXTRA_TEXT, wallpaper.title)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+    }
+
+    val chooser = Intent.createChooser(shareIntent, getString(R.string.share_with_friend))
+    startActivity(chooser)
 }
 
 fun WallpaperDetailFragment.releaseAnimation() {
