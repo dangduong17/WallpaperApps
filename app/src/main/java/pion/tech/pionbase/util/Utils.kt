@@ -18,47 +18,21 @@ import java.lang.Exception
 
 fun Fragment.safeShowDialog(
     dialog: BaseDialogFragment<out ViewBinding>?,
-    fragmentManager: FragmentManager? = null,
+    fragmentManager: FragmentManager = childFragmentManager,
 ) {
     if (dialog == null) return
     doActionWhenResume {
-        runCatching {
-            val fm = fragmentManager ?: if (isAdded) parentFragmentManager else childFragmentManager
-            val tag = dialog::class.java.simpleName
-            val existing = fm.findFragmentByTag(tag)
-            if (existing != null) {
-                fm.beginTransaction().remove(existing).commitAllowingStateLoss()
-            }
-            if (!dialog.isAdded && !dialog.isVisible) {
-                val ft = fm.beginTransaction()
-                dialog.show(ft, tag)
-            }
-        }.onFailure { e ->
-            e.printStackTrace()
-        }
+        dialog.show(fragmentManager)
     }
 }
 
 fun Fragment.safeShowBottomSheet(
     dialog: BaseBottomSheetDialogFragment<out ViewBinding>?,
-    fragmentManager: FragmentManager? = null,
+    fragmentManager: FragmentManager = childFragmentManager,
 ) {
     if (dialog == null) return
     doActionWhenResume {
-        runCatching {
-            val fm = fragmentManager ?: if (isAdded) parentFragmentManager else childFragmentManager
-            val tag = dialog::class.java.simpleName
-            val existing = fm.findFragmentByTag(tag)
-            if (existing != null) {
-                fm.beginTransaction().remove(existing).commitAllowingStateLoss()
-            }
-            if (!dialog.isAdded && !dialog.isVisible) {
-                val ft = fm.beginTransaction()
-                dialog.show(ft, tag)
-            }
-        }.onFailure { e ->
-            e.printStackTrace()
-        }
+        dialog.show(fragmentManager)
     }
 }
 

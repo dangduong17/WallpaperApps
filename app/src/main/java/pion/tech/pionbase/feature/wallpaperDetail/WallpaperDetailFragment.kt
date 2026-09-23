@@ -3,33 +3,35 @@ package pion.tech.pionbase.feature.wallpaperDetail
 import android.Manifest
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import android.view.View
 import android.view.animation.Animation
 import androidx.navigation.fragment.navArgs
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import android.content.ContentResolver
-import androidx.core.net.toUri
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import pion.tech.pionbase.R
 import pion.tech.pionbase.base.BaseFragment
 import pion.tech.pionbase.databinding.FragmentWallpaperDetailBinding
 import pion.tech.pionbase.util.collectFlowOnView
 import pion.tech.pionbase.util.displayToast
-import pion.tech.pionbase.util.showLoadingSuccessText
+import pion.tech.pionbase.util.showSuccessSnackbar
 import pion.tech.pionbase.util.showErrorSnackbar
+import pion.tech.pionbase.util.loadImage
 import pion.tech.pionbase.util.requestPermissionsWithPermissionX
+import pion.tech.pionbase.util.setPreventDoubleClickScaleView
 import timber.log.Timber
 
 class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, WallpaperDetailViewModel>(
     FragmentWallpaperDetailBinding::inflate,
-    WallpaperDetailViewModel::class,
+    WallpaperDetailViewModel::class
 ) {
     private val args: WallpaperDetailFragmentArgs by navArgs()
     
     // Xử lý URI nếu là ảnh từ picker (truyền qua args dưới dạng String)
     val wallpaperUri: android.net.Uri? by lazy {
-        args.wallpaper.imageUrl.takeIf { it.startsWith(ContentResolver.SCHEME_CONTENT + "://") }?.toUri()
+        args.wallpaper.imageUrl.takeIf { it.startsWith("content://") }?.let { android.net.Uri.parse(it) }
     }
     
     var favoriteAnim: Animation? = null
@@ -99,7 +101,7 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
             .collectFlowOnView(viewLifecycleOwner) { event ->
                 when (event) {
                     is WallpaperDetailEvent.DownloadSuccess -> {
-                        MaterialAlertDialogBuilder(requireContext())
+                        android.app.AlertDialog.Builder(requireContext())
                             .setTitle(getString(R.string.download_success_title))
                             .setMessage(getString(R.string.download_success_message))
                             .setPositiveButton(getString(R.string.ok), null)
@@ -109,7 +111,9 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
                         displayToast(getString(R.string.download_error_message, event.throwable.message))
                     }
                     is WallpaperDetailEvent.SetWallpaperSuccess -> {
-                        showLoadingSuccessText(getString(R.string.success))
+                        pion.tech.pionbase.util.safeDelay(300) {
+                            showSuccessSnackbar(getString(R.string.set_wallpaper_success))
+                        }
                     }
                     is WallpaperDetailEvent.SetWallpaperError -> {
                         showErrorSnackbar(getString(R.string.error, event.throwable.message ?: ""))

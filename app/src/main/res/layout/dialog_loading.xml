@@ -31,10 +31,9 @@
                 app:lottie_rawRes="@raw/loading_dialog" />
 
             <TextView
-                android:id="@+id/tvMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/loading"
+                android:text="@string/please_wait"
                 android:textColor="@color/white" />
         </LinearLayout>
 
