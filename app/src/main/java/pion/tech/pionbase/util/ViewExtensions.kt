@@ -175,6 +175,24 @@ fun Fragment.displayToast(
     Toast.makeText(context, getString(msg), Toast.LENGTH_SHORT).show()
 }
 
+fun Fragment.showSuccessSnackbar(msg: String) {
+    val dialog = pion.tech.pionbase.base.SuccessDialog(msg)
+    safeShowDialog(dialog)
+}
+
+fun Fragment.showSuccessSnackbar(@StringRes msgResId: Int) {
+    showSuccessSnackbar(getString(msgResId))
+}
+
+fun Fragment.showErrorSnackbar(msg: String) {
+    displayToast(msg)
+}
+
+fun Fragment.showErrorSnackbar(@StringRes msgResId: Int) {
+    showErrorSnackbar(getString(msgResId))
+}
+
+
 fun Fragment.convertDpToPx(dp: Int): Int {
     val dip = dp.toFloat()
     return TypedValue

@@ -19,6 +19,9 @@ import pion.tech.pionbase.feature.quoteEditor.adapter.ColorAdapter
 import pion.tech.pionbase.feature.quoteEditor.adapter.FontAdapter
 import pion.tech.pionbase.feature.quoteEditor.adapter.FontItem
 import pion.tech.pionbase.feature.quoteEditor.bottomSheet.QuoteBottomSheet
+import pion.tech.pionbase.util.displayToast
+import pion.tech.pionbase.util.showSuccessSnackbar
+import pion.tech.pionbase.util.showErrorSnackbar
 import pion.tech.pionbase.util.safeShowBottomSheet
 import pion.tech.pionbase.util.setPreventDoubleClick
 
@@ -234,34 +237,7 @@ fun QuoteEditorFragment.applyWallpaperDirectly() {
                 else -> WallpaperManager.FLAG_SYSTEM or WallpaperManager.FLAG_LOCK
             }
 
-            showHideLoading(true)
-            launchIO {
-                try {
-                    val wallpaperManager = WallpaperManager.getInstance(context)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        wallpaperManager.setBitmap(renderedBitmap, null, true, flag)
-                    } else {
-                        wallpaperManager.setBitmap(renderedBitmap)
-                    }
-                    launchMain {
-                        showHideLoading(false)
-                        com.google.android.material.snackbar.Snackbar.make(
-                            binding.root,
-                            R.string.set_wallpaper_success,
-                            com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
-                        ).show()
-                    }
-                } catch (e: Exception) {
-                    launchMain {
-                        showHideLoading(false)
-                        com.google.android.material.snackbar.Snackbar.make(
-                            binding.root,
-                            getString(R.string.error, e.message ?: ""),
-                            com.google.android.material.snackbar.Snackbar.LENGTH_LONG
-                        ).show()
-                    }
-                }
-            }
+            viewModel.applyWallpaper(renderedBitmap, flag)
         }
         .show()
 }

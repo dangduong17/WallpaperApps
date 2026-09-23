@@ -63,6 +63,7 @@ class WallpaperRepositoryImpl(
             val remote = dataSource.getTopWallpapers()
             mergeAndSaveWallpapers(
                 remote = remote,
+                isFeaturedProvider = { index, local -> index < FEATURED_LIMIT || local?.isFeatured == true },
                 deleteOldNonFavorites = true
             )
         } catch (e: Exception) {

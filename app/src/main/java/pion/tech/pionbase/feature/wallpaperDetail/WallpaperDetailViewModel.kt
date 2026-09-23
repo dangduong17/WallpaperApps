@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import pion.tech.pionbase.base.BaseViewModel
 import pion.tech.pionbase.base.launchMain
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
+import pion.tech.pionbase.domain.usecase.home.DownloadImageToBitmapUseCase
 import pion.tech.pionbase.domain.usecase.home.SetWallpaperUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.DownloadWallpaperUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.IsFavoriteWallpaperUseCase
@@ -18,7 +19,8 @@ class WallpaperDetailViewModel(
     private val toggleFavoriteUseCase: ToggleFavoriteUseCase,
     private val isFavoriteWallpaperUseCase: IsFavoriteWallpaperUseCase,
     private val downloadWallpaperUseCase: DownloadWallpaperUseCase,
-    private val setWallpaperUseCase: SetWallpaperUseCase
+    private val setWallpaperUseCase: SetWallpaperUseCase,
+    private val downloadImageToBitmapUseCase: DownloadImageToBitmapUseCase
 ) : BaseViewModel<WallpaperDetailUiState, WallpaperDetailEvent>(WallpaperDetailUiState()) {
 
     fun downloadWallpaper() {
@@ -56,6 +58,22 @@ class WallpaperDetailViewModel(
 
     fun applyWallpaper(bitmap: android.graphics.Bitmap, which: Int) {
         executeApplyWallpaper { setWallpaperUseCase(bitmap, which) }
+    }
+
+    fun applyWallpaperFromUrl(url: String, which: Int) {
+        setState { copy(isSettingWallpaper = true) }
+        handleApiCall(
+            apiCall = { downloadImageToBitmapUseCase(url) },
+            onSuccess = { bitmap ->
+                executeApplyWallpaper { setWallpaperUseCase(bitmap, which) }
+            },
+            onError = { throwable ->
+                launchMain {
+                    setState { copy(isSettingWallpaper = false) }
+                    setEvent(WallpaperDetailEvent.SetWallpaperError(throwable))
+                }
+            }
+        )
     }
 
     private fun executeApplyWallpaper(apiCall: () -> Flow<Result<Unit>>) {

@@ -16,6 +16,8 @@ import pion.tech.pionbase.base.BaseFragment
 import pion.tech.pionbase.databinding.FragmentWallpaperDetailBinding
 import pion.tech.pionbase.util.collectFlowOnView
 import pion.tech.pionbase.util.displayToast
+import pion.tech.pionbase.util.showSuccessSnackbar
+import pion.tech.pionbase.util.showErrorSnackbar
 import pion.tech.pionbase.util.loadImage
 import pion.tech.pionbase.util.requestPermissionsWithPermissionX
 import pion.tech.pionbase.util.setPreventDoubleClickScaleView
@@ -109,18 +111,12 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
                         displayToast(getString(R.string.download_error_message, event.throwable.message))
                     }
                     is WallpaperDetailEvent.SetWallpaperSuccess -> {
-                        com.google.android.material.snackbar.Snackbar.make(
-                            binding.root,
-                            R.string.set_wallpaper_success,
-                            com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
-                        ).show()
+                        pion.tech.pionbase.util.safeDelay(300) {
+                            showSuccessSnackbar(getString(R.string.set_wallpaper_success))
+                        }
                     }
                     is WallpaperDetailEvent.SetWallpaperError -> {
-                        com.google.android.material.snackbar.Snackbar.make(
-                            binding.root,
-                            getString(R.string.error, event.throwable.message ?: ""),
-                            com.google.android.material.snackbar.Snackbar.LENGTH_LONG
-                        ).show()
+                        showErrorSnackbar(getString(R.string.error, event.throwable.message ?: ""))
                     }
                 }
             }

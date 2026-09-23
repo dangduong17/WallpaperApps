@@ -10,14 +10,18 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.google.android.material.snackbar.Snackbar
+
 import pion.tech.pionbase.R
 import pion.tech.pionbase.base.doActionWhenResume
 import pion.tech.pionbase.base.launchIO
 import pion.tech.pionbase.base.launchMain
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
 import pion.tech.pionbase.feature.home.EditWallpaperActivity
+import pion.tech.pionbase.util.displayToast
+import pion.tech.pionbase.util.showSuccessSnackbar
+import pion.tech.pionbase.util.showErrorSnackbar
 import pion.tech.pionbase.util.isGif
+import pion.tech.pionbase.util.loadImage
 import pion.tech.pionbase.util.loadThumbnailAndFull
 import pion.tech.pionbase.util.setPreventDoubleClickScaleView
 import timber.log.Timber
@@ -63,7 +67,7 @@ fun WallpaperDetailFragment.settingEvent() {
                 }
                 startActivity(intent)
             } else {
-                Snackbar.make(binding.root, R.string.error_set_gif, Snackbar.LENGTH_SHORT).show()
+                showErrorSnackbar(getString(R.string.error_set_gif))
             }
             return@setPreventDoubleClickScaleView
         }
@@ -85,44 +89,11 @@ fun WallpaperDetailFragment.settingEvent() {
                 wallpaperUri?.let { uri ->
                     viewModel.applyWallpaper(uri, flag)
                 } ?: run {
-                    val drawable = binding.ivFullWallpaper.drawable
-                    val bitmap = try {
-                        drawable?.toBitmap()
-                    } catch (e: Exception) {
-                        null
-                    }
-
-                    if (bitmap != null) {
-                        viewModel.applyWallpaper(bitmap, flag)
+                    val imageUrl = viewModel.uiState.value.wallpaper?.imageUrl
+                    if (!imageUrl.isNullOrEmpty()) {
+                        viewModel.applyWallpaperFromUrl(imageUrl, flag)
                     } else {
-                        val imageUrl = viewModel.uiState.value.wallpaper?.imageUrl
-                        if (!imageUrl.isNullOrEmpty()) {
-                            showHideLoading(true)
-                            launchIO {
-                                try {
-                                    val downloadedBitmap = Glide.with(context)
-                                        .asBitmap()
-                                        .load(imageUrl)
-                                        .submit()
-                                        .get()
-                                    launchMain {
-                                        showHideLoading(false)
-                                        if (downloadedBitmap != null) {
-                                            viewModel.applyWallpaper(downloadedBitmap, flag)
-                                        } else {
-                                            Snackbar.make(binding.root, R.string.please_wait, Snackbar.LENGTH_SHORT).show()
-                                        }
-                                    }
-                                } catch (e: Exception) {
-                                    launchMain {
-                                        showHideLoading(false)
-                                        Snackbar.make(binding.root, context.getString(R.string.error, e.message ?: ""), Snackbar.LENGTH_LONG).show()
-                                    }
-                                }
-                            }
-                        } else {
-                            Snackbar.make(binding.root, R.string.please_wait, Snackbar.LENGTH_SHORT).show()
-                        }
+                        displayToast(getString(R.string.please_wait))
                     }
                 }
             }
@@ -191,7 +162,9 @@ fun WallpaperDetailFragment.handleWallpaperLoading(wallpaper: WallpaperUIModel, 
         // Nếu là ảnh từ Picker, dùng setImageURI
         if (wallpaperUri != null) {
             binding.ivFullWallpaper.setImageURI(wallpaperUri)
+            binding.ivBackgroundWallpaper.setImageURI(wallpaperUri)
         } else {
+            binding.ivBackgroundWallpaper.loadImage(wallpaper.resolvedThumbnailUrl)
             binding.ivFullWallpaper.loadThumbnailAndFull(
                 thumbnailUrl = wallpaper.resolvedThumbnailUrl,
                 fullUrl = wallpaper.imageUrl

@@ -24,6 +24,7 @@ import pion.tech.pionbase.feature.home.bottomSheet.WallpaperPreviewBottomSheet
 import pion.tech.pionbase.service.LiveWallpaperService
 import pion.tech.pionbase.util.collectFlowOnView
 import pion.tech.pionbase.util.displayToast
+import pion.tech.pionbase.util.showSuccessSnackbar
 import pion.tech.pionbase.util.handleUiState
 import pion.tech.pionbase.util.isGif
 import pion.tech.pionbase.util.isVideo
@@ -131,8 +132,9 @@ class HomeFragment :
                         else -> WallpaperManager.FLAG_SYSTEM or WallpaperManager.FLAG_LOCK
                     }
                     viewModel.setWallpaper(uri, flag)
-                    com.google.android.material.snackbar.Snackbar.make(binding.root, getString(R.string.set_wallpaper_success), com.google.android.material.snackbar.Snackbar.LENGTH_SHORT).show()
-                }
+                    pion.tech.pionbase.util.safeDelay(300) {
+                        showSuccessSnackbar(getString(R.string.set_wallpaper_success))
+                    }                }
             }
         
         // Since AlertDialog is not a DialogFragment, we can't use safeShowDialog directly 

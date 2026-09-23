@@ -30,11 +30,14 @@ data class QuoteEditorUiState(
 sealed class QuoteEditorEvent {
     data class SaveSuccess(val uri: Uri) : QuoteEditorEvent()
     data class SaveError(val throwable: Throwable) : QuoteEditorEvent()
+    object SetWallpaperSuccess : QuoteEditorEvent()
+    data class SetWallpaperError(val throwable: Throwable) : QuoteEditorEvent()
 }
 
 class QuoteEditorViewModel(
     private val getQuotesUseCase: GetQuotesUseCase,
-    private val saveQuoteWallpaperUseCase: SaveQuoteWallpaperUseCase
+    private val saveQuoteWallpaperUseCase: SaveQuoteWallpaperUseCase,
+    private val setWallpaperUseCase: pion.tech.pionbase.domain.usecase.home.SetWallpaperUseCase
 ) : BaseViewModel<QuoteEditorUiState, QuoteEditorEvent>(QuoteEditorUiState()) {
 
     init {
@@ -93,6 +96,25 @@ class QuoteEditorViewModel(
                 setState { copy(isLoading = false) }
                 launchMain {
                     setEvent(QuoteEditorEvent.SaveError(throwable))
+                }
+            }
+        )
+    }
+
+    fun applyWallpaper(bitmap: Bitmap, flag: Int) {
+        setState { copy(isLoading = true) }
+        handleApiCall(
+            apiCall = { setWallpaperUseCase(bitmap, flag) },
+            onSuccess = {
+                setState { copy(isLoading = false) }
+                launchMain {
+                    setEvent(QuoteEditorEvent.SetWallpaperSuccess)
+                }
+            },
+            onError = { throwable ->
+                setState { copy(isLoading = false) }
+                launchMain {
+                    setEvent(QuoteEditorEvent.SetWallpaperError(throwable))
                 }
             }
         )

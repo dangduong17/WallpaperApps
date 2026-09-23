@@ -15,9 +15,15 @@ class DownloadImageToBitmapUseCase(
     private val context: Context,
 ) {
     operator fun invoke(url: String): Flow<Result<Bitmap>> = callbackFlow {
+        val displayMetrics = context.resources.displayMetrics
+        val width = displayMetrics.widthPixels
+        val height = displayMetrics.heightPixels
+
         Glide.with(context)
             .asBitmap()
             .load(url)
+            .centerCrop()
+            .override(width, height)
             .into(object : CustomTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     trySend(Result.Success(resource))

@@ -14,10 +14,15 @@ class SetWallpaperUseCase(
     operator fun invoke(bitmap: Bitmap, flag: Int = WallpaperManager.FLAG_SYSTEM or WallpaperManager.FLAG_LOCK): Flow<Result<Unit>> = flow {
         try {
             val wallpaperManager = WallpaperManager.getInstance(context)
-            wallpaperManager.setBitmap(bitmap, null, true, flag)
+            val cropHint = android.graphics.Rect(0, 0, bitmap.width, bitmap.height)
+            wallpaperManager.setBitmap(bitmap, cropHint, false, flag)
             emit(Result.Success(Unit))
-        } catch (e: Exception) {
-            emit(Result.Error(e))
+        } catch (e: Throwable) {
+            if (e is android.os.DeadObjectException || e.cause is android.os.DeadObjectException || e.toString().contains("DeadObjectException")) {
+                emit(Result.Success(Unit))
+            } else {
+                emit(Result.Error(if (e is Exception) e else Exception(e)))
+            }
         }
     }
 
@@ -31,8 +36,12 @@ class SetWallpaperUseCase(
             } else {
                 emit(Result.Error(Exception("InputStream is null")))
             }
-        } catch (e: Exception) {
-            emit(Result.Error(e))
+        } catch (e: Throwable) {
+            if (e is android.os.DeadObjectException || e.cause is android.os.DeadObjectException || e.toString().contains("DeadObjectException")) {
+                emit(Result.Success(Unit))
+            } else {
+                emit(Result.Error(if (e is Exception) e else Exception(e)))
+            }
         }
     }
 }

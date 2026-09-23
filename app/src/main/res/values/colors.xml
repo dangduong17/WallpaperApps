@@ -23,6 +23,8 @@
     <color name="color_pink_E91E63">#E91E63</color>
     <color name="color_grey_D8D8D8">#D8D8D8</color>
     <color name="color_red_D40202">#D40202</color>
+    <color name="color_green_4CAF50">#4CAF50</color>
     <color name="color_transparent_black_4D">#4D000000</color>
+    <color name="color_transparent_black_A0">#A0000000</color>
     <color name="color_transparent_grey_5F">#5F5E5E</color>
 </resources>
