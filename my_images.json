@@ -1,0 +1,51 @@
+{
+  "total": 35,
+  "categories": [
+    "Nature",
+    "Arts",
+    "Animals",
+    "Cars",
+    "Space"
+  ],
+  "images": [
+    { "id": 1, "title": "Green Valley", "imageUrl": "https://picsum.photos/seed/n1/800/1200", "categoryName": "Nature" },
+    { "id": 2, "title": "Mountain Mist", "imageUrl": "https://picsum.photos/seed/n2/800/1200", "categoryName": "Nature" },
+    { "id": 3, "title": "Ocean Breeze", "imageUrl": "https://picsum.photos/seed/n3/800/1200", "categoryName": "Nature" },
+    { "id": 4, "title": "Forest Path", "imageUrl": "https://picsum.photos/seed/n4/800/1200", "categoryName": "Nature" },
+    { "id": 5, "title": "Sunny Meadow", "imageUrl": "https://picsum.photos/seed/n5/800/1200", "categoryName": "Nature" },
+    { "id": 6, "title": "Deep Canyon", "imageUrl": "https://picsum.photos/seed/n6/800/1200", "categoryName": "Nature" },
+    { "id": 7, "title": "Starry Night", "imageUrl": "https://picsum.photos/seed/n7/800/1200", "categoryName": "Nature" },
+
+    { "id": 8, "title": "Abstract Waves", "imageUrl": "https://picsum.photos/seed/a1/800/1200", "categoryName": "Arts" },
+    { "id": 9, "title": "Colorful Swirl", "imageUrl": "https://picsum.photos/seed/a2/800/1200", "categoryName": "Arts" },
+    { "id": 10, "title": "Modern Geometry", "imageUrl": "https://picsum.photos/seed/a3/800/1200", "categoryName": "Arts" },
+    { "id": 11, "title": "Digital Paint", "imageUrl": "https://picsum.photos/seed/a4/800/1200", "categoryName": "Arts" },
+    { "id": 12, "title": "Neon Dreams", "imageUrl": "https://picsum.photos/seed/a5/800/1200", "categoryName": "Arts" },
+    { "id": 13, "title": "Vintage Collage", "imageUrl": "https://picsum.photos/seed/a6/800/1200", "categoryName": "Arts" },
+    { "id": 14, "title": "Oil Stroke", "imageUrl": "https://picsum.photos/seed/a7/800/1200", "categoryName": "Arts" },
+
+    { "id": 15, "title": "Lion King", "imageUrl": "https://picsum.photos/seed/ani1/800/1200", "categoryName": "Animals" },
+    { "id": 16, "title": "Wild Eagle", "imageUrl": "https://picsum.photos/seed/ani2/800/1200", "categoryName": "Animals" },
+    { "id": 17, "title": "Golden Fish", "imageUrl": "https://picsum.photos/seed/ani3/800/1200", "categoryName": "Animals" },
+    { "id": 18, "title": "Running Horse", "imageUrl": "https://picsum.photos/seed/ani4/800/1200", "categoryName": "Animals" },
+    { "id": 19, "title": "White Wolf", "imageUrl": "https://picsum.photos/seed/ani5/800/1200", "categoryName": "Animals" },
+    { "id": 20, "title": "Blue Butterfly", "imageUrl": "https://picsum.photos/seed/ani6/800/1200", "categoryName": "Animals" },
+    { "id": 21, "title": "Cute Cat", "imageUrl": "https://picsum.photos/seed/ani7/800/1200", "categoryName": "Animals" },
+
+    { "id": 22, "title": "Sport Car", "imageUrl": "https://picsum.photos/seed/c1/800/1200", "categoryName": "Cars" },
+    { "id": 23, "title": "Classic Car", "imageUrl": "https://picsum.photos/seed/c2/800/1200", "categoryName": "Cars" },
+    { "id": 24, "title": "Supercar Red", "imageUrl": "https://picsum.photos/seed/c3/800/1200", "categoryName": "Cars" },
+    { "id": 25, "title": "Vintage Truck", "imageUrl": "https://picsum.photos/seed/c4/800/1200", "categoryName": "Cars" },
+    { "id": 26, "title": "Race Track", "imageUrl": "https://picsum.photos/seed/c5/800/1200", "categoryName": "Cars" },
+    { "id": 27, "title": "City Car", "imageUrl": "https://picsum.photos/seed/c6/800/1200", "categoryName": "Cars" },
+    { "id": 28, "title": "Motorcycle", "imageUrl": "https://picsum.photos/seed/c7/800/1200", "categoryName": "Cars" },
+
+    { "id": 29, "title": "Moon Surface", "imageUrl": "https://picsum.photos/seed/s1/800/1200", "categoryName": "Space" },
+    { "id": 30, "title": "Galaxy Spiral", "imageUrl": "https://picsum.photos/seed/s2/800/1200", "categoryName": "Space" },
+    { "id": 31, "title": "Mars Rover", "imageUrl": "https://picsum.photos/seed/s3/800/1200", "categoryName": "Space" },
+    { "id": 32, "title": "Astronaut", "imageUrl": "https://picsum.photos/seed/s4/800/1200", "categoryName": "Space" },
+    { "id": 33, "title": "Saturn Ring", "imageUrl": "https://picsum.photos/seed/s5/800/1200", "categoryName": "Space" },
+    { "id": 34, "title": "Black Hole", "imageUrl": "https://picsum.photos/seed/s6/800/1200", "categoryName": "Space" },
+    { "id": 35, "title": "Rocket Launch", "imageUrl": "https://picsum.photos/seed/s7/800/1200", "categoryName": "Space" }
+  ]
+}

@@ -1,29 +1,35 @@
 package pion.tech.pionbase.data.repository.wallpaperRepository
 
 import android.content.ContentValues
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import pion.tech.pionbase.data.database.dao.CategoryDao
 import pion.tech.pionbase.data.database.dao.WallpaperDao
-import pion.tech.pionbase.data.model.wallpaper.*
+import pion.tech.pionbase.data.model.wallpaper.CategoryDtoModel
+import pion.tech.pionbase.data.model.wallpaper.WallpaperDtoModel
+import pion.tech.pionbase.data.model.wallpaper.WallpaperEntity
+import pion.tech.pionbase.data.model.wallpaper.toDto
+import pion.tech.pionbase.data.model.wallpaper.toEntity
 import pion.tech.pionbase.data.remote.wallpaper.WallpaperDataSource
 import pion.tech.pionbase.data.repository.BaseRepository
 import pion.tech.pionbase.util.Result
-import java.io.OutputStream
+import timber.log.Timber
+
+private const val FEATURED_LIMIT = 10
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class WallpaperRepositoryImpl(
@@ -34,83 +40,88 @@ class WallpaperRepositoryImpl(
     private val context: android.content.Context
 ) : BaseRepository(), WallpaperRepository {
 
-    override fun getFeaturedWallpapers(): Flow<Result<List<WallpaperDtoModel>>> =
-        wallpaperDao.getFeaturedWallpapers().flatMapLatest { entities ->
-            if (entities.isEmpty()) {
-                flow<Result<List<WallpaperDtoModel>>> {
-                    val remote = dataSource.getFeaturedWallpapers()
-                    if (remote.isNotEmpty()) {
-                        val localWallpapers = wallpaperDao.getAllWallpapersList().associateBy { it.imageUrl }
-                        val merged = remote.map { dto ->
-                            val local = localWallpapers[dto.imageUrl]
-                            dto.toEntity(isFeatured = true).copy(isFavorite = local?.isFavorite ?: false)
-                        }
-                        wallpaperDao.insertWallpapers(merged)
-                    } else {
-                        emit(Result.Success(emptyList()))
-                    }
-                }.catch { emit(Result.Error(it)) }
-            } else {
-                flowOf(Result.Success(entities.map { it.toDto() }))
-            }
+    override fun getFeaturedWallpapers(): Flow<Result<List<WallpaperDtoModel>>> = flow {
+        try {
+            val remote = dataSource.getFeaturedWallpapers()
+            mergeAndSaveWallpapers(
+                remote = remote,
+                isFeaturedProvider = { index, local -> index < FEATURED_LIMIT || local?.isFeatured == true }
+            )
+        } catch (e: Exception) {
+            if (e is CancellationException) throw e
+            Timber.e(e, "Error fetching remote featured wallpapers")
         }
-
-    override fun getTopWallpapers(): Flow<Result<List<WallpaperDtoModel>>> =
-        wallpaperDao.getAllWallpapers().flatMapLatest { entities ->
-            if (entities.isEmpty()) {
-                flow<Result<List<WallpaperDtoModel>>> {
-                    val remote = dataSource.getTopWallpapers()
-                    if (remote.isNotEmpty()) {
-                        val localWallpapers = wallpaperDao.getAllWallpapersList().associateBy { it.imageUrl }
-                        val merged = remote.map { dto ->
-                            val local = localWallpapers[dto.imageUrl]
-                            dto.toEntity(isFeatured = false).copy(isFavorite = local?.isFavorite ?: false)
-                        }
-                        wallpaperDao.insertWallpapers(merged)
-                    } else {
-                        emit(Result.Success(emptyList()))
-                    }
-                }.catch { emit(Result.Error(it)) }
-            } else {
-                flowOf(Result.Success(entities.map { it.toDto() }))
-            }
-        }
-
-    override fun getCategories(): Flow<Result<List<CategoryDtoModel>>> =
-        categoryDao.getAllCategories().flatMapLatest { entities ->
-            if (entities.isEmpty()) {
-                flow<Result<List<CategoryDtoModel>>> {
-                    val remote = dataSource.getCategories()
-                    if (remote.isNotEmpty()) {
-                        categoryDao.insertCategories(remote.map { it.toEntity() })
-                    } else {
-                        emit(Result.Success(emptyList()))
-                    }
-                }.catch { emit(Result.Error(it)) }
-            } else {
-                flowOf(Result.Success(entities.map { it.toDto() }))
-            }
-        }
-
-    override fun getFavoriteWallpapers(): Flow<Result<List<WallpaperDtoModel>>> {
-        return wallpaperDao.getFavoriteWallpapers().map { entities ->
-            Result.Success(entities.map { it.toDto() })
+        emit(Unit)
+    }.flatMapLatest {
+        wallpaperDao.getFeaturedWallpapers().executeDataWithFlowCall { entities ->
+            entities.map { it.toDto() }
         }
     }
 
-    override fun getWallpapersByCategory(categoryName: String): Flow<Result<List<WallpaperDtoModel>>> {
-        return wallpaperDao.getWallpapersByCategory(categoryName).map { entities ->
-            Result.Success(entities.map { it.toDto() })
+    override fun getTopWallpapers(): Flow<Result<List<WallpaperDtoModel>>> = flow {
+        try {
+            val remote = dataSource.getTopWallpapers()
+            mergeAndSaveWallpapers(
+                remote = remote,
+                deleteOldNonFavorites = true
+            )
+        } catch (e: Exception) {
+            if (e is CancellationException) throw e
+            Timber.e(e, "Error fetching remote top wallpapers")
+        }
+        emit(Unit)
+    }.flatMapLatest {
+        wallpaperDao.getAllWallpapers().executeDataWithFlowCall { entities ->
+            entities.map { it.toDto() }
+        }
+    }
+
+    override fun getCategories(): Flow<Result<List<CategoryDtoModel>>> = flow {
+        try {
+            val remote = dataSource.getCategories()
+            if (remote.isNotEmpty()) {
+                categoryDao.deleteAllCategories()
+                categoryDao.insertCategories(remote.map { it.toEntity() })
+            }
+        } catch (e: Exception) {
+            if (e is CancellationException) throw e
+            Timber.e(e, "Error fetching remote categories")
+        }
+        emit(Unit)
+    }.flatMapLatest {
+        categoryDao.getAllCategories().executeDataWithFlowCall { entities ->
+            entities.map { it.toDto() }
+        }
+    }
+
+    override fun getFavoriteWallpapers(): Flow<Result<List<WallpaperDtoModel>>> {
+        return wallpaperDao.getFavoriteWallpapers().executeDataWithFlowCall { entities ->
+            entities.map { it.toDto() }
+        }
+    }
+
+    override fun getWallpapersByCategory(categoryName: String): Flow<Result<List<WallpaperDtoModel>>> = flow {
+        try {
+            val remote = dataSource.getWallpapersByCategory(categoryName)
+            mergeAndSaveWallpapers(remote = remote)
+        } catch (e: Exception) {
+            if (e is CancellationException) throw e
+            Timber.e(e, "Error fetching remote wallpapers by category: $categoryName")
+        }
+        emit(Unit)
+    }.flatMapLatest {
+        wallpaperDao.getWallpapersByCategory(categoryName).executeDataWithFlowCall { entities ->
+            entities.map { it.toDto() }
         }
     }
 
     override fun isFavorite(url: String): Flow<Result<Boolean>> {
-        return wallpaperDao.isFavorite(url).map { Result.Success(it) }
+        return wallpaperDao.isFavorite(url).executeDataWithFlowCall { it }
     }
 
     override fun searchWallpapers(query: String): Flow<Result<List<WallpaperDtoModel>>> {
-        return wallpaperDao.searchWallpapers(query).map { entities ->
-            Result.Success(entities.map { it.toDto() })
+        return wallpaperDao.searchWallpapers(query).executeDataWithFlowCall { entities ->
+            entities.map { it.toDto() }
         }
     }
 
@@ -124,16 +135,17 @@ class WallpaperRepositoryImpl(
                 Result.Error(Exception("Wallpaper not found"))
             }
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             Result.Error(e)
         }
     }
 
-    override suspend fun downloadWallpaper(url: String): Flow<Result<Uri>> = flow {
+    override suspend fun downloadWallpaper(url: String): Flow<Result<Uri>> = flow<Result<Uri>> {
         val request = Request.Builder().url(url).build()
         val response = okHttpClient.newCall(request).execute()
         if (!response.isSuccessful) throw Exception("Failed to download")
-        
-        val bitmap = response.body?.byteStream()?.use { BitmapFactory.decodeStream(it) } 
+
+        val bitmap = response.body?.byteStream()?.use { BitmapFactory.decodeStream(it) }
             ?: throw Exception("Failed to decode image")
 
         val filename = "PionBase_${System.currentTimeMillis()}.jpg"
@@ -149,13 +161,33 @@ class WallpaperRepositoryImpl(
             ?: throw Exception("Failed to create media store entry")
 
         context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-            bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 100, outputStream)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
         } ?: throw Exception("Failed to open output stream")
 
-        val result: Result<Uri> = Result.Success(uri)
-        emit(result)
-    }.catch { 
-        timber.log.Timber.e(it, "Download error")
-        emit(Result.Error(it)) 
+        emit(Result.Success(uri))
+    }.catch {
+        if (it is CancellationException) throw it
+        Timber.e(it, "Download error")
+        emit(Result.Error(it))
     }.flowOn(Dispatchers.IO)
+
+    private suspend fun mergeAndSaveWallpapers(
+        remote: List<WallpaperDtoModel>,
+        isFeaturedProvider: (Int, WallpaperEntity?) -> Boolean = { _, local -> local?.isFeatured ?: false },
+        deleteOldNonFavorites: Boolean = false
+    ) {
+        if (remote.isEmpty()) return
+        val localWallpapers = wallpaperDao.getAllWallpapersList().associateBy { it.imageUrl }
+        val merged = remote.mapIndexed { index, dto ->
+            val local = localWallpapers[dto.imageUrl]
+            dto.toEntity(isFeatured = isFeaturedProvider(index, local)).copy(
+                id = local?.id ?: 0,
+                isFavorite = local?.isFavorite ?: false
+            )
+        }
+        if (deleteOldNonFavorites) {
+            wallpaperDao.deleteNonFavoriteWallpapers()
+        }
+        wallpaperDao.insertWallpapers(merged)
+    }
 }
