@@ -3,7 +3,6 @@ package pion.tech.pionbase.flow
 import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
-import android.provider.MediaStore
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.intent.Intents
