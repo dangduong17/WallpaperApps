@@ -1,5 +1,6 @@
 package pion.tech.pionbase.feature.setting
 
+import kotlinx.coroutines.launch
 import com.google.android.material.color.DynamicColors
 import pion.tech.pionbase.base.BaseViewModel
 import pion.tech.pionbase.base.launchIO
@@ -50,44 +51,34 @@ class SettingViewModel(
 
     private fun loadSettings() {
         launchIO {
-            getSettingsUseCase.getEnabled().collect { result ->
-                if (result is Result.Success) {
-                    setState { copy(autoWallpaperEnabled = result.data) }
+            launch {
+                getSettingsUseCase.getEnabled().collect { result ->
+                    if (result is Result.Success) setState { copy(autoWallpaperEnabled = result.data) }
                 }
             }
-        }
-        launchIO {
-            getSettingsUseCase.getInterval().collect { result ->
-                if (result is Result.Success) {
-                    setState { copy(autoWallpaperInterval = result.data) }
+            launch {
+                getSettingsUseCase.getInterval().collect { result ->
+                    if (result is Result.Success) setState { copy(autoWallpaperInterval = result.data) }
                 }
             }
-        }
-        launchIO {
-            getLanguageUseCase().collect { result ->
-                if (result is Result.Success) {
-                    setState { copy(currentLanguageCode = result.data) }
+            launch {
+                getLanguageUseCase().collect { result ->
+                    if (result is Result.Success) setState { copy(currentLanguageCode = result.data) }
                 }
             }
-        }
-        launchIO {
-            getThemeSettingsUseCase.getThemeMode().collect { result ->
-                if (result is Result.Success) {
-                    setState { copy(themeMode = result.data) }
+            launch {
+                getThemeSettingsUseCase.getThemeMode().collect { result ->
+                    if (result is Result.Success) setState { copy(themeMode = result.data) }
                 }
             }
-        }
-        launchIO {
-            getThemeSettingsUseCase.getDynamicColorEnabled().collect { result ->
-                if (result is Result.Success) {
-                    setState { copy(dynamicColorEnabled = result.data) }
+            launch {
+                getThemeSettingsUseCase.getDynamicColorEnabled().collect { result ->
+                    if (result is Result.Success) setState { copy(dynamicColorEnabled = result.data) }
                 }
             }
-        }
-        launchIO {
-            getBatterySaverSettingsUseCase().collect { result ->
-                if (result is Result.Success) {
-                    setState { copy(batterySaverEnabled = result.data) }
+            launch {
+                getBatterySaverSettingsUseCase().collect { result ->
+                    if (result is Result.Success) setState { copy(batterySaverEnabled = result.data) }
                 }
             }
         }

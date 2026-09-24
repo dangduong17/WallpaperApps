@@ -31,7 +31,7 @@ fun ChangeLanguageFragment.startProgressAnimation() {
 
 fun ChangeLanguageFragment.preloadAndNav() {
     val tag = "preloadAndNav"
-    viewModel.preloadDataAndImages()
+    viewModel.preloadDataAndImages(requireContext().applicationContext)
     preloadJob = launchMain {
         try {
             delay(CHANGE_LANGUAGE_ANIM_DURATION)

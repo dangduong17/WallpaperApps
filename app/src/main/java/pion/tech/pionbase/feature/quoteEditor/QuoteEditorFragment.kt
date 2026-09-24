@@ -10,8 +10,6 @@ import pion.tech.pionbase.databinding.FragmentQuoteEditorBinding
 import pion.tech.pionbase.util.collectFlowOnView
 import pion.tech.pionbase.util.displayToast
 import pion.tech.pionbase.util.loadImage
-import pion.tech.pionbase.util.showSuccessSnackbar
-import pion.tech.pionbase.util.showErrorSnackbar
 
 import pion.tech.pionbase.util.loadThumbnailAndFull
 
@@ -77,18 +75,18 @@ class QuoteEditorFragment : BaseFragment<FragmentQuoteEditorBinding, QuoteEditor
             .collectFlowOnView(viewLifecycleOwner) { event ->
                 when (event) {
                     is QuoteEditorEvent.SaveSuccess -> {
-                        showSuccessSnackbar(getString(pion.tech.pionbase.R.string.save_quote_success))
+                        displayToast(getString(pion.tech.pionbase.R.string.save_quote_success))
                     }
                     is QuoteEditorEvent.SaveError -> {
-                        showErrorSnackbar(getString(pion.tech.pionbase.R.string.error, event.throwable.message))
+                        displayToast(getString(pion.tech.pionbase.R.string.error, event.throwable.message))
                     }
                     is QuoteEditorEvent.SetWallpaperSuccess -> {
                         pion.tech.pionbase.util.safeDelay(300) {
-                            showSuccessSnackbar(getString(pion.tech.pionbase.R.string.set_wallpaper_success))
+                            displayToast(getString(pion.tech.pionbase.R.string.set_wallpaper_success))
                         }
                     }
                     is QuoteEditorEvent.SetWallpaperError -> {
-                        showErrorSnackbar(getString(pion.tech.pionbase.R.string.error, event.throwable.message))
+                        displayToast(getString(pion.tech.pionbase.R.string.error, event.throwable.message))
                     }
                 }
             }

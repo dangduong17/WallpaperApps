@@ -3,6 +3,7 @@ package pion.tech.pionbase.feature.search
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.firstOrNull
 import pion.tech.pionbase.base.BaseViewModel
 import pion.tech.pionbase.base.launchIO
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
@@ -21,35 +22,47 @@ class SearchViewModel(
 
     private val searchTrigger = MutableSharedFlow<Pair<String, Boolean>>()
     private val suggestionTrigger = MutableSharedFlow<String>()
+    private var cachedCategoryTitles: List<String>? = null
 
     init {
         observeSearchQuery()
         observeSuggestions()
     }
 
+    private suspend fun getCategoryTitles(): List<String> {
+        cachedCategoryTitles?.let { return it }
+        return try {
+            val result = getCategoriesUseCase().firstOrNull()
+            if (result is Result.Success) {
+                val titles = result.data.map { it.toPresentation().title }
+                cachedCategoryTitles = titles
+                titles
+            } else {
+                emptyList()
+            }
+        } catch (_: Exception) {
+            emptyList()
+        }
+    }
+
     private fun observeSuggestions() {
         launchIO {
             suggestionTrigger.collectLatest { query ->
                 if (query.length >= 2) {
-                    getCategoriesUseCase().collect { result ->
-                        if (result is Result.Success) {
-                            val allCategories = result.data.map { it.toPresentation().title }
-                            
-                            searchWallpapersUseCase(query).collect { wallpaperResult ->
-                                val wallpaperTitles = if (wallpaperResult is Result.Success) {
-                                    wallpaperResult.data.map { it.safeTitle.replace(Regex("\\s\\d+$"), "").trim() }
-                                } else {
-                                    emptyList()
-                                }
-                                
-                                val suggestions = (allCategories + wallpaperTitles)
-                                    .filter { it.contains(query, true) }
-                                    .distinct()
-                                    .take(5)
-                                    
-                                setState { copy(suggestions = suggestions) }
-                            }
+                    val allCategories = getCategoryTitles()
+                    searchWallpapersUseCase(query).collect { wallpaperResult ->
+                        val wallpaperTitles = if (wallpaperResult is Result.Success) {
+                            wallpaperResult.data.map { it.safeTitle.replace(Regex("\\s\\d+$"), "").trim() }
+                        } else {
+                            emptyList()
                         }
+                        
+                        val suggestions = (allCategories + wallpaperTitles)
+                            .filter { it.contains(query, true) }
+                            .distinct()
+                            .take(5)
+                            
+                        setState { copy(suggestions = suggestions) }
                     }
                 } else {
                     setState { copy(suggestions = emptyList()) }

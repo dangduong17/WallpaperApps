@@ -20,6 +20,7 @@ class SplashFragment :
     override fun init(view: View, savedInstanceState: Bundle?) {
         initView()
         onBackEvent()
+        viewModel.preloadLanguageFlags(requireContext().applicationContext)
     }
 
     override fun subscribeObserver(view: View) {

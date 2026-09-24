@@ -192,7 +192,7 @@ class EditWallpaperActivity : AppCompatActivity() {
                     launchMain {
                         val mainIntent = Intent(this@EditWallpaperActivity, MainActivity::class.java).apply {
                             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                            putExtra("show_success_msg", true)
+                            putExtra(Constant.KEY_SHOW_SUCCESS_MSG, true)
                         }
                         startActivity(mainIntent)
                         finish()

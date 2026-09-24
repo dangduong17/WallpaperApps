@@ -23,7 +23,6 @@ import pion.tech.pionbase.feature.home.bottomSheet.WallpaperPreviewBottomSheet
 import pion.tech.pionbase.service.LiveWallpaperService
 import pion.tech.pionbase.util.collectFlowOnView
 import pion.tech.pionbase.util.displayToast
-import pion.tech.pionbase.util.showSuccessSnackbar
 import pion.tech.pionbase.util.handleUiState
 import pion.tech.pionbase.util.isGif
 import pion.tech.pionbase.util.isVideo
@@ -100,10 +99,10 @@ class HomeFragment :
                         if (outputFile.exists() && outputFile.length() > 0) {
                             outputFile.setReadable(true, false)
                             
-                            requireContext().getSharedPreferences("wallpaper_prefs", android.content.Context.MODE_PRIVATE)
+                            requireContext().getSharedPreferences(pion.tech.pionbase.util.Constant.PREF_WALLPAPER, android.content.Context.MODE_PRIVATE)
                                 .edit()
-                                .putString("selected_gif_path", outputFile.absolutePath)
-                                .putLong("gif_updated_at", System.currentTimeMillis())
+                                .putString(pion.tech.pionbase.util.Constant.KEY_SELECTED_GIF_PATH, outputFile.absolutePath)
+                                .putLong(pion.tech.pionbase.util.Constant.KEY_GIF_UPDATED_AT, System.currentTimeMillis())
                                 .apply()
                             
                             val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER)
@@ -121,7 +120,7 @@ class HomeFragment :
                             displayToast(getString(R.string.error_prepare_file))
                         }
                     } catch (e: Exception) {
-                        Timber.e(e, "Lỗi copy file")
+                        Timber.e(e, "Error copying file")
                         displayToast(getString(R.string.error_copying_file))
                     }
                 } else {
@@ -132,7 +131,7 @@ class HomeFragment :
                     }
                     viewModel.setWallpaper(uri, flag)
                     pion.tech.pionbase.util.safeDelay(300) {
-                        showSuccessSnackbar(getString(R.string.set_wallpaper_success))
+                        displayToast(getString(R.string.set_wallpaper_success))
                     }                }
             }
         

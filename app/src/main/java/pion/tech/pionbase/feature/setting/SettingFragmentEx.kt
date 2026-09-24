@@ -2,7 +2,6 @@ package pion.tech.pionbase.feature.setting
 
 import android.annotation.SuppressLint
 import android.widget.NumberPicker
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
@@ -10,6 +9,7 @@ import androidx.work.WorkManager
 import java.util.concurrent.TimeUnit
 import pion.tech.pionbase.R
 import pion.tech.pionbase.util.ThemeManager
+import pion.tech.pionbase.util.displayToast
 import pion.tech.pionbase.util.setPreventDoubleClickScaleView
 import pion.tech.pionbase.worker.AutoWallpaperWorker
 import timber.log.Timber
@@ -109,10 +109,10 @@ fun SettingFragment.showClearCacheDialog() {
             dialog.dismiss()
             viewModel.clearCache(
                 onSuccess = {
-                    Toast.makeText(context, getString(R.string.clear_cache_success), Toast.LENGTH_SHORT).show()
+                    displayToast(getString(R.string.clear_cache_success))
                 },
                 onError = {
-                    Toast.makeText(context, getString(R.string.clear_cache_failed), Toast.LENGTH_SHORT).show()
+                    displayToast(getString(R.string.clear_cache_failed))
                 },
             )
         }

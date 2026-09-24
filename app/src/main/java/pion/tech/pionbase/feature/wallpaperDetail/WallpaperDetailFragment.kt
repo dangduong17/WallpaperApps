@@ -16,8 +16,6 @@ import pion.tech.pionbase.base.BaseFragment
 import pion.tech.pionbase.databinding.FragmentWallpaperDetailBinding
 import pion.tech.pionbase.util.collectFlowOnView
 import pion.tech.pionbase.util.displayToast
-import pion.tech.pionbase.util.showSuccessSnackbar
-import pion.tech.pionbase.util.showErrorSnackbar
 import pion.tech.pionbase.util.loadImage
 import pion.tech.pionbase.util.requestPermissionsWithPermissionX
 import pion.tech.pionbase.util.setPreventDoubleClickScaleView
@@ -112,11 +110,11 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
                     }
                     is WallpaperDetailEvent.SetWallpaperSuccess -> {
                         pion.tech.pionbase.util.safeDelay(300) {
-                            showSuccessSnackbar(getString(R.string.set_wallpaper_success))
+                            displayToast(getString(R.string.set_wallpaper_success))
                         }
                     }
                     is WallpaperDetailEvent.SetWallpaperError -> {
-                        showErrorSnackbar(getString(R.string.error, event.throwable.message ?: ""))
+                        displayToast(getString(R.string.error, event.throwable.message ?: ""))
                     }
                 }
             }

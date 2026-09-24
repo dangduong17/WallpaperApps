@@ -8,12 +8,12 @@ import android.os.Looper
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.fragment.NavHostFragment
-import com.google.android.material.snackbar.Snackbar
 import pion.tech.pionbase.data.repository.dataStoreRepository.DataStoreRepository
 import pion.tech.pionbase.feature.language.LanguageManager
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -27,6 +27,7 @@ import pion.tech.pionbase.base.firebaseAnalytics.FirebaseEventNameSanitizer
 import pion.tech.pionbase.base.lifecycleCallback.FragmentLifecycleCallbacksImpl
 import pion.tech.pionbase.util.AppRemoteConfig
 import pion.tech.pionbase.util.collectFlowOnView
+import pion.tech.pionbase.util.Constant
 import timber.log.Timber
 import kotlin.getValue
 
@@ -36,13 +37,12 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val RESTART_DELAY_MS = 500L
-        private const val EXTRA_SHOW_SUCCESS_MSG = "show_success_msg"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        // Hiện Snackbar nếu có thông báo thành công từ EditWallpaperActivity
+        // Hiện Toast nếu có thông báo thành công từ EditWallpaperActivity
         checkSuccessMessage(intent)
         
         enableEdgeToEdge()
@@ -67,12 +67,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkSuccessMessage(intent: Intent?) {
-        if (intent?.getBooleanExtra(EXTRA_SHOW_SUCCESS_MSG, false) == true) {
+        if (intent?.getBooleanExtra(Constant.KEY_SHOW_SUCCESS_MSG, false) == true) {
             window.decorView.post {
-                Snackbar.make(
-                    findViewById(android.R.id.content),
+                Toast.makeText(
+                    this,
                     getString(R.string.set_wallpaper_success),
-                    Snackbar.LENGTH_SHORT
+                    Toast.LENGTH_SHORT
                 ).show()
             }
         }

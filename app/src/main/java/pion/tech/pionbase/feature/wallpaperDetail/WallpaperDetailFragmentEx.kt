@@ -14,7 +14,6 @@ import pion.tech.pionbase.R
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
 import pion.tech.pionbase.feature.home.EditWallpaperActivity
 import pion.tech.pionbase.util.displayToast
-import pion.tech.pionbase.util.showErrorSnackbar
 import pion.tech.pionbase.util.isGif
 import pion.tech.pionbase.util.loadImage
 import pion.tech.pionbase.util.loadThumbnailAndFull
@@ -62,7 +61,7 @@ fun WallpaperDetailFragment.settingEvent() {
                 }
                 startActivity(intent)
             } else {
-                showErrorSnackbar(getString(R.string.error_set_gif))
+                displayToast(getString(R.string.error_set_gif))
             }
             return@setPreventDoubleClickScaleView
         }

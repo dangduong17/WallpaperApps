@@ -13,15 +13,13 @@ import timber.log.Timber
 class SplashViewModel(
     private val getIsFirstLaunchUseCase: GetIsFirstLaunchUseCase,
     private val getLanguagesUseCase: GetLanguagesUseCase,
-    private val context: Context
 ) : BaseViewModel<SplashUiState, Nothing>(SplashUiState()) {
 
     init {
         checkFirstLaunch()
-        preloadLanguageFlags()
     }
 
-    private fun preloadLanguageFlags() {
+    fun preloadLanguageFlags(context: Context) {
         launchIO {
             try {
                 getLanguagesUseCase().collect { result ->

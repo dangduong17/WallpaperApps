@@ -15,10 +15,9 @@ class ChangeLanguageViewModel(
     private val getFeaturedWallpapersUseCase: GetFeaturedWallpapersUseCase,
     private val getTopWallpapersUseCase: GetTopWallpapersUseCase,
     private val getCategoriesUseCase: GetCategoriesUseCase,
-    private val context: Context
 ) : BaseViewModel<Unit, Nothing>(Unit) {
 
-    fun preloadDataAndImages() {
+    fun preloadDataAndImages(context: Context) {
         launchIO {
             try {
                 // 1. Pre-fetch API & save to Room DB

@@ -105,7 +105,7 @@ Luồng xử lý cài đặt hình nền từ màn hình chi tiết (`WallpaperD
    `WallpaperManager.setBitmap()`            Khởi chạy Intent cài đặt Live Wallpaper:
                      │                        `WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER`
                      ▼                        Trỏ tới `LiveWallpaperService` / `VideoWallpaperService`
-     Hiển thị Snackbar thành công                              │
+     Hiển thị Toast thành công                              │
                                                                ▼
                                               [LiveWallpaperService / VideoWallpaperService]
                                               - Chạy luồng vẽ phụ HandlerThread / SurfaceView

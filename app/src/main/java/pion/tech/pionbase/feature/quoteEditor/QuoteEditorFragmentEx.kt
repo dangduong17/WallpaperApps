@@ -19,8 +19,6 @@ import pion.tech.pionbase.feature.quoteEditor.adapter.FontAdapter
 import pion.tech.pionbase.feature.quoteEditor.adapter.FontItem
 import pion.tech.pionbase.feature.quoteEditor.bottomSheet.QuoteBottomSheet
 import pion.tech.pionbase.util.displayToast
-import pion.tech.pionbase.util.showSuccessSnackbar
-import pion.tech.pionbase.util.showErrorSnackbar
 import pion.tech.pionbase.util.safeShowBottomSheet
 import pion.tech.pionbase.util.setPreventDoubleClick
 

@@ -74,3 +74,4 @@ app/release/output.json
 .claude/
 .agents/
 /.serena/
+/.artifacts/
