@@ -27,7 +27,6 @@ import pion.tech.pionbase.base.firebaseAnalytics.FirebaseEventNameSanitizer
 import pion.tech.pionbase.base.lifecycleCallback.FragmentLifecycleCallbacksImpl
 import pion.tech.pionbase.util.AppRemoteConfig
 import pion.tech.pionbase.util.collectFlowOnView
-import pion.tech.pionbase.util.Constant
 import timber.log.Timber
 import kotlin.getValue
 
@@ -37,6 +36,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val RESTART_DELAY_MS = 500L
+        private const val EXTRA_SHOW_SUCCESS_MSG = "show_success_msg"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkSuccessMessage(intent: Intent?) {
-        if (intent?.getBooleanExtra(Constant.KEY_SHOW_SUCCESS_MSG, false) == true) {
+        if (intent?.getBooleanExtra(EXTRA_SHOW_SUCCESS_MSG, false) == true) {
             window.decorView.post {
                 Toast.makeText(
                     this,
