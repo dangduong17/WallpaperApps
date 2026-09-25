@@ -31,6 +31,12 @@ fun SettingFragment.onBackPressed() {
 fun SettingFragment.bindView() {
 }
 
+fun SettingFragment.historyEvent() {
+    binding.btnHistory.setPreventDoubleClickScaleView {
+        navigator.safeNavigate(R.id.action_settingFragment_to_historyFragment)
+    }
+}
+
 fun SettingFragment.languageEvent() {
     binding.btnLanguage.setPreventDoubleClickScaleView {
         navigator.safeNavigate(R.id.action_settingFragment_to_languageFragment)

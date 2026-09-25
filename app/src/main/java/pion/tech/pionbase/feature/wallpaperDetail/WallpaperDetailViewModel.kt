@@ -4,7 +4,9 @@ import kotlinx.coroutines.flow.Flow
 import pion.tech.pionbase.base.BaseViewModel
 import pion.tech.pionbase.base.launchIO
 import pion.tech.pionbase.base.launchMain
+import pion.tech.pionbase.data.model.history.WallpaperHistoryUIModel
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
+import pion.tech.pionbase.domain.usecase.history.AddWallpaperHistoryUseCase
 import pion.tech.pionbase.domain.usecase.home.DownloadImageToBitmapUseCase
 import pion.tech.pionbase.domain.usecase.home.SetWallpaperUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.DownloadWallpaperUseCase
@@ -22,6 +24,7 @@ class WallpaperDetailViewModel(
     private val downloadWallpaperUseCase: DownloadWallpaperUseCase,
     private val setWallpaperUseCase: SetWallpaperUseCase,
     private val downloadImageToBitmapUseCase: DownloadImageToBitmapUseCase,
+    private val addWallpaperHistoryUseCase: AddWallpaperHistoryUseCase,
 ) : BaseViewModel<WallpaperDetailUiState, WallpaperDetailEvent>(WallpaperDetailUiState()) {
 
     fun downloadWallpaper() {
@@ -30,6 +33,7 @@ class WallpaperDetailViewModel(
         handleApiCall(
             apiCall = { downloadWallpaperUseCase(currentWallpaper.imageUrl) },
             onSuccess = { uri ->
+                trackHistory(currentWallpaper, WallpaperHistoryUIModel.TYPE_DOWNLOAD)
                 launchMain {
                     kotlinx.coroutines.delay(ACTION_DELAY_MS)
                     setState { copy(isLoading = false) }
@@ -51,6 +55,7 @@ class WallpaperDetailViewModel(
         Timber.d("DEBUG: URL=${item.imageUrl}, isGif=$isGif")
         setState { copy(wallpaper = item, isGif = isGif) }
         checkFavoriteStatus(item.imageUrl)
+        trackHistory(item, WallpaperHistoryUIModel.TYPE_VIEW)
     }
 
     fun applyWallpaper(uri: android.net.Uri, which: Int) {
@@ -108,6 +113,7 @@ class WallpaperDetailViewModel(
                 apiCall().collect { result ->
                     when (result) {
                         is Result.Success -> {
+                            uiState.value.wallpaper?.let { trackHistory(it, WallpaperHistoryUIModel.TYPE_SET) }
                             launchMain {
                                 setEvent(WallpaperDetailEvent.SetWallpaperSuccess)
                             }
@@ -126,6 +132,19 @@ class WallpaperDetailViewModel(
                 }
             }
         }
+    }
+
+    private fun trackHistory(item: WallpaperUIModel, type: String) {
+        handleApiCall(
+            apiCall = {
+                addWallpaperHistoryUseCase(
+                    imageUrl = item.imageUrl,
+                    thumbnailUrl = item.resolvedThumbnailUrl,
+                    title = item.title,
+                    type = type
+                )
+            }
+        )
     }
 
     private fun checkFavoriteStatus(url: String) {

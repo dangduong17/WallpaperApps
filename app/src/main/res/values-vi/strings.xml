@@ -122,4 +122,10 @@
     <string name="clear_cache_confirm_message">Bạn có chắc chắn muốn xóa bộ nhớ đệm? Hành động này sẽ giúp giải phóng dung lượng bộ nhớ máy.</string>
     <string name="clear_cache_success">Đã xóa bộ nhớ đệm thành công!</string>
     <string name="clear_cache_failed">Xóa bộ nhớ đệm thất bại!</string>
+    <string name="download_history_recent_views">Lịch sử &amp; Đã xem</string>
+    <string name="recent_views">Đã xem gần đây</string>
+    <string name="download_and_set_history">Lịch sử cài đặt &amp; Tải về</string>
+    <string name="no_history_yet">Chưa có lịch sử nào</string>
+    <string name="clear_history_title">Xóa lịch sử</string>
+    <string name="clear_history_message">Bạn có chắc chắn muốn xóa lịch sử này không?</string>
 </resources>

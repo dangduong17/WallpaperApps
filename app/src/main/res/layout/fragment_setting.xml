@@ -98,6 +98,47 @@
                     app:tint="@color/icon_tint" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!-- Download History & Recent Views -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/btnHistory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8dp"
+                android:paddingVertical="@dimen/_12dp">
+
+                <ImageView
+                    android:id="@+id/ivHistoryIcon"
+                    android:layout_width="@dimen/_24dp"
+                    android:layout_height="@dimen/_24dp"
+                    android:src="@android:drawable/ic_menu_recent_history"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/icon_tint" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_16dp"
+                    android:text="@string/download_history_recent_views"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/_16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/ivHistoryArrow"
+                    app:layout_constraintStart_toEndOf="@id/ivHistoryIcon"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/ivHistoryArrow"
+                    android:layout_width="@dimen/_24dp"
+                    android:layout_height="@dimen/_24dp"
+                    android:src="@android:drawable/ic_media_play"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/icon_tint" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <!-- Language -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/btnLanguage"

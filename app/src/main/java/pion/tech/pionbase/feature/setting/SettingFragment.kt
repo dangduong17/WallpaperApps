@@ -20,6 +20,7 @@ class SettingFragment :
     override fun init(view: View, savedInstanceState: Bundle?) {
         backEvent()
         bindView()
+        historyEvent()
         languageEvent()
         themeEvent()
         dynamicColorEvent()

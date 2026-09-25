@@ -131,4 +131,10 @@
     <string name="qs_tile_changing_wallpaper" translatable="false">Changing wallpaper&#8230;</string>
     <string name="qs_tile_wallpaper_changed_success" translatable="false">Wallpaper changed successfully!</string>
     <string name="qs_tile_wallpaper_changed_error" translatable="false">Failed to change wallpaper</string>
+    <string name="download_history_recent_views" translatable="false">Download History &amp; Recent Views</string>
+    <string name="recent_views" translatable="false">Recent Views</string>
+    <string name="download_and_set_history" translatable="false">Downloads &amp; Applied</string>
+    <string name="no_history_yet" translatable="false">No history available yet</string>
+    <string name="clear_history_title" translatable="false">Clear History</string>
+    <string name="clear_history_message" translatable="false">Are you sure you want to clear this history?</string>
 </resources>

@@ -100,6 +100,9 @@
         <action
             android:id="@+id/action_settingFragment_to_languageFragment"
             app:destination="@id/languageFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
     </fragment>
     <fragment
         android:id="@+id/changeLanguageFragment"
@@ -164,4 +167,14 @@
         android:name="pion.tech.pionbase.feature.urlWallpaper.UrlWallpaperFragment"
         android:label="UrlWallpaperFragment"
         tools:layout="@layout/fragment_url_wallpaper" />
+
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="pion.tech.pionbase.feature.history.HistoryFragment"
+        android:label="HistoryFragment"
+        tools:layout="@layout/fragment_history">
+        <action
+            android:id="@+id/action_historyFragment_to_wallpaperDetailFragment"
+            app:destination="@id/wallpaperDetailFragment" />
+    </fragment>
 </navigation>
