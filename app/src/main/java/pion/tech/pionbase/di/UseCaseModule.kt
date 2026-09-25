@@ -33,6 +33,7 @@ import pion.tech.pionbase.domain.usecase.wallpaper.GetTopWallpapersUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.GetWallpapersByCategoryUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.IsFavoriteWallpaperUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.SearchWallpapersUseCase
+import pion.tech.pionbase.domain.usecase.wallpaper.SetRandomNextWallpaperUseCase
 import pion.tech.pionbase.domain.usecase.wallpaper.ToggleFavoriteUseCase
 
 val homeUseCaseModule = module {
@@ -60,6 +61,7 @@ val wallpaperUseCaseModule = module {
     factoryOf(::GetCacheSizeUseCase)
     factoryOf(::ClearCacheUseCase)
     factoryOf(::FormatCacheSizeUseCase)
+    factoryOf(::SetRandomNextWallpaperUseCase)
 }
 
 val languageUseCaseModule = module {

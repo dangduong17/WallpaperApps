@@ -127,4 +127,8 @@
     <string name="clear_cache_confirm_message" translatable="false">Are you sure you want to clear the cache? This will free up storage space on your device.</string>
     <string name="clear_cache_success" translatable="false">Cache cleared successfully!</string>
     <string name="clear_cache_failed" translatable="false">Failed to clear cache!</string>
+    <string name="qs_tile_random_wallpaper" translatable="false">Next Wallpaper</string>
+    <string name="qs_tile_changing_wallpaper" translatable="false">Changing wallpaper&#8230;</string>
+    <string name="qs_tile_wallpaper_changed_success" translatable="false">Wallpaper changed successfully!</string>
+    <string name="qs_tile_wallpaper_changed_error" translatable="false">Failed to change wallpaper</string>
 </resources>
