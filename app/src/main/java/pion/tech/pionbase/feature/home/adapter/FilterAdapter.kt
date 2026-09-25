@@ -50,9 +50,12 @@ class FilterAdapter :
             if (item.isSelected) {
                 cardFilter.setCardBackgroundColor(ContextCompat.getColor(root.context, R.color.color_pink_E91E63))
                 cardFilter.strokeWidth = 0
+                tvFilterName.setTextColor(ContextCompat.getColor(root.context, R.color.white))
             } else {
                 cardFilter.setCardBackgroundColor(Color.TRANSPARENT)
                 cardFilter.strokeWidth = 1
+                cardFilter.strokeColor = ContextCompat.getColor(root.context, R.color.divider_color)
+                tvFilterName.setTextColor(ContextCompat.getColor(root.context, R.color.text_primary))
             }
             
             root.setPreventDoubleClick {

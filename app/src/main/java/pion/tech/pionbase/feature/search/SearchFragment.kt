@@ -3,7 +3,6 @@ package pion.tech.pionbase.feature.search
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.core.widget.addTextChangedListener
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import pion.tech.pionbase.R

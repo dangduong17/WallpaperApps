@@ -18,7 +18,7 @@
         android:paddingHorizontal="@dimen/_16dp"
         android:paddingVertical="@dimen/_6dp"
         tools:text="Nature"
-        android:textColor="@color/white"
+        android:textColor="@color/text_primary"
         android:textSize="@dimen/_12sp" />
 
 </com.google.android.material.card.MaterialCardView>
