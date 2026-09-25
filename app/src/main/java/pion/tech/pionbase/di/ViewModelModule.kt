@@ -7,6 +7,7 @@ import pion.tech.pionbase.app.CommonViewModel
 import pion.tech.pionbase.feature.categoryDetail.CategoryDetailViewModel
 import pion.tech.pionbase.feature.changeLanguage.ChangeLanguageViewModel
 import pion.tech.pionbase.feature.favorite.FavoriteViewModel
+import pion.tech.pionbase.feature.history.HistoryViewModel
 import pion.tech.pionbase.feature.home.HomeViewModel
 import pion.tech.pionbase.feature.language.LanguageViewModel
 import pion.tech.pionbase.feature.onboard.OnboardViewModel
@@ -33,4 +34,5 @@ val viewModelModule =
         viewModelOf(::CategoryDetailViewModel)
         viewModelOf(::UrlWallpaperViewModel)
         viewModelOf(::QuoteEditorViewModel)
+        viewModelOf(::HistoryViewModel)
     }

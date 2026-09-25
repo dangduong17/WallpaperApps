@@ -6,6 +6,10 @@ import pion.tech.pionbase.domain.usecase.api.GetAppCategoryUseCase
 import pion.tech.pionbase.domain.usecase.api.GetTemplateDataUseCase
 import pion.tech.pionbase.domain.usecase.common.GetIsPremiumUseCase
 import pion.tech.pionbase.domain.usecase.common.SetIsPremiumUseCase
+import pion.tech.pionbase.domain.usecase.history.AddWallpaperHistoryUseCase
+import pion.tech.pionbase.domain.usecase.history.ClearWallpaperHistoryUseCase
+import pion.tech.pionbase.domain.usecase.history.GetDownloadAndSetHistoryUseCase
+import pion.tech.pionbase.domain.usecase.history.GetRecentViewsUseCase
 import pion.tech.pionbase.domain.usecase.home.DownloadImageToBitmapUseCase
 import pion.tech.pionbase.domain.usecase.home.GetInstalledAppsUseCase
 import pion.tech.pionbase.domain.usecase.home.SetWallpaperUseCase
@@ -87,6 +91,13 @@ val quoteUseCaseModule = module {
     factoryOf(::SaveQuoteWallpaperUseCase)
 }
 
+val historyUseCaseModule = module {
+    factoryOf(::AddWallpaperHistoryUseCase)
+    factoryOf(::GetRecentViewsUseCase)
+    factoryOf(::GetDownloadAndSetHistoryUseCase)
+    factoryOf(::ClearWallpaperHistoryUseCase)
+}
+
 val useCaseModule = module {
     includes(
         homeUseCaseModule,
@@ -95,5 +106,6 @@ val useCaseModule = module {
         apiUseCaseModule,
         commonUseCaseModule,
         quoteUseCaseModule,
+        historyUseCaseModule,
     )
 }

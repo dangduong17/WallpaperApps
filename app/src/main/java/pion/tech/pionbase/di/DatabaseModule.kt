@@ -8,6 +8,7 @@ import pion.tech.pionbase.data.database.AppDatabase
 import pion.tech.pionbase.data.database.dao.CategoryDao
 import pion.tech.pionbase.data.database.dao.DummyDao
 import pion.tech.pionbase.data.database.dao.WallpaperDao
+import pion.tech.pionbase.data.database.dao.WallpaperHistoryDao
 
 val databaseModule =
     module {
@@ -33,4 +34,5 @@ val databaseModule =
         single<DummyDao> { get<AppDatabase>().dummyDao() }
         single<WallpaperDao> { get<AppDatabase>().wallpaperDao() }
         single<CategoryDao> { get<AppDatabase>().categoryDao() }
+        single<WallpaperHistoryDao> { get<AppDatabase>().wallpaperHistoryDao() }
     }

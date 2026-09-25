@@ -10,6 +10,8 @@ import pion.tech.pionbase.data.repository.cacheRepository.CacheRepository
 import pion.tech.pionbase.data.repository.cacheRepository.CacheRepositoryImpl
 import pion.tech.pionbase.data.repository.dataStoreRepository.DataStoreRepository
 import pion.tech.pionbase.data.repository.dataStoreRepository.DataStoreRepositoryImpl
+import pion.tech.pionbase.data.repository.historyRepository.HistoryRepository
+import pion.tech.pionbase.data.repository.historyRepository.HistoryRepositoryImpl
 import pion.tech.pionbase.data.repository.installedAppRepository.InstalledAppsRepository
 import pion.tech.pionbase.data.repository.installedAppRepository.InstalledAppsRepositoryImpl
 import pion.tech.pionbase.data.repository.languageRepository.LanguageRepository
@@ -30,4 +32,5 @@ val repositoryModule =
         singleOf(::WallpaperRepositoryImpl) bind WallpaperRepository::class
         singleOf(::QuoteRepositoryImpl) bind QuoteRepository::class
         singleOf(::CacheRepositoryImpl) bind CacheRepository::class
+        singleOf(::HistoryRepositoryImpl) bind HistoryRepository::class
     }
