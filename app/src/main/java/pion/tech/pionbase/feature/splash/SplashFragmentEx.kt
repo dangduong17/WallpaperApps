@@ -49,7 +49,7 @@ fun SplashFragment.goToNextScreen() {
         } else {
             R.id.action_splashFragment_to_homeFragment
         }
-    navigator.navigateTo(destination)
+    navigator.safeNavigate(destination)
 }
 
 fun SplashFragment.isCameFromLanguage(): Boolean = navigator.isCameFrom(R.id.languageFragment)

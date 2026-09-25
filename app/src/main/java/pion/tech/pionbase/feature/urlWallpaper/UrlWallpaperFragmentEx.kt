@@ -11,7 +11,7 @@ fun UrlWallpaperFragment.initView() {
 
 fun UrlWallpaperFragment.settingEvent() {
     binding.btnBack.setPreventDoubleClickScaleView {
-        navigator.navigateUp()
+        navigator.safeNavigateUp()
     }
 
     binding.btnPreview.setPreventDoubleClickScaleView {

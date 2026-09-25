@@ -58,9 +58,7 @@ class SearchFragment :
     }
 
     override fun onClickWallpaper(item: WallpaperUIModel) {
-        if (isResumed && navigator.getCurrentDestinationId() == R.id.searchFragment) {
-            val action = SearchFragmentDirections.actionSearchFragmentToWallpaperDetailFragment(item)
-            navigator.navigateTo(action)
-        }
+        val action = SearchFragmentDirections.actionSearchFragmentToWallpaperDetailFragment(item)
+        navigator.safeNavigate(action)
     }
 }

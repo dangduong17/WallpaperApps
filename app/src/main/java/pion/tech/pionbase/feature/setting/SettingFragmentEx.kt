@@ -24,7 +24,7 @@ fun SettingFragment.backEvent() {
 }
 
 fun SettingFragment.onBackPressed() {
-    navigator.navigateUp()
+    navigator.safeNavigateUp()
 }
 
 @SuppressLint("SetTextI18n")
@@ -33,7 +33,7 @@ fun SettingFragment.bindView() {
 
 fun SettingFragment.languageEvent() {
     binding.btnLanguage.setPreventDoubleClickScaleView {
-        navigator.navigateTo(R.id.action_settingFragment_to_languageFragment)
+        navigator.safeNavigate(R.id.action_settingFragment_to_languageFragment)
     }
 }
 

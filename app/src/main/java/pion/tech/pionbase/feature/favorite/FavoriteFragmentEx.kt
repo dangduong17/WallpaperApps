@@ -11,6 +11,6 @@ fun FavoriteFragment.initView() {
 
 fun FavoriteFragment.settingEvent() {
     binding.ivBack.setPreventDoubleClickScaleView {
-        navigator.navigateUp()
+        navigator.safeNavigateUp()
     }
 }

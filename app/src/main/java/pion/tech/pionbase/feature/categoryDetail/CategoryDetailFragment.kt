@@ -52,9 +52,7 @@ class CategoryDetailFragment :
     }
 
     override fun onClickWallpaper(item: WallpaperUIModel) {
-        if (isResumed && navigator.getCurrentDestinationId() == R.id.categoryDetailFragment) {
-            val action = CategoryDetailFragmentDirections.actionCategoryDetailFragmentToWallpaperDetailFragment(item)
-            navigator.navigateTo(action)
-        }
+        val action = CategoryDetailFragmentDirections.actionCategoryDetailFragmentToWallpaperDetailFragment(item)
+        navigator.safeNavigate(action)
     }
 }

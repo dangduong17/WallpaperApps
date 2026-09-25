@@ -13,6 +13,6 @@ fun CategoryDetailFragment.initView() {
 
 fun CategoryDetailFragment.settingEvent() {
     binding.ivBack.setPreventDoubleClickScaleView {
-        navigator.navigateUp()
+        navigator.safeNavigateUp()
     }
 }

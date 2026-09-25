@@ -44,7 +44,7 @@ fun ChangeLanguageFragment.preloadAndNav() {
 }
 
 fun ChangeLanguageFragment.goToNextScreen() {
-    navigator.navigateTo(R.id.action_changeLanguageFragment_to_homeFragment)
+    navigator.safeNavigate(R.id.action_changeLanguageFragment_to_homeFragment)
 }
 
 fun ChangeLanguageFragment.releaseAnimation() {

@@ -39,9 +39,9 @@ fun LanguageFragment.applySelectedLanguage() {
 
 fun LanguageFragment.navigateToNextScreen() {
     if (isCameFromSetting()) {
-        navigator.navigateTo(R.id.action_languageFragment_to_splashFragment)
+        navigator.safeNavigate(R.id.action_languageFragment_to_splashFragment)
     } else {
-        navigator.navigateTo(R.id.action_languageFragment_to_changeLanguageFragment)
+        navigator.safeNavigate(R.id.action_languageFragment_to_changeLanguageFragment)
     }
 }
 

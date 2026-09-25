@@ -35,6 +35,6 @@ fun SearchFragment.initView() {
 
 fun SearchFragment.settingEvent() {
     binding.ivBack.setPreventDoubleClickScaleView {
-        navigator.navigateUp()
+        navigator.safeNavigateUp()
     }
 }

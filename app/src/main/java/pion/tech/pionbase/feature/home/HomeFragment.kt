@@ -166,17 +166,13 @@ class HomeFragment :
 
     override fun onClickWallpaper(item: WallpaperUIModel) {
         Timber.d("HomeFragment: onClickWallpaper called for: ${item.imageUrl}")
-        if (isResumed && navigator.getCurrentDestinationId() == R.id.homeFragment) {
-            val action = HomeFragmentDirections.actionHomeFragmentToWallpaperDetailFragment(item)
-            navigator.navigateTo(action)
-        }
+        val action = HomeFragmentDirections.actionHomeFragmentToWallpaperDetailFragment(item)
+        navigator.safeNavigate(action)
     }
 
     override fun onClickCategory(item: CategoryUIModel) {
         Timber.d("HomeFragment: onClickCategory called for: ${item.title}")
-        if (isResumed && navigator.getCurrentDestinationId() == R.id.homeFragment) {
-            val action = HomeFragmentDirections.actionHomeFragmentToCategoryDetailFragment(item.title)
-            navigator.navigateTo(action)
-        }
+        val action = HomeFragmentDirections.actionHomeFragmentToCategoryDetailFragment(item.title)
+        navigator.safeNavigate(action)
     }
 }

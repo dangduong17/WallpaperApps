@@ -41,9 +41,7 @@ class FavoriteFragment :
     }
 
     override fun onClickWallpaper(item: WallpaperUIModel) {
-        if (isResumed && navigator.getCurrentDestinationId() == R.id.favoriteFragment) {
-            val action = FavoriteFragmentDirections.actionFavoriteFragmentToWallpaperDetailFragment(item)
-            navigator.navigateTo(action)
-        }
+        val action = FavoriteFragmentDirections.actionFavoriteFragmentToWallpaperDetailFragment(item)
+        navigator.safeNavigate(action)
     }
 }

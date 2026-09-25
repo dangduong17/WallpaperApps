@@ -26,9 +26,7 @@ fun WallpaperDetailFragment.initView() {
 
 fun WallpaperDetailFragment.settingEvent() {
     binding.ivBack.setPreventDoubleClickScaleView {
-        if (isResumed && navigator.getCurrentDestinationId() == R.id.wallpaperDetailFragment) {
-            navigator.navigateUp()
-        }
+        navigator.safeNavigateUp()
     }
 
     binding.fabFavorite.setPreventDoubleClickScaleView {
@@ -96,9 +94,9 @@ fun WallpaperDetailFragment.settingEvent() {
     
     binding.fabAddQuote.setPreventDoubleClickScaleView {
         val currentWallpaper = viewModel.uiState.value.wallpaper
-        if (currentWallpaper != null && isResumed && navigator.getCurrentDestinationId() == R.id.wallpaperDetailFragment) {
+        if (currentWallpaper != null) {
             val action = WallpaperDetailFragmentDirections.actionWallpaperDetailFragmentToQuoteEditorFragment(currentWallpaper)
-            navigator.navigateTo(action)
+            navigator.safeNavigate(action)
         }
     }
 

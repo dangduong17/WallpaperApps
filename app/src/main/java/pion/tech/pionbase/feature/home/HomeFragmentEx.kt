@@ -65,15 +65,15 @@ fun HomeFragment.backEvent() {
 fun HomeFragment.settingEvent() {
     // Set listeners on the containers (FrameLayouts) for a larger touch target
     binding.btnProfile.setPreventDoubleClickScaleView {
-        navigator.navigateTo(R.id.action_homeFragment_to_settingFragment)
+        navigator.safeNavigate(R.id.action_homeFragment_to_settingFragment)
     }
 
     binding.btnFavorite.setPreventDoubleClickScaleView {
-        navigator.navigateTo(R.id.action_homeFragment_to_favoriteFragment)
+        navigator.safeNavigate(R.id.action_homeFragment_to_favoriteFragment)
     }
 
     binding.btnSearch.setPreventDoubleClickScaleView {
-        navigator.navigateTo(R.id.action_homeFragment_to_searchFragment)
+        navigator.safeNavigate(R.id.action_homeFragment_to_searchFragment)
     }
     
     binding.btnHome.setPreventDoubleClickScaleView {
@@ -81,7 +81,7 @@ fun HomeFragment.settingEvent() {
     }
 
     binding.btnUrlWallpaper.setPreventDoubleClickScaleView {
-        navigator.navigateTo(R.id.action_homeFragment_to_urlWallpaperFragment)
+        navigator.safeNavigate(R.id.action_homeFragment_to_urlWallpaperFragment)
     }
 
     binding.btnPickPhoto.setPreventDoubleClickScaleView {

@@ -130,9 +130,7 @@ fun QuoteEditorFragment.highlightTab(index: Int) {
 
 fun QuoteEditorFragment.settingEvent() {
     binding.ivBack.setPreventDoubleClick {
-        if (isResumed && navigator.getCurrentDestinationId() == R.id.quoteEditorFragment) {
-            navigator.navigateUp()
-        }
+        navigator.safeNavigateUp()
     }
 
     binding.sliderTextSize.addOnChangeListener { _, value, _ ->

@@ -30,5 +30,5 @@ fun OnboardFragment.nextPage() {
 }
 
 fun OnboardFragment.goToHomeEvent() {
-    navigator.navigateTo(R.id.action_onboardFragment_to_homeFragment)
+    navigator.safeNavigate(R.id.action_onboardFragment_to_homeFragment)
 }
