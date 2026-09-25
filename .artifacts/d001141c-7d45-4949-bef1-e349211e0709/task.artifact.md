@@ -1,5 +1,0 @@
-- [ ] Cập nhật AndroidManifest.xml (thêm quyền SET_WALLPAPER)
-- [ ] Tạo Domain Layer UseCases
-- [ ] Cập nhật Koin DI
-- [ ] Cập nhật UI (Layout, ViewModel, FragmentEx)
-- [ ] Kiểm tra và hoàn thiện

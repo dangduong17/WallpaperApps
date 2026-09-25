@@ -1,4 +1,0 @@
-- [ ] Khởi tạo kế hoạch thực hiện
-- [ ] Cập nhật UI State để lưu trữ loại nội dung (IMAGE/GIF)
-- [ ] Cập nhật logic `subscribeObserver` trong `WallpaperDetailFragment.kt` để hiển thị GIF bằng Glide
-- [ ] Xác nhận hiển thị ảnh/GIF từ gallery
