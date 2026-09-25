@@ -17,6 +17,19 @@ interface Navigator {
     )
 
     /**
+     * Navigate to a specific route with NavDirections
+     */
+    fun navigateTo(
+        directions: NavDirections,
+    )
+
+    // [ADDED BY AI]: Bổ sung hàm điều hướng an toàn tránh rò rỉ observer và chống double click
+    fun safeNavigate(directions: NavDirections)
+
+    // [ADDED BY AI]: Bổ sung hàm điều hướng an toàn tránh rò rỉ observer và chống double click
+    fun safeNavigate(actionId: Int, bundle: Bundle? = null)
+
+    /**
      * Navigate to a specific route and clear back stack
      */
     fun navigateTo(
@@ -25,12 +38,13 @@ interface Navigator {
         clearBackStack: Boolean = false,
     )
 
-    fun navigateTo(directions: NavDirections)
-
     /**
      * Navigate back to previous screen
      */
     fun navigateUp()
+
+    // [ADDED BY AI]: Bổ sung hàm quay lại an toàn chống khóa luồng
+    fun safeNavigateUp()
 
     /**
      * Add listener for navigation events
