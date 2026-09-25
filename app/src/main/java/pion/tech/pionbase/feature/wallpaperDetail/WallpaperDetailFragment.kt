@@ -109,9 +109,7 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding, Wal
                         displayToast(getString(R.string.download_error_message, event.throwable.message))
                     }
                     is WallpaperDetailEvent.SetWallpaperSuccess -> {
-                        pion.tech.pionbase.util.safeDelay(300) {
-                            displayToast(getString(R.string.set_wallpaper_success))
-                        }
+                        displayToast(getString(R.string.set_wallpaper_success))
                     }
                     is WallpaperDetailEvent.SetWallpaperError -> {
                         displayToast(getString(R.string.error, event.throwable.message ?: ""))

@@ -1,15 +1,20 @@
 package pion.tech.pionbase.feature.urlWallpaper
 
 import pion.tech.pionbase.base.BaseViewModel
+import pion.tech.pionbase.base.launchMain
 import pion.tech.pionbase.domain.usecase.home.DownloadImageToBitmapUseCase
 import pion.tech.pionbase.domain.usecase.home.SetWallpaperUseCase
-import pion.tech.pionbase.util.UiState
 import pion.tech.pionbase.util.handleApiCall
+
+sealed class UrlWallpaperEvent {
+    object SetWallpaperSuccess : UrlWallpaperEvent()
+    data class SetWallpaperError(val throwable: Throwable) : UrlWallpaperEvent()
+}
 
 class UrlWallpaperViewModel(
     private val downloadImageToBitmapUseCase: DownloadImageToBitmapUseCase,
-    private val setWallpaperUseCase: SetWallpaperUseCase
-) : BaseViewModel<UrlWallpaperUiState, Nothing>(UrlWallpaperUiState()) {
+    private val setWallpaperUseCase: SetWallpaperUseCase,
+) : BaseViewModel<UrlWallpaperUiState, UrlWallpaperEvent>(UrlWallpaperUiState()) {
 
     fun setWallpaperFromUrl(url: String) {
         setState { copy(isLoading = true) }
@@ -19,15 +24,18 @@ class UrlWallpaperViewModel(
                 handleApiCall(
                     apiCall = { setWallpaperUseCase(bitmap) },
                     onSuccess = { 
-                        setState { copy(isLoading = false, isSuccess = true) }
+                        setState { copy(isLoading = false) }
+                        launchMain { setEvent(UrlWallpaperEvent.SetWallpaperSuccess) }
                     },
                     onError = { throwable ->
-                        setState { copy(isLoading = false, error = throwable) }
+                        setState { copy(isLoading = false) }
+                        launchMain { setEvent(UrlWallpaperEvent.SetWallpaperError(throwable)) }
                     }
                 )
             },
             onError = { throwable ->
-                setState { copy(isLoading = false, error = throwable) }
+                setState { copy(isLoading = false) }
+                launchMain { setEvent(UrlWallpaperEvent.SetWallpaperError(throwable)) }
             }
         )
     }
@@ -35,6 +43,4 @@ class UrlWallpaperViewModel(
 
 data class UrlWallpaperUiState(
     val isLoading: Boolean = false,
-    val isSuccess: Boolean = false,
-    val error: Throwable? = null
 )

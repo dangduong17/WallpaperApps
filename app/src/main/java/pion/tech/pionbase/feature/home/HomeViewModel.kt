@@ -1,6 +1,7 @@
 package pion.tech.pionbase.feature.home
 
 import pion.tech.pionbase.base.BaseViewModel
+import pion.tech.pionbase.base.launchMain
 import pion.tech.pionbase.data.model.wallpaper.CategoryUIModel
 import pion.tech.pionbase.data.model.wallpaper.WallpaperUIModel
 import pion.tech.pionbase.data.model.wallpaper.toPresentation
@@ -14,6 +15,11 @@ import pion.tech.pionbase.feature.home.adapter.FilterUIModel
 import pion.tech.pionbase.util.UiState
 import pion.tech.pionbase.util.handleApiCall
 
+sealed class HomeEvent {
+    object SetWallpaperSuccess : HomeEvent()
+    data class SetWallpaperError(val throwable: Throwable) : HomeEvent()
+}
+
 class HomeViewModel(
     private val getFeaturedWallpapersUseCase: GetFeaturedWallpapersUseCase,
     private val getTopWallpapersUseCase: GetTopWallpapersUseCase,
@@ -21,7 +27,7 @@ class HomeViewModel(
     private val getWallpapersByCategoryUseCase: GetWallpapersByCategoryUseCase,
     private val setWallpaperUseCase: SetWallpaperUseCase,
     private val downloadImageToBitmapUseCase: DownloadImageToBitmapUseCase
-) : BaseViewModel<HomeUiState, Nothing>(HomeUiState()) {
+) : BaseViewModel<HomeUiState, HomeEvent>(HomeUiState()) {
 
     init {
         getFeaturedWallpapers()
@@ -104,9 +110,11 @@ class HomeViewModel(
             apiCall = { setWallpaperUseCase(uri, flag) },
             onSuccess = { 
                 setState { copy(isSettingWallpaper = false) }
+                launchMain { setEvent(HomeEvent.SetWallpaperSuccess) }
             },
-            onError = { 
+            onError = { throwable ->
                 setState { copy(isSettingWallpaper = false) }
+                launchMain { setEvent(HomeEvent.SetWallpaperError(throwable)) }
             }
         )
     }
@@ -118,11 +126,20 @@ class HomeViewModel(
             onSuccess = { bitmap ->
                 handleApiCall(
                     apiCall = { setWallpaperUseCase(bitmap) },
-                    onSuccess = { setState { copy(isSettingWallpaper = false) } },
-                    onError = { setState { copy(isSettingWallpaper = false) } }
+                    onSuccess = { 
+                        setState { copy(isSettingWallpaper = false) }
+                        launchMain { setEvent(HomeEvent.SetWallpaperSuccess) }
+                    },
+                    onError = { throwable ->
+                        setState { copy(isSettingWallpaper = false) }
+                        launchMain { setEvent(HomeEvent.SetWallpaperError(throwable)) }
+                    }
                 )
             },
-            onError = { setState { copy(isSettingWallpaper = false) } }
+            onError = { throwable ->
+                setState { copy(isSettingWallpaper = false) }
+                launchMain { setEvent(HomeEvent.SetWallpaperError(throwable)) }
+            }
         )
     }
 }

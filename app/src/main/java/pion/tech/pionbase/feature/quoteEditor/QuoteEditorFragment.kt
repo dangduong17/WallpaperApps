@@ -5,12 +5,11 @@ import android.view.View
 import androidx.navigation.fragment.navArgs
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import pion.tech.pionbase.R
 import pion.tech.pionbase.base.BaseFragment
 import pion.tech.pionbase.databinding.FragmentQuoteEditorBinding
 import pion.tech.pionbase.util.collectFlowOnView
 import pion.tech.pionbase.util.displayToast
-import pion.tech.pionbase.util.loadImage
-
 import pion.tech.pionbase.util.loadThumbnailAndFull
 
 class QuoteEditorFragment : BaseFragment<FragmentQuoteEditorBinding, QuoteEditorViewModel>(
@@ -75,18 +74,16 @@ class QuoteEditorFragment : BaseFragment<FragmentQuoteEditorBinding, QuoteEditor
             .collectFlowOnView(viewLifecycleOwner) { event ->
                 when (event) {
                     is QuoteEditorEvent.SaveSuccess -> {
-                        displayToast(getString(pion.tech.pionbase.R.string.save_quote_success))
+                        displayToast(getString(R.string.save_quote_success))
                     }
                     is QuoteEditorEvent.SaveError -> {
-                        displayToast(getString(pion.tech.pionbase.R.string.error, event.throwable.message))
+                        displayToast(getString(R.string.error, event.throwable.message))
                     }
                     is QuoteEditorEvent.SetWallpaperSuccess -> {
-                        pion.tech.pionbase.util.safeDelay(300) {
-                            displayToast(getString(pion.tech.pionbase.R.string.set_wallpaper_success))
-                        }
+                        displayToast(getString(R.string.set_wallpaper_success))
                     }
                     is QuoteEditorEvent.SetWallpaperError -> {
-                        displayToast(getString(pion.tech.pionbase.R.string.error, event.throwable.message))
+                        displayToast(getString(R.string.error, event.throwable.message))
                     }
                 }
             }

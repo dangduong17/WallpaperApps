@@ -68,6 +68,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkSuccessMessage(intent: Intent?) {
         if (intent?.getBooleanExtra(EXTRA_SHOW_SUCCESS_MSG, false) == true) {
+            intent.removeExtra(EXTRA_SHOW_SUCCESS_MSG)
             window.decorView.post {
                 Toast.makeText(
                     this,

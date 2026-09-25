@@ -109,13 +109,11 @@ class WallpaperDetailViewModel(
                     when (result) {
                         is Result.Success -> {
                             launchMain {
-                                kotlinx.coroutines.delay(ACTION_DELAY_MS)
                                 setEvent(WallpaperDetailEvent.SetWallpaperSuccess)
                             }
                         }
                         is Result.Error -> {
                             launchMain {
-                                kotlinx.coroutines.delay(ACTION_DELAY_MS)
                                 setEvent(WallpaperDetailEvent.SetWallpaperError(result.error))
                             }
                         }
